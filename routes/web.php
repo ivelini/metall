@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminPanel\Catalog\CatalogImportPriceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,14 @@ use Illuminate\Support\Facades\Route;
 require __DIR__.'/auth.php';
 
 Route::get('/', function () {
-    return redirect('dashboard');
+    return redirect('admin-panel/dashboard');
 });
 
-Route::get('/dashboard', function () {
-    return view('admin_panel.dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'admin_panel.dashboard')->name('dashboard');
+
+    Route::group(['prefix' => 'catalog', 'namespace' => 'AdminPanel\Catalog'], function () {
+        Route::get('price-import', [CatalogImportPriceController::class, 'create'])->name('catalog.price.create');
+        Route::post('price-upload', [CatalogImportPriceController::class, 'upload'])->name('catalog.price.upload');
+    });
+});

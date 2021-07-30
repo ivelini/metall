@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatalogStandartProductTable extends Migration
+class CreateCatalogStandardsProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCatalogStandartProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('catalog_standart_product', function (Blueprint $table) {
+        Schema::create('catalog_standards_product', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('code');
@@ -27,6 +27,6 @@ class CreateCatalogStandartProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('catalog_standart_product');
+        Schema::dropIfExists('catalog_standards_product');
     }
 }

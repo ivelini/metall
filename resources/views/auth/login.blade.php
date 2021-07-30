@@ -51,6 +51,15 @@
                                 <i class="icon-reading icon-2x text-secondary border-secondary border-3 rounded-pill p-3 mb-3 mt-1"></i>
                                 <h5 class="mb-0">Вход</h5>
                                 <span class="d-block text-muted">Ваши данные</span>
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="form-group form-group-feedback form-group-feedback-left">

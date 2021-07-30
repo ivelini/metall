@@ -20,24 +20,21 @@ class CreateCatalogTroynikiTable extends Migration
             $table->decimal('h1');
             $table->decimal('du2');
             $table->decimal('h2');
-            $table->unsignedBigInteger('catalog_standart_product_id');
-            $table->unsignedBigInteger('catalog_marka_stali_id');
+            $table->unsignedBigInteger('catalog_standards_product_id');
+            $table->unsignedBigInteger('catalog_marki_stali_id');
             $table->string('ed_izm');
             $table->decimal('price_za_ed');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company')
-                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreign('catalog_standart_product_id')->references('id')
-                ->on('catalog_standart_product')
-                ->cascadeOnUpdate()
+            $table->foreign('catalog_standards_product_id')->references('id')
+                ->on('catalog_standards_product')
                 ->cascadeOnDelete();
 
-            $table->foreign('catalog_marka_stali_id')->references('id')
-                ->on('catalog_marka_stali')
-                ->cascadeOnUpdate()
+            $table->foreign('catalog_marki_stali_id')->references('id')
+                ->on('catalog_marki_stali')
                 ->cascadeOnDelete();
         });
     }

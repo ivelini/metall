@@ -19,11 +19,9 @@ class CreateUserCompanyTable extends Migration
             $table->unsignedBigInteger('company_id');
 
             $table->foreign('user_id')->references('id')->on('users')
-                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
             $table->foreign('company_id')->references('id')->on('company')
-                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
     }

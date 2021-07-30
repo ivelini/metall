@@ -18,8 +18,8 @@ class CreateCatalogFlantsyTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->decimal('du');
             $table->decimal('davlenie');
-            $table->unsignedBigInteger('catalog_standart_product_id');
-            $table->unsignedBigInteger('catalog_marka_stali_id');
+            $table->unsignedBigInteger('catalog_standards_product_id');
+            $table->unsignedBigInteger('catalog_marki_stali_id');
             $table->decimal('price_za_ed');
             $table->timestamps();
 
@@ -27,13 +27,13 @@ class CreateCatalogFlantsyTable extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreign('catalog_standart_product_id')->references('id')
-                ->on('catalog_standart_product')
+            $table->foreign('catalog_standards_product_id')->references('id')
+                ->on('catalog_standards_product')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreign('catalog_marka_stali_id')->references('id')
-                ->on('catalog_marka_stali')
+            $table->foreign('catalog_marki_stali_id')->references('id')
+                ->on('catalog_marki_stali')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatalogPerehodTable extends Migration
+class CreateCatalogOtvodyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateCatalogPerehodTable extends Migration
      */
     public function up()
     {
-        Schema::create('catalog_perehod', function (Blueprint $table) {
+        Schema::create('catalog_otvody', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
-            $table->decimal('du1');
-            $table->decimal('h1');
-            $table->decimal('du2');
-            $table->decimal('h2');
-            $table->string('model');
-            $table->unsignedBigInteger('catalog_standart_product_id');
-            $table->unsignedBigInteger('catalog_marka_stali_id');
+            $table->decimal('du');
+            $table->decimal('h');
+            $table->decimal('ugol_giba');
+            $table->unsignedBigInteger('catalog_standards_product_id');
+            $table->unsignedBigInteger('catalog_marki_stali_id');
             $table->string('ed_izm');
             $table->decimal('price_za_ed');
             $table->timestamps();
@@ -31,13 +29,13 @@ class CreateCatalogPerehodTable extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreign('catalog_standart_product_id')->references('id')
-                ->on('catalog_standart_product')
+            $table->foreign('catalog_standards_product_id')->references('id')
+                ->on('catalog_standards_product')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreign('catalog_marka_stali_id')->references('id')
-                ->on('catalog_marka_stali')
+            $table->foreign('catalog_marki_stali_id')->references('id')
+                ->on('catalog_marki_stali')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -50,6 +48,6 @@ class CreateCatalogPerehodTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('catalog_perehod');
+        Schema::dropIfExists('catalog_otvody');
     }
 }
