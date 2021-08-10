@@ -16,8 +16,9 @@ class CreateCatalogMarkiStaliTable extends Migration
         Schema::create('catalog_marki_stali', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
-            $table->boolean('is_stainless');
+            $table->string('code')->nullable();
+            $table->boolean('is_stainless')->nullable();
+            $table->timestamps();
         });
     }
 

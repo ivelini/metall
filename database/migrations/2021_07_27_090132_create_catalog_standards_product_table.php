@@ -16,7 +16,8 @@ class CreateCatalogStandardsProductTable extends Migration
         Schema::create('catalog_standards_product', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->nullable();
+            $table->timestamps();
         });
     }
 

@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserRoleSeeder::class,
             CompanySeeder::class,
-            UserCompanySeeder::class
+            UserCompanySeeder::class,
+            MarkiStaliSeeder::class,
+            StandardProductsSeeder::class
         ]);
     }
 }

@@ -10,7 +10,7 @@ class Company extends Model
     use HasFactory;
     protected $table = 'company';
 
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+    public function users() {
+        return $this->belongsToMany(User::class, 'user_company', 'user_id', 'id');
     }
 }

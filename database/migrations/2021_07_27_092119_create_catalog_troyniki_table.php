@@ -22,8 +22,8 @@ class CreateCatalogTroynikiTable extends Migration
             $table->decimal('h2');
             $table->unsignedBigInteger('catalog_standards_product_id');
             $table->unsignedBigInteger('catalog_marki_stali_id');
-            $table->string('ed_izm');
-            $table->decimal('price_za_ed');
+            $table->string('ed_izm')->nullable();
+            $table->decimal('price')->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company')

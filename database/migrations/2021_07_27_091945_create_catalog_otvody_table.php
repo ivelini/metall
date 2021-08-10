@@ -18,11 +18,11 @@ class CreateCatalogOtvodyTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->decimal('du');
             $table->decimal('h');
-            $table->decimal('ugol_giba');
+            $table->decimal('ugol_giba')->nullable();
             $table->unsignedBigInteger('catalog_standards_product_id');
             $table->unsignedBigInteger('catalog_marki_stali_id');
-            $table->string('ed_izm');
-            $table->decimal('price_za_ed');
+            $table->string('ed_izm')->nullable();
+            $table->decimal('price')->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company')
