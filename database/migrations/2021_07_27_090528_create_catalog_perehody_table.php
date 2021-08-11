@@ -20,7 +20,7 @@ class CreateCatalogPerehodyTable extends Migration
             $table->decimal('h1');
             $table->decimal('du2');
             $table->decimal('h2');
-            $table->string('model');
+            $table->string('model')->nullable();
             $table->unsignedBigInteger('catalog_standards_product_id');
             $table->unsignedBigInteger('catalog_marki_stali_id');
             $table->string('ed_izm')->nullable();

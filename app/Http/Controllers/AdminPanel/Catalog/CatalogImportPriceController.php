@@ -34,6 +34,7 @@ class CatalogImportPriceController extends Controller
 
         $result = $inputPriceService->input($path);
 
+        dd(__METHOD__, $result);
 
 
 

@@ -9,6 +9,7 @@ use App\Repositories\CatalogMarkiStaliRepository;
 use App\Repositories\CatalogProductTablesRepository;
 use App\Repositories\CatalogStandardRepository;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -36,21 +37,30 @@ class InputPriceService
         $keysFromExcel = $this->getKyesFromExcel($spreadsheet);
 
         //Валидируем ключи
-        $resultValidateKeysFromExcel = $this->validateKeysFromExcel($keysFromExcel);
+        $resultValidate = $this->validateKeysFromExcel($keysFromExcel);
 
-        //Если есть ошибки заполнения прайса (коллекция не пустая)
-        if ($resultValidateKeysFromExcel->isNotEmpty()) {
-            return $resultValidateKeysFromExcel;
+        /**
+        * Если валидация вернула строку, то ошибка
+        * Если коллекцию, то сопоставляем провалидированные ключи
+        */
+        if (gettype($resultValidate) == 'string') {
+            return $resultValidate;
+        }
+        else {
+            $keysFromExcel = $this->collationKeysFromExcel($keysFromExcel, $resultValidate);
         }
 
         //Добавляем марки стали и стандарты изготовления, если есть новые
         $this->importSteelAndStandardTable($spreadsheet, $keysFromExcel);
 
         //Парсим прайс
-//        $price = $this->parsingPrice($spreadsheet, $keysFromExcel);
+        $price = $this->parsingPrice($spreadsheet, $keysFromExcel);
 
         //Удаляем из таблиц данные о продукции организации
         $this->deleteProductionFromTable($keysFromExcel);
+
+        //Добавление каталога в таблицу
+        $this->insertPriceToTable($price);
 
         dd(__METHOD__, $price);
 
@@ -61,7 +71,7 @@ class InputPriceService
      * Формирование ключей прайс листа вида [Название листа][Ключ колонки => Буква колонки]
      *
      * @param $path // путь к загруженному прайсу
-     * @return bool|\Illuminate\Support\Collection
+     * @return bool|Collection
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function getKyesFromExcel($spreadsheet)
@@ -95,76 +105,123 @@ class InputPriceService
      * Проерка коректности заполнения названий листов и ключей к ним
      *
      * @param $keysFromExcel
-     * @return \Illuminate\Support\Collection //Коллекция с ошибками
+     * @return Collection|string
      */
     protected function validateKeysFromExcel($keysFromExcel)
     {
-        //Обязательнве табличные значения для листов
+        /*
+         * Обязательнве табличные значения для листов
+         * Массив вида [Название листа][Ключ1*, Ключ2, ...]
+         * Звездочка (*) - обязательный ключ
+         */
 
-        $etalonKeys['Отводы']   =   ['du', 'h', 'steel', 'standard'];
-        $etalonKeys['Переходы'] =   ['du', 'h', 'du2', 'h2', 'steel', 'standard'];
-        $etalonKeys['Тройники'] =   ['du', 'h', 'du2', 'h2', 'steel', 'standard'];
-        $etalonKeys['Фланцы']   =   ['du', 'davlenie'];
-        $etalonKeys['Днища']    =   ['du', 'h'];
+        $etalonKeys['Отводы']   =   ['du*', 'h*', 'steel*', 'standard*', 'ugol_giba', 'ed_izm', 'price'];
+        $etalonKeys['Переходы'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'model','steel*', 'standard*', 'ed_izm', 'price'];
+        $etalonKeys['Тройники'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'steel*', 'standard*', 'ed_izm', 'price'];
+        $etalonKeys['Фланцы']   =   ['du', 'davlenie*', 'steel*', 'standard*', 'price'];
+        $etalonKeys['Днища']    =   ['du*', 'h*', 'steel*', 'standard*', 'price'];
 
         //Проверка названия листов на корректность
-        $errSheet = [];
+
         foreach ($keysFromExcel as $value) {
 
             $sheetExist = Arr::exists($etalonKeys, $value['sheet']);
 
             if ($sheetExist == false) {
-                $errSheet[] = 'Название листа не корректно: ' . $value['sheet'];
+                $err = 'Название листа не корректно: ' . $value['sheet'];
+
+                return $err;
             }
         }
 
-        if (count($errSheet) > 0) {
-            return collect($errSheet);
-        };
 
-        //Проверка существования обязательных ключей для каждого листа
-        $resultKeysNotFound = $keysFromExcel->map(function ($value) use ($etalonKeys) {
+        $validateKeys = [];
+        //Проверка существования ключей для каждого листа
+        foreach ($keysFromExcel as $keysFromSheet) {
 
-            $etalonKeysFromSheet = $etalonKeys[$value['sheet']];
-            $sheetName = $value['sheet'];
-            $etalonKeysFromSheet = collect($etalonKeysFromSheet);
-            $value = $value->keys();
+            $validateKeysFromSheet = [];
+            $sheetName = $keysFromSheet['sheet'];
+            $etalonKeysFromSheet = $etalonKeys[$sheetName];
+            $keysFromSheet = array_slice($keysFromSheet->keys()->all(), 1);
 
-            $keysNotFound  = $etalonKeysFromSheet->diff($value);
+            $etalonKeysFromSheetRequiredNotFound = [];
 
-            if ($keysNotFound->isNotEmpty()) {
+            foreach ($etalonKeysFromSheet as $etalonKey) {
 
-                $keysNotFound = Arr::flatten($keysNotFound);
+                $etalonKeyFound = false;
+                //Если эталонный ключ обязательный
+                if (gettype(mb_strpos($etalonKey, '*')) == 'integer') {
+                    $etalonKey = mb_substr($etalonKey, 0, mb_strpos($etalonKey, '*'));
 
-                $strKeys = '';
-                foreach ($keysNotFound as $item) {
-                    $strKeys .= $item . ' ';
+                    foreach ($keysFromSheet as $key) {
+                        if ($key == $etalonKey) {
+
+                            $etalonKeyFound = true;
+                            $validateKeysFromSheet[] = $key;
+
+                        }
+                    }
+
+                    ($etalonKeyFound == false)? $etalonKeysFromSheetRequiredNotFound[] = $etalonKey: '';
                 }
+                else {
 
-                $strErr = 'Отсутствуют ключи: Лист: ' . $sheetName . ' - ' . $strKeys;
-                return $strErr;
+                    foreach ($keysFromSheet as $key) {
+                        if ($key == $etalonKey) {
+                            $validateKeysFromSheet[] = $key;
+                        }
+                    }
+                }
             }
 
-        });
+            //Если массив с ненайденными обязательными ключами не пуст
+            if (count($etalonKeysFromSheetRequiredNotFound) > 0) {
 
-
-        // Если возвращены все пустые значения, то обнуляем коллекцию
-        $isNull = true;
-        $resultKeysNotFound->each(function ($value) {
-            if ($value != null) {
-                $isNull = false;
-                return false;
+                $err = 'Отсутствуют обязательные ключи: Лист - ' . $sheetName . '; Ключи - '
+                    . implode(', ', $etalonKeysFromSheetRequiredNotFound);
+                return  $err;
             }
-        });
 
-        if ($isNull) {
-            unset($resultKeysNotFound);
-            $resultKeysNotFound = collect();
+            $validateKeys[$sheetName] = $validateKeysFromSheet;
+            unset($validateKeysFromSheet);
         }
 
-        return $resultKeysNotFound;
+        $validateKeys = collect($validateKeys);
 
+        return $validateKeys;
+    }
 
+    /**
+     * Оставляет только провалидированные ключи в коллекции $keysFromExcel
+     *
+     * @param $keysFromExcel
+     * @param $resultValidate
+     * @return Collection
+     */
+    protected function collationKeysFromExcel($keysFromExcel, $resultValidate) {
+
+        $keysFromExcel = $keysFromExcel->map(function ($keysFromSheet, $key) use ($resultValidate) {
+
+            $sheetName = $keysFromSheet['sheet'];
+            $resultValidate = $resultValidate[$sheetName];
+
+            $keysFromSheet = $keysFromSheet->filter(function ($value, $key) use ($resultValidate) {
+
+                if ($key == 'sheet') {
+                    return true;
+                    }
+
+                foreach ($resultValidate as $resultKey) {
+                    if ($key == $resultKey) {
+                        return true;
+                    }
+                }
+            });
+
+            return $keysFromSheet;
+        });
+
+        return $keysFromExcel;
     }
 
     /**
@@ -262,20 +319,6 @@ class InputPriceService
         return $value;
     }
 
-    protected function importPriceTable($sheet, $rows) {
-        switch ($sheet) {
-            case 'Отводы':
-                $modelOtvody = new CatalogOtvody();
-                foreach ($rows as $row) {
-                    $modelOtvody->create($row);
-                }
-                break;
-
-        }
-
-    }
-
-
     /**
      * Парсим прайс лист по ключам
      *
@@ -313,12 +356,16 @@ class InputPriceService
                     }
                 }
                 $row['company_id'] = Auth::user()->company()->first()->id;
+                dd(__METHOD__, $row);
                 $rows[] = $row;
+                unset($row);
             }
 
             $price[$keySheet['sheet']] = $rows;
             unset($rows);
         }
+
+        $price = collect($price);
 
         return $price;
     }
@@ -337,6 +384,29 @@ class InputPriceService
             DB::table($tableName)
                 ->where('company_id', '=', $companyId)
                 ->delete();
+        });
+
+        return true;
+    }
+
+    protected function insertPriceToTable($price) {
+
+        $sheetsName = $price->keys();
+        $tablesName = $this->catalogProductTablesRepository->getTablesName($sheetsName);
+        $price = $tablesName->combine($price);
+
+        $price->each(function ($value, $tableName) {
+
+            $i = 0;
+            $inc = 49;
+            $length = 50;
+            while ($i < count($value)) {
+
+                $products = array_slice($value, $i, $length);
+                DB::table($tableName)->insert($products);
+
+                $i += $inc;
+            }
         });
 
         return true;
