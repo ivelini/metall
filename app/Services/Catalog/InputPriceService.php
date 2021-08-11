@@ -4,11 +4,11 @@
 namespace App\Services\Catalog;
 
 
-use App\Models\CatalogOtvody;
 use App\Repositories\CatalogMarkiStaliRepository;
 use App\Repositories\CatalogProductTablesRepository;
 use App\Repositories\CatalogStandardRepository;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,12 +21,25 @@ class InputPriceService
     protected $catalogMarkiStaliRepository;
     protected $catalogStandardRepository;
     protected $catalogProductTablesRepository;
+    protected $etalonKeys = [];
 
     public function __construct()
     {
         $this->catalogMarkiStaliRepository = new CatalogMarkiStaliRepository();
         $this->catalogStandardRepository = new CatalogStandardRepository();
         $this->catalogProductTablesRepository = new CatalogProductTablesRepository();
+
+        /*
+         * Обязательнве табличные значения для листов
+         * Массив вида [Название листа][Ключ1*, Ключ2, ...]
+         * Звездочка (*) - обязательный ключ
+         */
+
+        $this->etalonKeys['Отводы']   =   ['du*', 'h*', 'steel*', 'standard*', 'ugol_giba', 'ed_izm', 'price'];
+        $this->etalonKeys['Переходы'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'model','steel*', 'standard*', 'ed_izm', 'price'];
+        $this->etalonKeys['Тройники'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'steel*', 'standard*', 'ed_izm', 'price'];
+        $this->etalonKeys['Фланцы']   =   ['du', 'davlenie*', 'steel*', 'standard*', 'price'];
+        $this->etalonKeys['Днища']    =   ['du*', 'h*', 'steel*', 'standard*', 'price'];
     }
 
     public function input($path)
@@ -62,8 +75,7 @@ class InputPriceService
         //Добавление каталога в таблицу
         $this->insertPriceToTable($price);
 
-        dd(__METHOD__, $price);
-
+        return true;
     }
 
 
@@ -109,23 +121,13 @@ class InputPriceService
      */
     protected function validateKeysFromExcel($keysFromExcel)
     {
-        /*
-         * Обязательнве табличные значения для листов
-         * Массив вида [Название листа][Ключ1*, Ключ2, ...]
-         * Звездочка (*) - обязательный ключ
-         */
 
-        $etalonKeys['Отводы']   =   ['du*', 'h*', 'steel*', 'standard*', 'ugol_giba', 'ed_izm', 'price'];
-        $etalonKeys['Переходы'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'model','steel*', 'standard*', 'ed_izm', 'price'];
-        $etalonKeys['Тройники'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'steel*', 'standard*', 'ed_izm', 'price'];
-        $etalonKeys['Фланцы']   =   ['du', 'davlenie*', 'steel*', 'standard*', 'price'];
-        $etalonKeys['Днища']    =   ['du*', 'h*', 'steel*', 'standard*', 'price'];
 
         //Проверка названия листов на корректность
 
         foreach ($keysFromExcel as $value) {
 
-            $sheetExist = Arr::exists($etalonKeys, $value['sheet']);
+            $sheetExist = Arr::exists($this->etalonKeys, $value['sheet']);
 
             if ($sheetExist == false) {
                 $err = 'Название листа не корректно: ' . $value['sheet'];
@@ -141,7 +143,7 @@ class InputPriceService
 
             $validateKeysFromSheet = [];
             $sheetName = $keysFromSheet['sheet'];
-            $etalonKeysFromSheet = $etalonKeys[$sheetName];
+            $etalonKeysFromSheet = $this->etalonKeys[$sheetName];
             $keysFromSheet = array_slice($keysFromSheet->keys()->all(), 1);
 
             $etalonKeysFromSheetRequiredNotFound = [];
@@ -329,11 +331,22 @@ class InputPriceService
     protected function parsingPrice($spreadsheet, $keysFromExcel)
     {
 
+        $created_at = Carbon::now()->toDateTimeString();
+
         // Парсим каждый лист прайса
         foreach ($keysFromExcel as $keySheet) {
 
-            $workSheet = $spreadsheet->getSheetByName($keySheet['sheet']);
+            $sheetName = $keySheet['sheet'];
+            $workSheet = $spreadsheet->getSheetByName($sheetName);
             $colCol = $workSheet->getHighestRow();
+            $etalonKeysFromSheet = $this->etalonKeys[$sheetName];
+
+            $etalonKeysFromSheetRequired = [];
+            foreach ($etalonKeysFromSheet as $key) {
+                if (gettype(mb_strpos($key, '*')) == 'integer') {
+                    $etalonKeysFromSheetRequired[] = mb_substr($key, 0, mb_strpos($key, '*'));
+                }
+            }
 
             //Подставляем вместо названия стали и стандарта ID
             for ($col = 2; $col <= $colCol; $col++) {
@@ -356,8 +369,22 @@ class InputPriceService
                     }
                 }
                 $row['company_id'] = Auth::user()->company()->first()->id;
-                dd(__METHOD__, $row);
-                $rows[] = $row;
+
+                $rowError = false;
+                foreach ($row as $rowKey => $rowValue) {
+                    foreach ($etalonKeysFromSheetRequired as $etalonKey) {
+                        if ($rowKey == $etalonKey && empty($rowValue) ) {
+                            $rowError = true;
+                        }
+                    }
+                }
+
+                if ($rowError == false) {
+                    $row['created_at'] = $created_at;
+                    $row['updated_at'] = $created_at;
+                    $rows[] = $row;
+                }
+
                 unset($row);
             }
 
@@ -389,6 +416,12 @@ class InputPriceService
         return true;
     }
 
+    /**
+     *
+     *
+     * @param $price
+     * @return bool
+     */
     protected function insertPriceToTable($price) {
 
         $sheetsName = $price->keys();

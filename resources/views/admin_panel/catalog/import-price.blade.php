@@ -9,11 +9,14 @@
                 @csrf
                 @if ($errors->any())
                     <div class="alert alert-danger">
-                        <ul>
                             @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                                {{ $error }}
                             @endforeach
-                        </ul>
+                    </div>
+                @endif
+                @if (session('success'))
+                    <div class="alert alert-info">
+                        {{ session()->get('success') }}
                     </div>
                 @endif
                 <fieldset class="mb-3">

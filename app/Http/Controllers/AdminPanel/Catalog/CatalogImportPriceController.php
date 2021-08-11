@@ -34,10 +34,17 @@ class CatalogImportPriceController extends Controller
 
         $result = $inputPriceService->input($path);
 
-        dd(__METHOD__, $result);
+        if (gettype($result) == 'string') {
 
-
-
+            return redirect()
+                ->route('catalog.price.create')
+                ->withErrors($result);
+        }
+        else {
+            return redirect()
+                ->route('catalog.price.create')
+                ->with(['success' => 'Прайс успешно загружен']);
+        }
     }
 
 
