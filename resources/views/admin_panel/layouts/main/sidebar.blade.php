@@ -89,8 +89,18 @@
                     <a href="#" class="nav-link"><i class="icon-copy"></i> <span>Каталог</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="{{ route('catalog.price.create') }}" class="nav-link active">Импорт прайс листа</a></li>
-                        <li class="nav-item"><a href="../../../../layout_2/LTR/material/full/index.html" class="nav-link">Layout 2</a></li>
+                        <li class="nav-item"><a href="{{ route('catalog.price.create') }}" class="nav-link active"><i class="icon-attachment2"></i> Импорт прайс листа</a></li>
+                        <li class="nav-item nav-item-submenu">
+                            <a href="#" class="nav-link"><i class="icon-database4"></i>  Каталог продукции</a>
+                            <ul class="nav nav-group-sub">
+                                <li class="nav-item"><a href="{{ route('catalog.products.otvody.index') }}" class="nav-link">
+                                        <i class="icon-database-insert"></i> Отводы</a>
+                                </li>
+                                <li class="nav-item"><a href="{{ route('catalog.products.perehody.index') }}" class="nav-link">
+                                        <i class="icon-database-insert"></i> Переходы</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <!-- /main -->

@@ -25,6 +25,8 @@
 
     <script src="/admin_panel/assets/js/app.js"></script>
 
+    @yield('header-js')
+
     <!-- /theme JS files -->
 
 </head>
@@ -87,6 +89,6 @@
 
 </div>
 <!-- /page content -->
-
+@yield('include-footer')
 </body>
 </html>

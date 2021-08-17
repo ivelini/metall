@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Catalog;
 
+use App\Repositories\CoreRepository;
 use App\Models\CatalogStandardsProduct as Model;
 
 class CatalogStandardRepository extends CoreRepository

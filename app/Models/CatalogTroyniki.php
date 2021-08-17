@@ -15,7 +15,7 @@ class CatalogTroyniki extends Model
     }
 
     public function standardProduct() {
-        return $this->belongsTo(CatalogStandardtProduct::class, 'catalog_standards_product_id', 'id');
+        return $this->belongsTo(CatalogStandardsProduct::class, 'catalog_standards_product_id', 'id');
     }
 
     public function markaStali() {

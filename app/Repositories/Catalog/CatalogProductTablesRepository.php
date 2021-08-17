@@ -1,8 +1,7 @@
 <?php
 
 
-namespace App\Repositories;
-
+namespace App\Repositories\Catalog;
 
 use Illuminate\Support\Facades\DB;
 

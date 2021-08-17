@@ -4,9 +4,9 @@
 namespace App\Services\Catalog;
 
 
-use App\Repositories\CatalogMarkiStaliRepository;
-use App\Repositories\CatalogProductTablesRepository;
-use App\Repositories\CatalogStandardRepository;
+use App\Repositories\Catalog\CatalogMarkiStaliRepository;
+use App\Repositories\Catalog\CatalogProductTablesRepository;
+use App\Repositories\Catalog\CatalogStandardRepository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
