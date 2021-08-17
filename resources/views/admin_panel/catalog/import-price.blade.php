@@ -33,6 +33,12 @@
                 </fieldset>
             </form>
             <h6 class="font-weight-semibold">Инструция по загрузке прайса</h6>
-            <p class="mb-3"></p>
+            <p class="mb-3">
+                <div>['Отводы']   =   ['du*', 'h*', 'steel*', 'standard*', 'ugol_giba', 'ed_izm', 'price']</div>
+                <div>['Переходы'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'model','steel*', 'standard*', 'ed_izm', 'price']</div>
+                <div>['Тройники'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'steel*', 'standard*', 'ed_izm', 'price']</div>
+                <div>['Фланцы']   =   ['du', 'davlenie*', 'steel*', 'standard*', 'price']</div>
+                <div>['Днища']    =   ['du*', 'h*', 'steel*', 'standard*', 'price']</div>
+            </p>
         </div>
 @endsection

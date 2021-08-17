@@ -30,6 +30,7 @@ class CatalogProductTablesRepository
                 $catalogTables[] = $value;
             }
         }
+
         $tablesName = $sheetName->map(function ($sheet) use ($catalogTables) {
 
             $sheet = mb_strtolower($sheet);
@@ -42,6 +43,7 @@ class CatalogProductTablesRepository
             }
         });
 
+        dd(__METHOD__, $tablesName);
         return $tablesName;
     }
 

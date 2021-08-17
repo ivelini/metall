@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatalogTroynikiTable extends Migration
+class CreateCatalogTroinikiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateCatalogTroynikiTable extends Migration
      */
     public function up()
     {
-        Schema::create('catalog_troyniki', function (Blueprint $table) {
+        Schema::create('catalog_troiniki', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
             $table->decimal('du1');
             $table->decimal('h1');
-            $table->decimal('du2');
-            $table->decimal('h2');
+            $table->decimal('du2')->nullable();
+            $table->decimal('h2')->nullable();
             $table->unsignedBigInteger('catalog_standards_product_id');
             $table->unsignedBigInteger('catalog_marki_stali_id');
             $table->string('ed_izm')->nullable();
@@ -46,6 +46,6 @@ class CreateCatalogTroynikiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('catalog_troyniki');
+        Schema::dropIfExists('catalog_troiniki');
     }
 }

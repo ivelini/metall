@@ -72,6 +72,7 @@ class InputPriceService
         //Удаляем из таблиц данные о продукции организации
         $this->deleteProductionFromTable($keysFromExcel);
 
+        dd(__METHOD__);
         //Добавление каталога в таблицу
         $this->insertPriceToTable($price);
 
