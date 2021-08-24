@@ -1,6 +1,9 @@
 @extends('admin_panel.layouts.main.main')
 @section('title')
-    Каталог продукции - Отводы
+    Каталог продукции - {{ $productName }}
+@endsection
+@section('pageheader-title')
+    Каталог продукции - {{ $productName }}
 @endsection
 @section('header-js')
     <script src="/admin_panel/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
@@ -16,6 +19,12 @@
                         @break
                     @case('Переходы')
                         @include('admin_panel.catalog.product.table.perehody')
+                        @break
+                    @case('Тройники')
+                        @include('admin_panel.catalog.product.table.troiniki')
+                        @break
+                    @case('Днища')
+                        @include('admin_panel.catalog.product.table.dnisha')
                         @break
                     @default
 
@@ -42,7 +51,7 @@
                             columnDefs: [{
                                 orderable: false,
                                 width: 100,
-                                targets: [ 5 ]
+                                targets: [ 4 ]
                             }],
                             dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                             language: {

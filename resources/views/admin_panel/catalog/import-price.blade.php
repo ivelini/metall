@@ -2,6 +2,9 @@
 @section('title')
     Импорт прайс листа
 @endsection
+@section('pageheader-title')
+    Импорт прайс листа
+@endsection
 @section('content-area')
     <div class="card">
         <div class="card-body">

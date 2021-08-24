@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogImportPriceController;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogOtvodyContoller;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogPerehodyController;
+use App\Http\Controllers\AdminPanel\Catalog\CatalogTroinikiController;
+use App\Http\Controllers\AdminPanel\Catalog\CatalogDnishaController;
+use \App\Http\Controllers\AdminPanel\Catalog\CatalogProductsCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +31,13 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
 
         Route::get('price-import', [CatalogImportPriceController::class, 'create'])->name('catalog.price.create');
         Route::post('price-upload', [CatalogImportPriceController::class, 'upload'])->name('catalog.price.upload');
-        Route::resource('products/otvody', CatalogOtvodyContoller::class)->names('catalog.products.otvody');
-        Route::resource('products/perehody', CatalogPerehodyController::class)->names('catalog.products.perehody');
 
+        Route::group(['prefix' => 'products'], function () {
+            Route::resource('otvody', CatalogOtvodyContoller::class)->names('catalog.products.otvody');
+            Route::resource('perehody', CatalogPerehodyController::class)->names('catalog.products.perehody');
+            Route::resource('troiniki', CatalogTroinikiController::class)->names('catalog.products.troiniki');
+            Route::resource('dnisha', CatalogDnishaController::class)->names('catalog.products.dnisha');
+            Route::resource('category', CatalogProductsCategoryController::class)->names('catalog.products.category');
+        });
     });
 });

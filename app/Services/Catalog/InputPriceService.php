@@ -4,13 +4,14 @@
 namespace App\Services\Catalog;
 
 
+use App\Jobs\ImportPriceJob;
+use App\Repositories\Catalog\CatalogCatgoryProductsRepository;
 use App\Repositories\Catalog\CatalogMarkiStaliRepository;
 use App\Repositories\Catalog\CatalogProductTablesRepository;
 use App\Repositories\Catalog\CatalogStandardRepository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -21,13 +22,16 @@ class InputPriceService
     protected $catalogMarkiStaliRepository;
     protected $catalogStandardRepository;
     protected $catalogProductTablesRepository;
+    protected $catalogCatgoryProductRepository;
     protected $etalonKeys = [];
+    protected $companyId;
 
     public function __construct()
     {
         $this->catalogMarkiStaliRepository = new CatalogMarkiStaliRepository();
         $this->catalogStandardRepository = new CatalogStandardRepository();
         $this->catalogProductTablesRepository = new CatalogProductTablesRepository();
+        $this->catalogCatgoryProductRepository = new CatalogCatgoryProductsRepository();
 
         /*
          * Обязательнве табличные значения для листов
@@ -42,9 +46,11 @@ class InputPriceService
         $this->etalonKeys['Днища']    =   ['du*', 'h*', 'steel*', 'standard*', 'price'];
     }
 
-    public function input($path)
+    public function input($path, $companyId)
     {
+
         $spreadsheet = IOFactory::load(Storage::disk('local')->path($path));
+        $this->companyId = $companyId;
 
         //Собираем ключи
         $keysFromExcel = $this->getKyesFromExcel($spreadsheet);
@@ -63,27 +69,83 @@ class InputPriceService
             $keysFromExcel = $this->collationKeysFromExcel($keysFromExcel, $resultValidate);
         }
 
-        //Добавляем марки стали и стандарты изготовления, если есть новые
-        $this->importSteelAndStandardTable($spreadsheet, $keysFromExcel);
 
-        //Парсим прайс
-        $price = $this->parsingPrice($spreadsheet, $keysFromExcel);
-
-        //Удаляем из таблиц данные о продукции организации
-        $this->deleteProductionFromTable($keysFromExcel);
-
-        dd(__METHOD__);
-        //Добавление каталога в таблицу
-        $this->insertPriceToTable($price);
+        // Добавляем задание на загрузку прайса в таблицу
+        ImportPriceJob::dispatchSync($spreadsheet, $keysFromExcel, $this->companyId);
 
         return true;
+    }
+
+    public function insertFromJob($spreadsheet, $keysFromExcel, $companyId)
+    {
+        $this->companyId = $companyId;
+
+//        //Добавляем марки стали и стандарты изготовления, если есть новые
+//        $this->importSteelAndStandardTable($spreadsheet, $keysFromExcel);
+//
+//        //Парсим прайс
+//        $price = $this->parsingPrice($spreadsheet, $keysFromExcel);
+
+//        //Удаляем из таблиц данные о продукции организации
+//        $this->deleteProductionFromTable($keysFromExcel);
+//
+//        //Добавление каталога в таблицу
+//        $this->insertPriceToTable($price);
+
+        $this->insertCategoryProducts($keysFromExcel);
+
+    }
+
+    /**
+     * Добавляем родительские категории в таблицу "catalog_product_category"
+     *
+     * @param $keysFromExcel
+     */
+    protected function insertCategoryProducts($keysFromExcel)
+    {
+        // Получаем список листов на кирилице
+        $sheetName = $keysFromExcel->pluck('sheet');
+
+        // Получаем список названий таблиц подуктов
+        $tablesProductName = $this->catalogProductTablesRepository->getTablesName($sheetName);
+
+        //Получаенм список названий категорий по ID компании
+        $listCategoryNamesFromCompanyId = $this->catalogCatgoryProductRepository
+            ->getListNameCategoryFromCompanyId($this->companyId);
+
+        //Если нет ни одной категории
+        if ($listCategoryNamesFromCompanyId->count() == 0) {
+
+            $categoryModel = $this->catalogCatgoryProductRepository->startConditions();
+            $categoryModel->category_name = 'Без категории';
+            $categoryModel->company_id = $this->companyId;
+            $categoryModel->save();
+        }
+
+        //Смотрим какие категории есть, а какие нужно добавить
+        $diffCategoryName = $sheetName->diff($listCategoryNamesFromCompanyId);
+
+        if ($diffCategoryName->count() > 0) {
+
+            //Объединяем названия с таблицей
+            $collectSheetTable = $diffCategoryName->combine($tablesProductName);
+
+            $collectSheetTable->each(function ($value, $key) {
+
+                $categoryModel = $this->catalogCatgoryProductRepository->startConditions();
+                $categoryModel->category_name = $key;
+                $categoryModel->catalog_product_table_name = $value;
+                $categoryModel->company_id = $this->companyId;
+                $categoryModel->save();
+            });
+        }
     }
 
 
     /**
      * Формирование ключей прайс листа вида [Название листа][Ключ колонки => Буква колонки]
      *
-     * @param $path // путь к загруженному прайсу
+     * @param $spreadsheet // путь к загруженному прайсу
      * @return bool|Collection
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
@@ -115,7 +177,7 @@ class InputPriceService
     }
 
     /**
-     * Проерка коректности заполнения названий листов и ключей к ним
+     * Проверка коректности заполнения названий листов и ключей к ним
      *
      * @param $keysFromExcel
      * @return Collection|string
@@ -369,7 +431,7 @@ class InputPriceService
                         }
                     }
                 }
-                $row['company_id'] = Auth::user()->company()->first()->id;
+                $row['company_id'] = $this->companyId;
 
                 $rowError = false;
                 foreach ($row as $rowKey => $rowValue) {
@@ -403,7 +465,7 @@ class InputPriceService
      */
     protected function deleteProductionFromTable($keysFromExcel)
     {
-        $companyId = Auth::user()->company()->first()->id;
+        $companyId = $this->companyId;
         $sheetsName = $keysFromExcel->pluck('sheet');
 
         $tablesName = $this->catalogProductTablesRepository->getTablesName($sheetsName);
@@ -427,6 +489,7 @@ class InputPriceService
 
         $sheetsName = $price->keys();
         $tablesName = $this->catalogProductTablesRepository->getTablesName($sheetsName);
+
         $price = $tablesName->combine($price);
 
         $price->each(function ($value, $tableName) {
@@ -445,5 +508,4 @@ class InputPriceService
 
         return true;
     }
-
 }

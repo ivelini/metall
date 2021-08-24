@@ -17,19 +17,7 @@ class CatalogProductTablesRepository
     public function getTablesName($sheetName)
     {
 
-        $tablesAll = DB::select('SHOW TABLES');
-
-        $catalogTables = [];
-        foreach ($tablesAll as $key => $value) {
-            $value = head($value);
-
-            if (gettype(strpos($value, 'catalog_')) == 'integer'
-                    && strpos($value, 'marki_stali') == false
-                    && strpos($value, 'standards_product') == false) {
-
-                $catalogTables[] = $value;
-            }
-        }
+        $catalogTables = $this->getCatalogProductTables();
 
         $tablesName = $sheetName->map(function ($sheet) use ($catalogTables) {
 
@@ -43,8 +31,27 @@ class CatalogProductTablesRepository
             }
         });
 
-        dd(__METHOD__, $tablesName);
         return $tablesName;
+    }
+
+    protected function getCatalogProductTables()
+    {
+        $tablesAll = DB::select('SHOW TABLES');
+
+        $catalogTables = [];
+        foreach ($tablesAll as $key => $value) {
+            $value = head($value);
+
+            if (gettype(strpos($value, 'catalog_')) == 'integer'
+                && strpos($value, 'marki_stali') == false
+                && strpos($value, 'standards_product') == false
+                && strpos($value, 'product_category') == false) {
+
+                $catalogTables[] = $value;
+            }
+        }
+
+        return $catalogTables;
     }
 
     protected function translit($input){
@@ -70,4 +77,29 @@ class CatalogProductTablesRepository
         return strtr($input, $arr);
     }
 
+    /**
+     * Выборка таблиц каталога, если продлукты данной компании присутствуют
+     *
+     * @param $companyId
+     * @return array
+     */
+    public function getTablesProductFromCompanyId($companyId)
+    {
+        $catalogTables = $this->getCatalogProductTables();
+
+        $tablesProductFromCompany = [];
+        foreach ($catalogTables as $table) {
+            $porductionCount = DB::table($table)
+                ->select('id', 'company_id')
+                ->where('company_id', '=', $companyId)
+                ->count();
+
+            if ($porductionCount > 0) {
+
+                $tablesProductFromCompany[] = $table;
+            }
+        }
+
+        return $tablesProductFromCompany;
+    }
 }

@@ -93,14 +93,10 @@
                         <li class="nav-item nav-item-submenu">
                             <a href="#" class="nav-link"><i class="icon-database4"></i>  Каталог продукции</a>
                             <ul class="nav nav-group-sub">
-                                <li class="nav-item"><a href="{{ route('catalog.products.otvody.index') }}" class="nav-link">
-                                        <i class="icon-database-insert"></i> Отводы</a>
-                                </li>
-                                <li class="nav-item"><a href="{{ route('catalog.products.perehody.index') }}" class="nav-link">
-                                        <i class="icon-database-insert"></i> Переходы</a>
-                                </li>
+                                @widget('Sidebar\ListProductWidget')
                             </ul>
                         </li>
+                        <li class="nav-item"><a href="{{ route('catalog.products.category.index') }}" class="nav-link active"><i class="icon-list"></i> Категории</a></li>
                     </ul>
                 </li>
                 <!-- /main -->

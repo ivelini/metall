@@ -13,4 +13,8 @@ class Company extends Model
     public function users() {
         return $this->belongsToMany(User::class, 'user_company', 'user_id', 'id');
     }
+
+    public function catalogProductCategories() {
+        return$this->hasMany(CatalogProductsCategory::class, 'company_id', 'id');
+    }
 }
