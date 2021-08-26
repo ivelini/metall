@@ -4,7 +4,7 @@
 namespace App\Repositories\Catalog;
 
 use App\Repositories\CoreRepository;
-use App\Models\CatalogDnishya as Model;
+use App\Models\CatalogDnisha as Model;
 
 class CatalogDnishaRepository extends CoreRepository
 {

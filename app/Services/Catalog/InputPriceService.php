@@ -5,7 +5,7 @@ namespace App\Services\Catalog;
 
 
 use App\Jobs\ImportPriceJob;
-use App\Repositories\Catalog\CatalogCatgoryProductsRepository;
+use App\Repositories\Catalog\CatalogCatgoryProductRepository;
 use App\Repositories\Catalog\CatalogMarkiStaliRepository;
 use App\Repositories\Catalog\CatalogProductTablesRepository;
 use App\Repositories\Catalog\CatalogStandardRepository;
@@ -31,7 +31,7 @@ class InputPriceService
         $this->catalogMarkiStaliRepository = new CatalogMarkiStaliRepository();
         $this->catalogStandardRepository = new CatalogStandardRepository();
         $this->catalogProductTablesRepository = new CatalogProductTablesRepository();
-        $this->catalogCatgoryProductRepository = new CatalogCatgoryProductsRepository();
+        $this->catalogCatgoryProductRepository = new CatalogCatgoryProductRepository();
 
         /*
          * Обязательнве табличные значения для листов
@@ -69,9 +69,8 @@ class InputPriceService
             $keysFromExcel = $this->collationKeysFromExcel($keysFromExcel, $resultValidate);
         }
 
-
         // Добавляем задание на загрузку прайса в таблицу
-        ImportPriceJob::dispatchSync($spreadsheet, $keysFromExcel, $this->companyId);
+        ImportPriceJob::dispatch($spreadsheet, $keysFromExcel, $this->companyId);
 
         return true;
     }
@@ -80,67 +79,22 @@ class InputPriceService
     {
         $this->companyId = $companyId;
 
-//        //Добавляем марки стали и стандарты изготовления, если есть новые
-//        $this->importSteelAndStandardTable($spreadsheet, $keysFromExcel);
-//
-//        //Парсим прайс
-//        $price = $this->parsingPrice($spreadsheet, $keysFromExcel);
+        //Добавляем марки стали и стандарты изготовления, если есть новые
+        $this->importSteelAndStandardTable($spreadsheet, $keysFromExcel);
 
-//        //Удаляем из таблиц данные о продукции организации
-//        $this->deleteProductionFromTable($keysFromExcel);
-//
-//        //Добавление каталога в таблицу
-//        $this->insertPriceToTable($price);
+        //Парсим прайс
+        $price = $this->parsingPrice($spreadsheet, $keysFromExcel);
 
+        //Удаляем из таблиц данные о продукции организации
+        $this->deleteProductionFromTable($keysFromExcel);
+
+        //Добавление каталога в таблицу
+        $this->insertPriceToTable($price);
+
+        //Добавляем родительские категории, если они не присутствуют в таблице "catalog_product_category"
         $this->insertCategoryProducts($keysFromExcel);
 
     }
-
-    /**
-     * Добавляем родительские категории в таблицу "catalog_product_category"
-     *
-     * @param $keysFromExcel
-     */
-    protected function insertCategoryProducts($keysFromExcel)
-    {
-        // Получаем список листов на кирилице
-        $sheetName = $keysFromExcel->pluck('sheet');
-
-        // Получаем список названий таблиц подуктов
-        $tablesProductName = $this->catalogProductTablesRepository->getTablesName($sheetName);
-
-        //Получаенм список названий категорий по ID компании
-        $listCategoryNamesFromCompanyId = $this->catalogCatgoryProductRepository
-            ->getListNameCategoryFromCompanyId($this->companyId);
-
-        //Если нет ни одной категории
-        if ($listCategoryNamesFromCompanyId->count() == 0) {
-
-            $categoryModel = $this->catalogCatgoryProductRepository->startConditions();
-            $categoryModel->category_name = 'Без категории';
-            $categoryModel->company_id = $this->companyId;
-            $categoryModel->save();
-        }
-
-        //Смотрим какие категории есть, а какие нужно добавить
-        $diffCategoryName = $sheetName->diff($listCategoryNamesFromCompanyId);
-
-        if ($diffCategoryName->count() > 0) {
-
-            //Объединяем названия с таблицей
-            $collectSheetTable = $diffCategoryName->combine($tablesProductName);
-
-            $collectSheetTable->each(function ($value, $key) {
-
-                $categoryModel = $this->catalogCatgoryProductRepository->startConditions();
-                $categoryModel->category_name = $key;
-                $categoryModel->catalog_product_table_name = $value;
-                $categoryModel->company_id = $this->companyId;
-                $categoryModel->save();
-            });
-        }
-    }
-
 
     /**
      * Формирование ключей прайс листа вида [Название листа][Ключ колонки => Буква колонки]
@@ -506,6 +460,52 @@ class InputPriceService
             }
         });
 
+        return true;
+    }
+
+    /**
+     * Добавляем родительские категории в таблицу "catalog_product_category"
+     *
+     * @param $keysFromExcel
+     */
+    protected function insertCategoryProducts($keysFromExcel)
+    {
+        // Получаем список листов на кирилице
+        $sheetName = $keysFromExcel->pluck('sheet');
+
+        // Получаем список названий таблиц подуктов
+        $tablesProductName = $this->catalogProductTablesRepository->getTablesName($sheetName);
+
+        //Получаенм список названий категорий по ID компании
+        $listCategoryNamesFromCompanyId = $this->catalogCatgoryProductRepository
+            ->getListNameCategoryFromCompanyId($this->companyId);
+
+        //Если нет ни одной категории
+        if ($listCategoryNamesFromCompanyId->count() == 0) {
+
+            $categoryModel = $this->catalogCatgoryProductRepository->startConditions();
+            $categoryModel->category_name = 'Без категории';
+            $categoryModel->company_id = $this->companyId;
+            $categoryModel->save();
+        }
+
+        //Смотрим какие категории есть, а какие нужно добавить
+        $diffCategoryName = $sheetName->diff($listCategoryNamesFromCompanyId);
+
+        if ($diffCategoryName->count() > 0) {
+
+            //Объединяем названия с таблицей
+            $collectSheetTable = $diffCategoryName->combine($tablesProductName);
+
+            $collectSheetTable->each(function ($value, $key) {
+
+                $categoryModel = $this->catalogCatgoryProductRepository->startConditions();
+                $categoryModel->category_name = $key;
+                $categoryModel->catalog_product_table_name = $value;
+                $categoryModel->company_id = $this->companyId;
+                $categoryModel->save();
+            });
+        }
         return true;
     }
 }

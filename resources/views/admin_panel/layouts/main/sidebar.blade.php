@@ -96,7 +96,7 @@
                                 @widget('Sidebar\ListProductWidget')
                             </ul>
                         </li>
-                        <li class="nav-item"><a href="{{ route('catalog.products.category.index') }}" class="nav-link active"><i class="icon-list"></i> Категории</a></li>
+                        <li class="nav-item"><a href="{{ route('catalog.product.category.index') }}" class="nav-link active"><i class="icon-list"></i> Категории</a></li>
                     </ul>
                 </li>
                 <!-- /main -->

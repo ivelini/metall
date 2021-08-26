@@ -3,7 +3,11 @@
 
 namespace App\Repositories\Catalog;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+
 
 class CatalogProductTablesRepository
 {
@@ -101,5 +105,65 @@ class CatalogProductTablesRepository
         }
 
         return $tablesProductFromCompany;
+    }
+
+    public function getColumnsFromTableNameForFilter($tableName)
+    {
+
+        $listColumnsTable = collect(Schema::getColumnListing($tableName));
+
+        $excludeColumn = collect([
+            'id',
+            'company_id',
+            'ed_izm',
+            'price',
+            'created_at',
+            'updated_at'
+        ]);
+
+        $columnForFilter = $listColumnsTable->diff($excludeColumn);
+
+        return $columnForFilter;
+    }
+
+    public function getUniqVolumeFromColumn($columns, $tableName)
+    {
+        $model = $this->getModelClass($tableName);
+        $companyId = Auth::user()->company()->first()->id;
+
+        $uniqVolume = [];
+        foreach ($columns as $column) {
+            $listVolume = $model->select('id', $column)
+                ->where('company_id', $companyId)
+                ->pluck($column)
+                ->unique();
+
+            $uniqVolume[$column] = $listVolume;
+        }
+
+        $generalTables['catalog_standards_product_id'] = 'catalog_standards_product';
+        $generalTables['catalog_marki_stali_id'] = 'catalog_marki_stali';
+
+        foreach ($generalTables as $key => $tableName) {
+            $uniqVolume[$key] = $uniqVolume[$key]->map(function ($volume) use ($tableName) {
+                $standardName = $this->getModelClass($tableName)
+                    ->select('id', 'name')
+                    ->where('id', $volume)
+                    ->first()
+                    ->name;
+                $standardName = $standardName . ':' . $volume;
+                return $standardName;
+            });
+        }
+
+        return $uniqVolume;
+    }
+
+    public function getModelClass($tableName)
+    {
+        $modelClass = 'App\Models\\' . ucfirst(Str::camel($tableName));
+        $model = new $modelClass();
+
+        return $model;
     }
 }

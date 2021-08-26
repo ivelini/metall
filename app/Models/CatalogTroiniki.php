@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CatalogPerehodi extends Model
+class CatalogTroiniki extends Model
 {
     use HasFactory;
-    protected $table = 'catalog_perehody';
+    protected $table = 'catalog_troiniki';
 
     public function company() {
         return $this->belongsTo(Company::class, 'company_id', 'id');

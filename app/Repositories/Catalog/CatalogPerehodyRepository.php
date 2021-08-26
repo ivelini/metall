@@ -4,7 +4,7 @@
 namespace App\Repositories\Catalog;
 
 use App\Repositories\CoreRepository;
-use App\Models\CatalogPerehodi as Model;
+use App\Models\CatalogPerehody as Model;
 
 class CatalogPerehodyRepository extends CoreRepository
 {
