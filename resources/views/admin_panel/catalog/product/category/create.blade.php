@@ -27,12 +27,13 @@
                         </div>
                     </div>
                 </div>
+                @include('admin_panel.layouts.main.alerts')
                 <fieldset class="mb-3">
                     <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Параметры фильтра</legend>
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">Название категории</label>
                         <div class="col-lg-10">
-                            <input name="category_name" type="text" class="form-control">
+                            <input name="category_name" type="text" class="form-control" value="{{ old('category_name') }}">
                         </div>
                     </div>
 
@@ -44,9 +45,14 @@
                                         <option value=""></option>
                                         @if($keyName == 'catalog_standards_product_id' || $keyName == 'catalog_marki_stali_id')
                                             @foreach($volumeCollect as $volume)
-                                                <option value="@php
-                                                    echo mb_substr($volume, strpos($volume, ':'));
-                                                @endphp">{{ $volume }}</option>
+                                                @php
+                                                     print '<option value="' . mb_substr($volume, mb_strripos($volume, ':', 0, 'utf8') +1) . '">'
+                                                        . mb_substr($volume, 0, mb_strripos($volume, ':', 0, 'utf8')) . '</option>'
+                                                @endphp
+                                            @endforeach
+                                        @elseif($keyName != 'catalog_standards_product_id')
+                                            @foreach($volumeCollect as $volume)
+                                                <option value="{{ $volume }}">{{ $volume }}</option>
                                             @endforeach
                                         @endif
                                     </select>

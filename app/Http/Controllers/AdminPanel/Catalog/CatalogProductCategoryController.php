@@ -7,6 +7,8 @@ use App\Repositories\Catalog\CatalogProductTablesRepository;
 use Illuminate\Http\Request;
 use App\Repositories\Catalog\CatalogCategoryProductRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CatalogProductCategoryRequest;
+use function MongoDB\BSON\fromJSON;
 
 class CatalogProductCategoryController extends Controller
 {
@@ -63,7 +65,7 @@ class CatalogProductCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CatalogProductCategoryRequest $request)
     {
 
         $input = $request->input();
@@ -71,16 +73,38 @@ class CatalogProductCategoryController extends Controller
 
         empty($input['is_published']) == true ? $input['is_published'] = 0 : $input['is_published'] = 1;
 
+        //Собираем ключи для фильтра
         $filtrKeyValue = [];
         foreach ($input as $key => $value) {
-            if (strpos($key, '_filtr') > 0 && $value != NULL) {
-                $key = substr($key, 0, strpos($key, '_filtr'));
+            if (mb_strripos($key, ':') > 0 && $value != NULL) {
+                $key = substr($key, 0, strpos($key, ':'));
                 $filtrKeyValue[$key] = $value;
             }
         }
 
+        //Если нет ни одного ключа
+        if (count($filtrKeyValue) == 0) {
+            return redirect()->back()
+                ->withInput()
+                ->with(['alert' => 'Хотя бы один параметр фильтра должен быть выбран']);
+        }
+
+        //Сереализуем фильтр
         $filtrKeyValue = json_encode($filtrKeyValue);
-        dd(__METHOD__, $companyId, $input,$filtrKeyValue);
+
+        //Добавляем днные в таблицу
+        $prouctCategoryTable = $this->catalogProductCategoryRepository->startConditions();
+        $prouctCategoryTable->parent_id = $input['parent_id'];
+        $prouctCategoryTable->company_id = $companyId;
+        $prouctCategoryTable->category_name = $input['category_name'];
+        $prouctCategoryTable->catalog_product_table_name = $input['catalog_product_table_name'];
+        $prouctCategoryTable->columns_name = $filtrKeyValue;
+        $prouctCategoryTable->is_published = $input['is_published'];
+        $prouctCategoryTable->save();
+
+        return redirect()
+            ->route('catalog.product.category.index')
+            ->with(['success' => 'Категория успешно добавлена']);
     }
 
     /**
@@ -102,7 +126,18 @@ class CatalogProductCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = $this->catalogProductCategoryRepository->startConditions()
+            ->where('id', $id)
+            ->first();
+
+        $columns = $this->catalogProductTablesRepository->getColumnsFromTableNameForFilter($category->catalog_product_table_name);
+
+        $uniqVolumes =$this->catalogProductTablesRepository->getUniqVolumeFromColumn($columns, $category->catalog_product_table_name);
+        $selectedVolumeFromColumns = (array) json_decode($category->columns_name);
+
+        $uniqVolumesAndSelected = $this->catalogProductTablesRepository->selectUniqVolumes($uniqVolumes, $selectedVolumeFromColumns);
+
+        return view('admin_panel.catalog.product.category.edit', compact('category', 'uniqVolumesAndSelected'));
     }
 
     /**
@@ -114,7 +149,7 @@ class CatalogProductCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd(__METHOD__,$request, $id);
     }
 
     /**

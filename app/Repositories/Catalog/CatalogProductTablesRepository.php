@@ -159,6 +159,36 @@ class CatalogProductTablesRepository
         return $uniqVolume;
     }
 
+    public function selectUniqVolumes($uniqVolumes, $selectedVolumeFromColumns)
+    {
+        foreach ($selectedVolumeFromColumns as $keyName => $selectVolume) {
+            if ($keyName != 'catalog_standards_product_id' && $keyName != 'catalog_marki_stali_id') {
+                $uniqVolumes[$keyName] = $uniqVolumes[$keyName]->map(function ($volume) use ($selectVolume) {
+                    if ($volume == $selectVolume) {
+                        return '+' . $volume;
+                    }
+
+                    return $volume;
+                });
+            }
+            else {
+                $uniqVolumes[$keyName] = $uniqVolumes[$keyName]->map(function ($value) use ($selectVolume) {
+                    $valueIdSelected = mb_substr($value, mb_strripos($value, ':', 0, 'utf8') + 1);
+
+                    if ($valueIdSelected == $selectVolume) {
+                        return '+' . $value;
+                    }
+
+                    return $value;
+                });
+            }
+
+        }
+
+//        dd(__METHOD__,$uniqVolumes);
+        return $uniqVolumes;
+    }
+
     public function getModelClass($tableName)
     {
         $modelClass = 'App\Models\\' . ucfirst(Str::camel($tableName));

@@ -12,6 +12,7 @@
 @section('content-area')
     <div class="card">
         <div class="card-body">
+            @include('admin_panel.layouts.main.alerts')
             <div class="row">
                 <div class="col-lg-12">
                     @if($categories->count() > 0)
