@@ -6,13 +6,15 @@
     Категория "{{ $parentCategory->category_name }}" - добавление подкатегории
 @endsection
 @section('header-js')
+    <script src="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>
+    <link href="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.css" rel="stylesheet">
     <script src="/admin_panel/global_assets/js/plugins/extensions/jquery_ui/interactions.min.js"></script>
     <script src="/admin_panel/global_assets/js/plugins/extensions/jquery_ui/touch.min.js"></script>
 @endsection
 @section('content-area')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('catalog.product.category.store') }}" method="POST">
+            <form action="{{ route('catalog.product.category.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="catalog_product_table_name" value="{{ $parentCategory->catalog_product_table_name }}">
                 <input type="hidden" name="parent_id" value="{{ $parentCategory->id }}">
@@ -30,12 +32,6 @@
                 @include('admin_panel.layouts.main.alerts')
                 <fieldset class="mb-3">
                     <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Параметры фильтра</legend>
-                    <div class="form-group row">
-                        <label class="col-form-label col-lg-2">Название категории</label>
-                        <div class="col-lg-10">
-                            <input name="category_name" type="text" class="form-control" value="{{ old('category_name') }}">
-                        </div>
-                    </div>
 
                     @foreach($uniqVolumes as $keyName => $volumeCollect)
                         <div class="form-group row">
@@ -60,6 +56,55 @@
                         </div>
                     @endforeach
                     </fieldset>
+                <fieldset>
+                    <div class="form-group row">
+                        <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">SEO</legend>
+                        <label class="col-form-label col-lg-2">Название категории (для меню)</label>
+                        <div class="col-lg-10">
+                            <input name="category_name" type="text" class="form-control" value="{{ old('category_name') }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2">Название категории (на странице)</label>
+                        <div class="col-lg-10">
+                            <input name="title" type="text" class="form-control" value="{{ old('category_name') }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2">title</label>
+                        <div class="col-lg-10">
+                            <input name="title_seo" type="text" class="form-control" value="{{ old('category_name') }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2">slug</label>
+                        <div class="col-lg-10">
+                            <input name="slug" type="text" class="form-control" value="{{ old('category_name') }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-10">
+                            <div class="form-group">
+                                <label>Описание категории</label>
+                                <textarea name="description"
+                                          rows="5"
+                                          cols="3"
+                                          class="form-control"
+                                          id="summernote">{{ old('description') }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="card">
+                                <div class="card-img-actions m-1">
+                                    <img class="card-img img-fluid" src="/admin_panel/global_assets/images/placeholders/placeholder.jpg" alt="">
+                                    <div class="card-img-actions-overlay card-img">
+                                        <input name="img" type="file" class="form-control-plaintext" style="width: 65px">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary">Добавить <i class="icon-paperplane ml-2"></i></button>
                 </div>
@@ -67,5 +112,9 @@
         </div>
 @endsection
 @section('include-footer')
-
+            <script>
+                $(document).ready(function() {
+                    $('#summernote').summernote();
+                });
+            </script>
 @endsection

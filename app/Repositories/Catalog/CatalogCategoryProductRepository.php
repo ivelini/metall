@@ -5,6 +5,7 @@ namespace App\Repositories\Catalog;
 
 use App\Models\CatalogProductsCategory as Model;
 use App\Repositories\CoreRepository;
+use Illuminate\Support\Facades\Storage;
 
 class CatalogCategoryProductRepository extends CoreRepository
 {
@@ -46,5 +47,17 @@ class CatalogCategoryProductRepository extends CoreRepository
     {
         $model =  $this->startConditions()->where('id', $id)->first();
         return $model;
+    }
+
+    public function getCategory($id)
+    {
+        $category = $this->startConditions()
+            ->where('id', $id)
+            ->first();
+
+        $category->img = '/storage' . mb_substr($category->img, 0, mb_strripos($category->img, '.'))
+            . '_medium.jpg';
+
+        return $category;
     }
 }

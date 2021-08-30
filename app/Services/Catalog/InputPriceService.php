@@ -5,7 +5,7 @@ namespace App\Services\Catalog;
 
 
 use App\Jobs\ImportPriceJob;
-use App\Repositories\Catalog\CatalogCatgoryProductRepository;
+use App\Repositories\Catalog\CatalogCategoryProductRepository;
 use App\Repositories\Catalog\CatalogMarkiStaliRepository;
 use App\Repositories\Catalog\CatalogProductTablesRepository;
 use App\Repositories\Catalog\CatalogStandardRepository;
@@ -31,7 +31,7 @@ class InputPriceService
         $this->catalogMarkiStaliRepository = new CatalogMarkiStaliRepository();
         $this->catalogStandardRepository = new CatalogStandardRepository();
         $this->catalogProductTablesRepository = new CatalogProductTablesRepository();
-        $this->catalogCatgoryProductRepository = new CatalogCatgoryProductRepository();
+        $this->catalogCatgoryProductRepository = new CatalogCategoryProductRepository();
 
         /*
          * Обязательнве табличные значения для листов

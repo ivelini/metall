@@ -31,7 +31,26 @@
                                         @if($category->children->count() > 0)
                                             <ul class="list list-unstyled">
                                                 @foreach($category->children as $child)
-                                                    <li><a href="{{ route('catalog.product.category.edit', $child->id) }}">{{ $child->category_name }}</a></li>
+                                                    <li>
+                                                        <div class="row @if($child->is_published == 0) not-active @endif">
+                                                            <div class="col-lg-3">
+                                                                <a href="{{ route('catalog.product.category.edit', $child->id) }}">
+                                                                    {{ $child->category_name }}</a>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                {{ $child->columns_name }}
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <form action="{{ route('catalog.product.category.destroy', $child->id) }}" method="POST">
+                                                                    @method('DELETE')
+                                                                    @csrf
+                                                                    <div class="text-right">
+                                                                        <button type="submit" class="btn"> <i class="icon-bin"></i></button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </li>
                                                 @endforeach
                                             </ul>
                                         @endif

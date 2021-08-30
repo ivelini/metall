@@ -1,0 +1,12 @@
+.not-active {
+    color: #999;
+}
+.not-active a{
+    color: #999;
+}
+.not-active .icon-bin{
+    color: #999;
+}
+.not-active a:hover{
+    color: #0a6ebd;
+}

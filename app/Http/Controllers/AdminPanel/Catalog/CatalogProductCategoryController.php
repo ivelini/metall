@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers\AdminPanel\Catalog;
 
+use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Catalog\CatalogProductTablesRepository;
 use Illuminate\Http\Request;
 use App\Repositories\Catalog\CatalogCategoryProductRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CatalogProductCategoryRequest;
-use function MongoDB\BSON\fromJSON;
 
 class CatalogProductCategoryController extends Controller
 {
 
     protected $catalogProductCategoryRepository;
     protected $catalogProductTablesRepository;
+    protected $imageHelper;
 
     public function __construct()
     {
         $this->catalogProductCategoryRepository = new CatalogCategoryProductRepository();
         $this->catalogProductTablesRepository = new CatalogProductTablesRepository();
+        $this->imageHelper = new ImageHelper();
     }
 
     /**
@@ -71,26 +73,20 @@ class CatalogProductCategoryController extends Controller
         $input = $request->input();
         $companyId = Auth::user()->company()->first()->id;
 
-        empty($input['is_published']) == true ? $input['is_published'] = 0 : $input['is_published'] = 1;
+        $filterKey = $this->getFilterKey($input);
+        $input['is_published'] = $filterKey['is_published'];
+        $filterKeyValue = $filterKey['filterKeyValue'];
 
-        //Собираем ключи для фильтра
-        $filtrKeyValue = [];
-        foreach ($input as $key => $value) {
-            if (mb_strripos($key, ':') > 0 && $value != NULL) {
-                $key = substr($key, 0, strpos($key, ':'));
-                $filtrKeyValue[$key] = $value;
-            }
-        }
 
         //Если нет ни одного ключа
-        if (count($filtrKeyValue) == 0) {
+        if (count($filterKeyValue) == 0) {
             return redirect()->back()
                 ->withInput()
                 ->with(['alert' => 'Хотя бы один параметр фильтра должен быть выбран']);
         }
 
         //Сереализуем фильтр
-        $filtrKeyValue = json_encode($filtrKeyValue);
+        $filterKeyValue = json_encode($filterKeyValue);
 
         //Добавляем днные в таблицу
         $prouctCategoryTable = $this->catalogProductCategoryRepository->startConditions();
@@ -98,8 +94,16 @@ class CatalogProductCategoryController extends Controller
         $prouctCategoryTable->company_id = $companyId;
         $prouctCategoryTable->category_name = $input['category_name'];
         $prouctCategoryTable->catalog_product_table_name = $input['catalog_product_table_name'];
-        $prouctCategoryTable->columns_name = $filtrKeyValue;
+        $prouctCategoryTable->columns_name = $filterKeyValue;
         $prouctCategoryTable->is_published = $input['is_published'];
+        $prouctCategoryTable->description = $input['description'];
+
+        if (!empty($request->file('img'))) {
+
+            $image = $request->file('img');
+            $imgPath = $this->imageHelper->seveImage($image);
+            $prouctCategoryTable->img = $imgPath;
+        }
         $prouctCategoryTable->save();
 
         return redirect()
@@ -126,9 +130,7 @@ class CatalogProductCategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = $this->catalogProductCategoryRepository->startConditions()
-            ->where('id', $id)
-            ->first();
+        $category = $this->catalogProductCategoryRepository->getCategory($id);
 
         $columns = $this->catalogProductTablesRepository->getColumnsFromTableNameForFilter($category->catalog_product_table_name);
 
@@ -149,7 +151,41 @@ class CatalogProductCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd(__METHOD__,$request, $id);
+        $request->validate([
+            'img'   =>  'mimes:jpg,bmp,png,jpeg',
+        ]);
+
+        $input = $request->input();
+
+        $filterKey = $this->getFilterKey($input);
+        $input['is_published'] = $filterKey['is_published'];
+        $filterKeyValue = $filterKey['filterKeyValue'];
+
+        //Сереализуем фильтр
+        $filterKeyValue = json_encode($filterKeyValue);
+
+        //Обновляем категорию
+        $prouctCategoryTable = $this->catalogProductCategoryRepository->startConditions()
+            ->where('id', $id)
+            ->first();
+        $prouctCategoryTable->category_name = $input['category_name'];
+        $prouctCategoryTable->columns_name = $filterKeyValue;
+        $prouctCategoryTable->is_published = $input['is_published'];
+        $prouctCategoryTable->description = $input['description'];
+
+        if (!empty($request->file('img'))) {
+
+            $image = $request->file('img');
+            $imgPath = $this->imageHelper->seveImage($image);
+            $prouctCategoryTable->img = $imgPath;
+        }
+
+        $prouctCategoryTable->save();
+
+        return redirect()
+            ->route('catalog.product.category.index')
+            ->with(['success' => 'Категория "' . $input['category_name'] . '" успешно добавлена']);
+
     }
 
     /**
@@ -160,6 +196,32 @@ class CatalogProductCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $prouctCategoryTable = $this->catalogProductCategoryRepository->startConditions()
+            ->where('id', $id)
+            ->first()
+            ->forceDelete();
+
+        return redirect()
+            ->route('catalog.product.category.index')
+            ->with(['success' => 'Категория успешно удалена']);
+    }
+
+    protected function getFilterKey($input)
+    {
+        empty($input['is_published']) == true ? $input['is_published'] = 0 : $input['is_published'] = 1;
+
+        //Собираем ключи для фильтра
+        $filterKeyValue = [];
+        foreach ($input as $key => $value) {
+            if (mb_strripos($key, ':') > 0 && $value != NULL) {
+                $key = substr($key, 0, strpos($key, ':'));
+                $filterKeyValue[$key] = $value;
+            }
+        }
+
+        $filterKey['is_published'] = $input['is_published'];
+        $filterKey['filterKeyValue'] = $filterKeyValue;
+
+        return $filterKey;
     }
 }
