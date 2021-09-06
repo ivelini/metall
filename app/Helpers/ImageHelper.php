@@ -46,8 +46,8 @@ class ImageHelper
 
             $imgClone = clone $img;
 
-            $marginW = ($imgW - $size[0]) / 2;
-            $marginH = ($imgH - $size[1]) / 2;
+            $marginW = round((($imgW - $size[0]) / 2), 0, PHP_ROUND_HALF_DOWN);
+            $marginH = round((($imgH - $size[1]) / 2), 0, PHP_ROUND_HALF_DOWN);
 
             if($imgW > $size[0]) {
                 if ($imgH > $size[1]) {

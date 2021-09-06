@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminPanel\Catalog\CatalogTroinikiController;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogDnishaController;
 use \App\Http\Controllers\AdminPanel\Catalog\CatalogProductCategoryController;
 use \App\Http\Controllers\AdminPanel\Content\ContentRecordCategoryController;
+use \App\Http\Controllers\AdminPanel\Content\ContentRecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +49,7 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'records'], function () {
             Route::resource('category', ContentRecordCategoryController::class)->names('content.records.category');
-            Route::resource('record', ContentRecordCategoryController::class)->names('content.records.record');
+            Route::resource('record', ContentRecordController::class)->names('content.records.record');
         });
 
     });

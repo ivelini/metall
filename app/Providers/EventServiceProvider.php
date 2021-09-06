@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\ContentRecord;
 use App\Models\ContentRecordCategory;
 use App\Observers\ContentRecordCategoryObserver;
+use App\Observers\ContentRecordObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,5 +32,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         ContentRecordCategory::observe(ContentRecordCategoryObserver::class);
+        ContentRecord::observe(ContentRecordObserver::class);
     }
 }

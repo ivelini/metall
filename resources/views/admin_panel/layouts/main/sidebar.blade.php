@@ -107,8 +107,8 @@
                     <a href="#" class="nav-link"><i class="icon-pencil7"></i> <span>Записи</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="#" class="nav-link"><i class="icon-circle-small"></i> Добавить запись</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link"><i class="icon-circle-small"></i> Все записи</a></li>
+                        <li class="nav-item"><a href="{{ route('content.records.record.create') }}" class="nav-link"><i class="icon-circle-small"></i> Добавить запись</a></li>
+                        <li class="nav-item"><a href="{{ route('content.records.record.index') }}" class="nav-link"><i class="icon-circle-small"></i> Все записи</a></li>
                        <li class="nav-item"><a href="{{ route('content.records.category.index') }}" class="nav-link"><i class="icon-circle-small"></i> Рубрики</a></li>
                     </ul>
                 </li>

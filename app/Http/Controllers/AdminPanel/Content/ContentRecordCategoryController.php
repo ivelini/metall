@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminPanel\Content;
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Content\ContentRecordCategoryRepository;
+use App\Repositories\ImageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,6 @@ class ContentRecordCategoryController extends Controller
     {
         $this->imageHelper = new ImageHelper();
         $this->contentRecordCategoryRepository = new ContentRecordCategoryRepository();
-
     }
 
     /**

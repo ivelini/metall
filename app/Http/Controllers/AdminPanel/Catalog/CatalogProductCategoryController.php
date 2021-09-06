@@ -118,7 +118,7 @@ class CatalogProductCategoryController extends Controller
 
             $prouctCategoryTable->image()->save($imageModel);
         }
-        dd(__METHOD__,$prouctCategoryTable);
+
         return redirect()
             ->route('catalog.product.category.index')
             ->with(['success' => 'Категория успешно добавлена']);

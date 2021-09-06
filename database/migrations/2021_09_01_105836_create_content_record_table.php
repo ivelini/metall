@@ -21,6 +21,7 @@ class CreateContentRecordTable extends Migration
             $table->string('slug');
             $table->text('description')->nullable();
             $table->text('content')->nullable();
+            $table->boolean('is_published')->default('0');
             $table->timestamps();
 
             $table->foreign('content_record_category_id')->references('id')

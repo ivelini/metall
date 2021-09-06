@@ -49,6 +49,16 @@ class ContentRecordCategoryRepository extends CoreRepository
         return $categories;
     }
 
+    public function getCategoriesFromCompanyIdForRecord($id)
+    {
+        $categories = $this->startConditions()
+            ->select('id', 'company_id', 'h1')
+            ->where('company_id', $id)
+            ->get();
+
+        return $categories;
+    }
+
     public function getCategory($id)
     {
         $category = $this->startConditions()
