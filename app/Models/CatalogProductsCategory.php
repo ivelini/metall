@@ -15,7 +15,13 @@ class CatalogProductsCategory extends Model
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
-    public function children() {
+    public function children()
+    {
         return $this->hasMany(CatalogProductsCategory::class, 'parent_id', 'id');
+    }
+
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'catalog_product_category_id', 'id');
     }
 }

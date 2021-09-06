@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             UserCompanySeeder::class,
             MarkiStaliSeeder::class,
-            StandardProductsSeeder::class
+            StandardProductsSeeder::class,
+            ContentRecordCategorySeeder::class
         ]);
     }
 }

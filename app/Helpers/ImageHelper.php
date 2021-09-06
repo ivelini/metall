@@ -8,15 +8,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
-use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Random;
 
 class ImageHelper
 {
-    public function seveImage($image)
+    protected function getImgPath()
     {
         $userId = Auth::id();
         $imgPath = '/User' . $userId . '/images/' . Str::random(6) . '.jpg';
 
+        return $imgPath;
+    }
+
+    public function seveImage($image)
+    {
+        $imgPath = $this->getImgPath();
         $img = Image::make($image);
         $img->save(Storage::path('public') . '' . $imgPath, 100);
 
@@ -73,6 +78,42 @@ class ImageHelper
         }
 
         return true;
+    }
 
+    /**
+     * Сохраняет изображения из summernote и возващает строку html с ссылкой на сохраненые изображения
+     *
+     * @param $content
+     * @return string
+     */
+    public function saveImageFromSummernote($content)
+    {
+
+        $imgPath = $this->getImgPath();
+        $dom = new \DOMDocument();
+        $dom->loadHtml($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $images = $dom->getElementsByTagName('img');
+
+        foreach($images as $k => $img){
+            $data = $img->getAttribute('src');
+
+            if (mb_strlen($img->getAttribute('src')) > 1000) {
+
+                list($type, $data) = explode(';', $data);
+                list(, $data)      = explode(',', $data);
+                $data = base64_decode($data);
+
+                $path = Storage::path('public') . $imgPath;
+
+                file_put_contents($path, $data);
+
+                $img->removeAttribute('src');
+                $img->setAttribute('src', '/storage/' . $imgPath);
+            }
+        }
+
+        $content = utf8_decode($dom->saveHTML($dom->documentElement));
+
+        return $content;
     }
 }

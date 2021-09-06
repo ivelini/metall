@@ -67,19 +67,19 @@
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">Название категории (на странице)</label>
                         <div class="col-lg-10">
-                            <input name="title" type="text" class="form-control" value="{{ old('category_name') }}">
+                            <input name="h1" type="text" class="form-control" value="{{ old('h1') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">title</label>
                         <div class="col-lg-10">
-                            <input name="title_seo" type="text" class="form-control" value="{{ old('category_name') }}">
+                            <input name="title" type="text" class="form-control" value="{{ old('title') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">slug</label>
                         <div class="col-lg-10">
-                            <input name="slug" type="text" class="form-control" value="{{ old('category_name') }}">
+                            <input name="slug" type="text" class="form-control" value="{{ old('slug') }}">
                         </div>
                     </div>
                     <div class="form-group row">

@@ -53,10 +53,13 @@ class CatalogCategoryProductRepository extends CoreRepository
     {
         $category = $this->startConditions()
             ->where('id', $id)
+            ->with('image')
             ->first();
 
-        $category->img = '/storage' . mb_substr($category->img, 0, mb_strripos($category->img, '.'))
-            . '_medium.jpg';
+        if(!empty($category->image->path)) {
+            $category->img = '/storage' . mb_substr($category->image->path, 0, mb_strripos($category->image->path, '.'))
+                . '_medium.jpg';
+        }
 
         return $category;
     }

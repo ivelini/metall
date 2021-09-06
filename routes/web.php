@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminPanel\Catalog\CatalogPerehodyController;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogTroinikiController;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogDnishaController;
 use \App\Http\Controllers\AdminPanel\Catalog\CatalogProductCategoryController;
+use \App\Http\Controllers\AdminPanel\Content\ContentRecordCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,5 +42,14 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
             Route::get('category/{category}/create', [CatalogProductCategoryController::class, 'createFromParent'])
                 ->name('catalog.product.parentcategory.create');
         });
+    });
+
+    Route::group(['prefix' => 'content'], function () {
+
+        Route::group(['prefix' => 'records'], function () {
+            Route::resource('category', ContentRecordCategoryController::class)->names('content.records.category');
+            Route::resource('record', ContentRecordCategoryController::class)->names('content.records.record');
+        });
+
     });
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminPanel\Catalog;
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Catalog\CatalogProductTablesRepository;
+use App\Repositories\ImageRepository;
 use Illuminate\Http\Request;
 use App\Repositories\Catalog\CatalogCategoryProductRepository;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +17,14 @@ class CatalogProductCategoryController extends Controller
     protected $catalogProductCategoryRepository;
     protected $catalogProductTablesRepository;
     protected $imageHelper;
+    protected $imageRepository;
 
     public function __construct()
     {
         $this->catalogProductCategoryRepository = new CatalogCategoryProductRepository();
         $this->catalogProductTablesRepository = new CatalogProductTablesRepository();
         $this->imageHelper = new ImageHelper();
+        $this->imageRepository = new ImageRepository();
     }
 
     /**
@@ -69,6 +72,9 @@ class CatalogProductCategoryController extends Controller
      */
     public function store(CatalogProductCategoryRequest $request)
     {
+        $request->validate([
+            'img'   =>  'mimes:jpg,bmp,png,jpeg',
+        ]);
 
         $input = $request->input();
         $companyId = Auth::user()->company()->first()->id;
@@ -93,19 +99,26 @@ class CatalogProductCategoryController extends Controller
         $prouctCategoryTable->parent_id = $input['parent_id'];
         $prouctCategoryTable->company_id = $companyId;
         $prouctCategoryTable->category_name = $input['category_name'];
+        $prouctCategoryTable->title = $input['title'];
+        $prouctCategoryTable->title_main = $input['title_main'];
+        $prouctCategoryTable->slug = $input['slug'];
         $prouctCategoryTable->catalog_product_table_name = $input['catalog_product_table_name'];
         $prouctCategoryTable->columns_name = $filterKeyValue;
         $prouctCategoryTable->is_published = $input['is_published'];
         $prouctCategoryTable->description = $input['description'];
+        $prouctCategoryTable->save();
 
         if (!empty($request->file('img'))) {
 
             $image = $request->file('img');
             $imgPath = $this->imageHelper->seveImage($image);
-            $prouctCategoryTable->img = $imgPath;
-        }
-        $prouctCategoryTable->save();
 
+            $imageModel = $this->imageRepository->startConditions();
+            $imageModel->path = $imgPath;
+
+            $prouctCategoryTable->image()->save($imageModel);
+        }
+        dd(__METHOD__,$prouctCategoryTable);
         return redirect()
             ->route('catalog.product.category.index')
             ->with(['success' => 'Категория успешно добавлена']);
@@ -169,18 +182,31 @@ class CatalogProductCategoryController extends Controller
             ->where('id', $id)
             ->first();
         $prouctCategoryTable->category_name = $input['category_name'];
+        $prouctCategoryTable->title = $input['title'];
+        $prouctCategoryTable->title_main = $input['title_main'];
+        $prouctCategoryTable->slug = $input['slug'];
         $prouctCategoryTable->columns_name = $filterKeyValue;
         $prouctCategoryTable->is_published = $input['is_published'];
         $prouctCategoryTable->description = $input['description'];
+        $prouctCategoryTable->save();
 
         if (!empty($request->file('img'))) {
 
             $image = $request->file('img');
             $imgPath = $this->imageHelper->seveImage($image);
-            $prouctCategoryTable->img = $imgPath;
-        }
 
-        $prouctCategoryTable->save();
+            $imageModel = $this->imageRepository->startConditions();
+            $imageModel->path = $imgPath;
+
+            if (empty($prouctCategoryTable->image)) {
+
+                $prouctCategoryTable->image()->save($imageModel);
+            }
+            else {
+
+                $prouctCategoryTable->image->update(['path' => $imageModel->path]);
+            }
+        }
 
         return redirect()
             ->route('catalog.product.category.index')
