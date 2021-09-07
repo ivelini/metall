@@ -3,7 +3,7 @@
     Каталог продукции - {{ $productName }}
 @endsection
 @section('pageheader-title')
-    Каталог продукции - {{ $productName }}
+    <a href="{{ Redirect::back()->getTargetUrl() }}"><i class="icon-arrow-left52 mr-2"></i></a>Каталог продукции - {{ $productName }}
 @endsection
 @section('header-js')
     <script src="/admin_panel/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>

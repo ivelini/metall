@@ -8,9 +8,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use App\Repositories\ImageRepository;
 
 class ImageHelper
 {
+
+    protected $imageRepository;
+
+    public function __construct()
+    {
+        $this->imageRepository = new ImageRepository();
+    }
+
     protected function getImgPath()
     {
         $userId = Auth::id();
@@ -19,7 +28,32 @@ class ImageHelper
         return $imgPath;
     }
 
-    public function seveImage($image)
+    public  function saveOrUpdateImageFromModel($model, $requestImg)
+    {
+        if (!empty($requestImg)) {
+
+            $image = $requestImg;
+            $imgPath = $this->saveImage($image);
+
+            $imageModel = $this->imageRepository->startConditions();
+            $imageModel->path = $imgPath;
+
+            if (empty($model->image)) {
+
+                $model->image()->save($imageModel);
+            }
+            else {
+
+                $model->image->update(['path' => $imageModel->path]);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function saveImage($image)
     {
         $imgPath = $this->getImgPath();
         $img = Image::make($image);
@@ -46,27 +80,42 @@ class ImageHelper
 
             $imgClone = clone $img;
 
-            $marginW = round((($imgW - $size[0]) / 2), 0, PHP_ROUND_HALF_DOWN);
-            $marginH = round((($imgH - $size[1]) / 2), 0, PHP_ROUND_HALF_DOWN);
+            if ($imgW / $imgH >= 1) {
+                $imgClone->resize(null, $size[1], function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            }
+            else {
+                $imgClone->resize($size[0], null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            }
 
-            if($imgW > $size[0]) {
-                if ($imgH > $size[1]) {
+            $imgCloneW = $imgClone->width();
+            $imgCloneH = $imgClone->height();
+
+
+            $marginW = round((($imgCloneW - $size[0]) / 2), 0, PHP_ROUND_HALF_DOWN);
+            $marginH = round((($imgCloneH - $size[1]) / 2), 0, PHP_ROUND_HALF_DOWN);
+
+            if($imgCloneW > $size[0]) {
+                if ($imgCloneH > $size[1]) {
                     $imgClone->crop($size[0], $size[1], $marginW, $marginH);
                 }
                 else {
-                    $imgClone->crop($imgH, $imgH, $marginW, 0);
+                    $imgClone->crop($imgCloneH, $imgCloneH, $marginW, 0);
                 }
             }
             else {
-                if ($imgH > $size[1]) {
-                    $imgClone->crop($imgW, $imgW, 0, $marginH);
+                if ($imgCloneH > $size[1]) {
+                    $imgClone->crop($imgCloneW, $imgCloneW, 0, $marginH);
                 }
                 else {
-                    if ($imgW > $imgH) {
-                        $imgClone->crop($imgH, $imgH, $marginW);
+                    if ($imgCloneW > $imgCloneH) {
+                        $imgClone->crop($imgCloneH, $imgCloneH, $marginW);
                     }
                     else {
-                        $imgClone->crop($imgW, $imgW, 0, $marginH);
+                        $imgClone->crop($imgCloneW, $imgCloneW, 0, $marginH);
                     }
                 }
             }

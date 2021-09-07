@@ -49,11 +49,11 @@ class ContentRecordCategoryRepository extends CoreRepository
         return $categories;
     }
 
-    public function getCategoriesFromCompanyIdForRecord($id)
+    public function getCategoriesFromCompanyIdForRecord($companyId)
     {
         $categories = $this->startConditions()
             ->select('id', 'company_id', 'h1')
-            ->where('company_id', $id)
+            ->where('company_id', $companyId)
             ->get();
 
         return $categories;
@@ -68,5 +68,18 @@ class ContentRecordCategoryRepository extends CoreRepository
 
         return $category;
 
+    }
+
+    public function getRecordsFromCategoryId($id)
+    {
+        $records = $this->startConditions()->where('id', $id)
+            ->with(['records' => function($query) {
+                $query->select('id', 'content_record_category_id', 'h1', 'slug', 'created_at');
+            }
+            ])
+            ->first()
+            ->records;
+
+        return $records;
     }
 }

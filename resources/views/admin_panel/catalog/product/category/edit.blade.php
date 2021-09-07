@@ -3,7 +3,7 @@
 
 @endsection
 @section('pageheader-title')
-
+    <a href="{{ Redirect::back()->getTargetUrl() }}"><i class="icon-arrow-left52 mr-2"></i></a>Редактировать категорию
 @endsection
 @section('header-js')
     <script src="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>

@@ -3,7 +3,7 @@
     Категория "{{ $parentCategory->category_name }}" - добавление подкатегории
 @endsection
 @section('pageheader-title')
-    Категория "{{ $parentCategory->category_name }}" - добавление подкатегории
+    <a href="{{ Redirect::back()->getTargetUrl() }}"><i class="icon-arrow-left52 mr-2"></i></a>Категория "{{ $parentCategory->category_name }}" - добавление подкатегории
 @endsection
 @section('header-js')
     <script src="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>

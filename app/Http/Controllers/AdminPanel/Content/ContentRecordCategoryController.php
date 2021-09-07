@@ -99,7 +99,10 @@ class ContentRecordCategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $records = $this->contentRecordCategoryRepository->getRecordsFromCategoryId($id);
+        $category = $this->contentRecordCategoryRepository->getCategory($id);
+
+        return view('admin_panel.content.record.category.show', compact('records', 'category'));
     }
 
     /**

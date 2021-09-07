@@ -36,8 +36,6 @@ class ContentRecordController extends Controller
         $companyId = Auth::user()->company()->first()->id;
         $records = $this->contentRecordRepository->getAllRecordsFromCompanyId($companyId);
 
-//        dd(__METHOD__, $records);
-
         return view('admin_panel.content.record.page.index', compact('records'));
     }
 
@@ -67,38 +65,27 @@ class ContentRecordController extends Controller
         $contentRecordModel = $this->contentRecordRepository->startConditions();
 
         //Обработка поля из редактора summernote
-        $data['description'] = $request->input('description');
+        $data['content'] = $request->input('content');
 
-        if(!empty($data['description'])) {
+        if(!empty($data['content'])) {
             $data['content'] = $this->imageHelper->saveImageFromSummernote($data['content']);
         }
 
-        $contentRecordModel->create([
-            'content_record_category_id' => $data['content_record_category_id'],
-            'h1' => $data['h1'],
-            'title' => $data['title'],
-            'content' => $data['content'],
-            'description' => $data['description'],
-            'slug' => $data['slug'],
-            'is_published' => (empty($data['is_published']) == true) ? 0 : 1
-        ]);
+        $record = $contentRecordModel->create([
+                    'content_record_category_id' => $data['content_record_category_id'],
+                    'h1' => $data['h1'],
+                    'title' => $data['title'],
+                    'content' => $data['content'],
+                    'description' => $data['description'],
+                    'slug' => $data['slug'],
+                    'is_published' => (empty($data['is_published']) == true) ? 0 : 1
+                ]);
 
-        if (!empty($request->file('img'))) {
-
-            $image = $request->file('img');
-            $imgPath = $this->imageHelper->seveImage($image);
-
-            $imageModel = $this->imageRepository->startConditions();
-            $imageModel->path = $imgPath;
-
-            $contentRecordModel->image()->save($imageModel);
-        }
+        $this->imageHelper->saveOrUpdateImageFromModel($record, $request->file('img'));
 
         return redirect()
             ->route('content.records.record.index')
             ->with(['success' => 'Запись успешно добавлена']);
-
-
     }
 
     /**
@@ -120,7 +107,13 @@ class ContentRecordController extends Controller
      */
     public function edit($id)
     {
-        //
+        $companyId = Auth::user()->company()->first()->id;
+        $record = $this->contentRecordRepository->getRecordForEdit($id);
+        $categories = $this->contentRecordCategoryRepository->getCategoriesFromCompanyIdForRecord($companyId);
+
+        session(['content_lenth' => mb_strlen($record->content)]);
+
+        return view('admin_panel.content.record.page.edit', compact('record', 'categories'));
     }
 
     /**
@@ -132,7 +125,33 @@ class ContentRecordController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->input();
+
+        $contentRecordModel = $this->contentRecordRepository->getRecord($id);
+
+        //Обработка поля из редактора summernote
+        $data['content'] = $request->input('content');
+
+        if(!empty($data['content']) &&
+            mb_strlen($data['content']) != session('content_lenth') - 1) {
+
+            $data['content'] = $this->imageHelper->saveImageFromSummernote($data['content']);
+        }
+
+        $contentRecordModel->update([
+            'h1' => $data['h1'],
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'slug' => $data['slug'],
+            'content' => $data['content'],
+            'is_published' => (empty($data['is_published']) == true) ? 0 : 1,
+        ]);
+
+        $this->imageHelper->saveOrUpdateImageFromModel($contentRecordModel, $request->file('img'));
+
+        return redirect()
+            ->route('content.records.record.index')
+            ->with(['success' => 'Запись "' . $data['h1'] . '" успешно обновлена']);
     }
 
     /**
@@ -143,6 +162,12 @@ class ContentRecordController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = $this->contentRecordRepository
+            ->getRecord($id)
+            ->delete();
+
+        return redirect()
+            ->route('content.records.record.index')
+            ->with(['success' => 'Запись успешно удалена']);
     }
 }

@@ -1,9 +1,9 @@
 @extends('admin_panel.layouts.main.main')
 @section('title')
-    Все рубрики
+    Рубика "{{ $category->title }}"
 @endsection
 @section('pageheader-title')
-    Все рубрики
+    <a href="{{ Redirect::back()->getTargetUrl() }}"><i class="icon-arrow-left52 mr-2"></i></a>Рубика "{{ $category->h1 }}"
 @endsection
 @section('header-js')
     <script src="/admin_panel/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
@@ -19,7 +19,7 @@
                         <div class="text-right">
 
 
-                            <a href="{{ route('content.records.category.create') }}" type="button" class="btn btn-primary">Добавить рубрику</a>
+                            <a href="{{ route('content.records.record.create') }}" type="button" class="btn btn-primary">Добавить запись</a>
                         </div>
 
                 </div>
@@ -29,19 +29,19 @@
                     <thead>
                     <tr>
                         <th>Название</th>
-                        <th>Ярлык</th>
-                        <th>Записи</th>
+                        <th>Категория</th>
+                        <th>Дата публикации</th>
                         <th>Удалить</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($categories as $category)
-                        <tr>
-                            <td><a href="{{ route('content.records.category.edit', $category->id) }}">{{ $category->h1 }}</a></td>
-                            <td>{{ $category->slug }}</td>
-                            <td><a href="{{ route('content.records.category.show', $category->id) }}">{{ $category->records_count }}</a></td>
+                    @foreach($records as $record)
+                        <tr @if($record->is_published == 0) class="not-active" @endif>
+                            <td><a href="{{ route('content.records.record.edit', $record->id) }}">{{ $record->h1 }}</a></td>
+                            <td><a href="{{ route('content.records.category.show', $category->id) }}">{{ $category->h1 }}</a></td>
+                            <td>{{ $record->created_at }}</td>
                             <td>
-                                <form action="{{ route('content.records.category.destroy', $category->id) }}" method="POST">
+                                <form action="{{ route('content.records.record.destroy', $record->id) }}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     <div class="text-right">
@@ -73,9 +73,9 @@
                     autoWidth: false,
                     columnDefs: [{
                         orderable: false,
-                        width: 100,
-                        targets: [ 3 ]
+                        width: 100
                     }],
+                    order: [[2, 'desc']],
                     dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                     language: {
                         search: '<span>Фильтр:</span> _INPUT_',

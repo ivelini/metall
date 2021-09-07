@@ -2,19 +2,26 @@
 
 namespace App\Observers;
 
+use App\Helpers\ObserveHelper;
 use App\Models\ContentRecord;
-use Illuminate\Support\Str;
 
 class ContentRecordObserver
 {
+
+    protected $observeHelper;
+
+    public function __construct()
+    {
+        $this->observeHelper = new ObserveHelper();
+    }
+
     public function creating(ContentRecord $contentRecord)
     {
-        if($contentRecord->title == NULL) {
-            $contentRecord->title = $contentRecord->h1;
-        }
+        $contentRecord = $this->observeHelper->checkH1AndSlugColumns($contentRecord);
+    }
 
-        if($contentRecord->slug == NULL) {
-            $contentRecord->slug = Str::slug($contentRecord->h1);
-        }
+    public function updating(ContentRecord $contentRecord)
+    {
+        $contentRecord = $this->observeHelper->checkH1AndSlugColumns($contentRecord);
     }
 }

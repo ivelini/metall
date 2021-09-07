@@ -111,7 +111,7 @@ class CatalogProductCategoryController extends Controller
         if (!empty($request->file('img'))) {
 
             $image = $request->file('img');
-            $imgPath = $this->imageHelper->seveImage($image);
+            $imgPath = $this->imageHelper->saveImage($image);
 
             $imageModel = $this->imageRepository->startConditions();
             $imageModel->path = $imgPath;
@@ -190,23 +190,7 @@ class CatalogProductCategoryController extends Controller
         $prouctCategoryTable->description = $input['description'];
         $prouctCategoryTable->save();
 
-        if (!empty($request->file('img'))) {
-
-            $image = $request->file('img');
-            $imgPath = $this->imageHelper->seveImage($image);
-
-            $imageModel = $this->imageRepository->startConditions();
-            $imageModel->path = $imgPath;
-
-            if (empty($prouctCategoryTable->image)) {
-
-                $prouctCategoryTable->image()->save($imageModel);
-            }
-            else {
-
-                $prouctCategoryTable->image->update(['path' => $imageModel->path]);
-            }
-        }
+        $this->imageHelper->saveOrUpdateImageFromModel($prouctCategoryTable, $request->file('img'));
 
         return redirect()
             ->route('catalog.product.category.index')
@@ -222,7 +206,7 @@ class CatalogProductCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $prouctCategoryTable = $this->catalogProductCategoryRepository->startConditions()
+        $this->catalogProductCategoryRepository->startConditions()
             ->where('id', $id)
             ->first()
             ->forceDelete();
