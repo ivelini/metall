@@ -53,11 +53,11 @@
 
                                 <div class="form-group row">
                                     <div class="col-lg-12">
-                                        <textarea name="descrtiption"
+                                        <textarea name="description"
                                                   placeholder="Описание"
                                                   rows="5"
                                                   cols="3"
-                                                  class="form-control">{{ old('descrtiption') }}</textarea>
+                                                  class="form-control">{{ old('description') }}</textarea>
                                     </div>
                                 </div>
                             </fieldset>

@@ -16,7 +16,7 @@ class ContentRecordCategorySeeder extends Seeder
     {
         DB::table('content_record_category')->insert([
             [
-                'h1' => 'Без категоррии',
+                'h1' => 'Без категории',
                 'slug' => 'bez_categorii',
                 'company_id' => '1'
             ],

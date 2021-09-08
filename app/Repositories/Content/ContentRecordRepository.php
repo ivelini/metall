@@ -4,12 +4,20 @@
 namespace App\Repositories\Content;
 
 
+use App\Helpers\ImageHelper;
 use App\Repositories\CoreRepository;
 use App\Models\ContentRecord as Model;
 use Illuminate\Support\Facades\Auth;
 
 class ContentRecordRepository extends CoreRepository
 {
+    protected $imageHelper;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->imageHelper = new ImageHelper();
+    }
 
     public function getModelClass()
     {
@@ -78,10 +86,7 @@ class ContentRecordRepository extends CoreRepository
                     ])
             ->first();
 
-        if(!empty($record->image->path)) {
-            $record->img = '/storage' . mb_substr($record->image->path, 0, mb_strripos($record->image->path, '.'))
-                . '_medium.jpg';
-        }
+        $this->imageHelper->getImgPathFromModel($record, 'large');
 
         $record->category_id = $record->category->id;
         $record->category_h1 = $record->category->h1;

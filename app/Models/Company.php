@@ -15,6 +15,11 @@ class Company extends Model
     }
 
     public function catalogProductCategories() {
-        return$this->hasMany(CatalogProductsCategory::class, 'company_id', 'id');
+        return $this->hasMany(CatalogProductsCategory::class, 'company_id', 'id');
+    }
+
+    public function contentSheetWorkerCategory()
+    {
+        return $this->hasMany(ContentSheetWorkerCategory::class, 'company_id', 'id');
     }
 }

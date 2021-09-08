@@ -19,6 +19,7 @@ class CreateImageTable extends Migration
             $table->unsignedBigInteger('catalog_product_category_id')->nullable();
             $table->unsignedBigInteger('content_record_category_id')->nullable();
             $table->unsignedBigInteger('content_record_id')->nullable();
+            $table->unsignedBigInteger('content_sheet_worker_id')->nullable();
             $table->boolean('is_head')->default('0');
             $table->timestamps();
 
@@ -34,6 +35,11 @@ class CreateImageTable extends Migration
 
             $table->foreign('content_record_id')->references('id')
                 ->on('content_record')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
+            $table->foreign('content_sheet_worker_id')->references('id')
+                ->on('content_sheet_worker')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

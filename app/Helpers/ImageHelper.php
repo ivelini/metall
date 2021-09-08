@@ -69,7 +69,8 @@ class ImageHelper
         $template = [
             'small' =>  [150,150],
             'medium' => [250,250],
-            'large' =>  [350,350]
+            'large' =>  [350,350],
+            'extralarge' =>  [450,450]
         ];
 
         $img = Image::make(Storage::path('public') . '' . $imgPath);
@@ -164,5 +165,15 @@ class ImageHelper
         $content = utf8_decode($dom->saveHTML($dom->documentElement));
 
         return $content;
+    }
+
+    public function getImgPathFromModel($model, $format = 'medium')
+    {
+        if(!empty($model->image->path)) {
+            $model->img = '/storage' . mb_substr($model->image->path, 0, mb_strripos($model->image->path, '.'))
+                . '_' . $format . '.jpg';
+        }
+
+        return $model;
     }
 }

@@ -6,9 +6,11 @@ use App\Http\Controllers\AdminPanel\Catalog\CatalogOtvodyContoller;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogPerehodyController;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogTroinikiController;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogDnishaController;
-use \App\Http\Controllers\AdminPanel\Catalog\CatalogProductCategoryController;
-use \App\Http\Controllers\AdminPanel\Content\ContentRecordCategoryController;
-use \App\Http\Controllers\AdminPanel\Content\ContentRecordController;
+use App\Http\Controllers\AdminPanel\Catalog\CatalogProductCategoryController;
+use App\Http\Controllers\AdminPanel\Content\ContentRecordCategoryController;
+use App\Http\Controllers\AdminPanel\Content\ContentRecordController;
+use App\Http\Controllers\AdminPAnel\Content\ContentPageWorkerCategoryController;
+use App\Http\Controllers\AdminPAnel\Content\ContentPageWorkerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,5 +54,13 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
             Route::resource('record', ContentRecordController::class)->names('content.records.record');
         });
 
+        Route::group(['prefix' => 'sheet'], function () {
+
+            Route::group(['prefix' => 'workers'], function () {
+                Route::match(['put', 'patch'], 'category/order-renew', [ContentPageWorkerCategoryController::class, 'orderRenew'])->name('content.sheet.worker.category.orderrenew');
+                Route::resource('category', ContentPageWorkerCategoryController::class)->names('content.sheet.worker.category');
+                Route::resource('worker', ContentPageWorkerController::class)->names('content.sheet.worker');
+            });
+        });
     });
 });

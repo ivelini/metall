@@ -37,17 +37,25 @@
                     <tbody>
                     @foreach($categories as $category)
                         <tr>
-                            <td><a href="{{ route('content.records.category.edit', $category->id) }}">{{ $category->h1 }}</a></td>
+                            <td>
+                                @if($category->slug != 'bez_categorii')
+                                    <a href="{{ route('content.records.category.edit', $category->id) }}">{{ $category->h1 }}</a>
+                                @elseif($category->slug == 'bez_categorii')
+                                    {{ $category->h1 }}
+                                @endif
+                            </td>
                             <td>{{ $category->slug }}</td>
                             <td><a href="{{ route('content.records.category.show', $category->id) }}">{{ $category->records_count }}</a></td>
                             <td>
-                                <form action="{{ route('content.records.category.destroy', $category->id) }}" method="POST">
-                                    @method('DELETE')
-                                    @csrf
-                                    <div class="text-right">
-                                        <button type="submit" class="btn"> <i class="icon-bin"></i></button>
-                                    </div>
-                                </form>
+                                @if($category->slug != 'bez_categorii')
+                                    <form action="{{ route('content.records.category.destroy', $category->id) }}" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <div class="text-right">
+                                            <button type="submit" class="btn"> <i class="icon-bin"></i></button>
+                                        </div>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

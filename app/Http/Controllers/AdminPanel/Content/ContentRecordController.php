@@ -60,6 +60,9 @@ class ContentRecordController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'h1' => 'required'
+        ]);
         $data = $request->input();
 
         $contentRecordModel = $this->contentRecordRepository->startConditions();
@@ -133,7 +136,7 @@ class ContentRecordController extends Controller
         $data['content'] = $request->input('content');
 
         if(!empty($data['content']) &&
-            mb_strlen($data['content']) != session('content_lenth') - 1) {
+            mb_strlen($data['content']) != session('content_lenth')) {
 
             $data['content'] = $this->imageHelper->saveImageFromSummernote($data['content']);
         }
@@ -144,6 +147,7 @@ class ContentRecordController extends Controller
             'description' => $data['description'],
             'slug' => $data['slug'],
             'content' => $data['content'],
+            'content_record_category_id' => $data['content_record_category_id'],
             'is_published' => (empty($data['is_published']) == true) ? 0 : 1,
         ]);
 
