@@ -4,7 +4,7 @@
 namespace App\Repositories\Catalog;
 
 use App\Repositories\CoreRepository;
-use App\Models\CatalogOtvody as Model;
+use App\Models\Catalog\CatalogOtvody as Model;
 
 class CatalogOtvodyRepository extends CoreRepository
 {

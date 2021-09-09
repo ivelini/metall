@@ -109,7 +109,22 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Добавить <i class="icon-paperplane ml-2"></i></button>
+                            <button type="submit" class="btn btn-primary">Сохранить <i class="icon-floppy-disk ml-2"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form action="{{ route('content.sheet.worker.destroy', $worker->id) }}" method="POST">
+        @csrf
+        @method('DELETE')
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-danger">Удалить</button>
                         </div>
                     </div>
                 </div>

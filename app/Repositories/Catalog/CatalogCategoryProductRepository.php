@@ -3,7 +3,7 @@
 
 namespace App\Repositories\Catalog;
 
-use App\Models\CatalogProductsCategory as Model;
+use App\Models\Catalog\CatalogProductsCategory as Model;
 use App\Repositories\CoreRepository;
 use Illuminate\Support\Facades\Storage;
 

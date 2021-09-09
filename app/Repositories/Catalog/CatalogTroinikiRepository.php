@@ -4,7 +4,7 @@
 namespace App\Repositories\Catalog;
 
 use App\Repositories\CoreRepository;
-use App\Models\CatalogTroiniki as Model;
+use App\Models\Catalog\CatalogTroiniki as Model;
 
 class CatalogTroinikiRepository extends CoreRepository
 {

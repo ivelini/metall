@@ -27,7 +27,9 @@ class CreateCatalogProductCategoryTable extends Migration
             $table->string('description')->nullable();
             $table->timestamps();
 
-            $table->foreign('company_id')->references('id')->on('company')->cascadeOnDelete();
+            $table->foreign('company_id')->references('id')->on('company')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 

@@ -5,7 +5,7 @@ namespace App\Repositories\Content;
 
 
 use App\Repositories\CoreRepository;
-use App\Models\ContentRecordCategory as Model;
+use App\Models\Content\ContentRecordCategory as Model;
 use Illuminate\Support\Facades\Auth;
 
 class ContentRecordCategoryRepository extends CoreRepository

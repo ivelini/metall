@@ -7,7 +7,7 @@ use App\Repositories\Content\ContentSheetWorkerCategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ContentPageWorkerCategoryController extends Controller
+class ContentSheetWorkerCategoryController extends Controller
 {
 
     protected $contentSheetWorkerCategoryRepository;

@@ -6,7 +6,7 @@ namespace App\Repositories\Content;
 
 use App\Helpers\ImageHelper;
 use App\Repositories\CoreRepository;
-use App\Models\ContentRecord as Model;
+use App\Models\Content\ContentRecord as Model;
 use Illuminate\Support\Facades\Auth;
 
 class ContentRecordRepository extends CoreRepository

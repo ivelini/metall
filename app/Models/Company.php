@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Catalog\CatalogProductsCategory;
+use App\Models\Content\ContentSheetWorkerCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

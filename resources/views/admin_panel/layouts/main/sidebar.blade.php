@@ -117,7 +117,8 @@
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item"><a href="{{ route('content.sheet.worker.index') }}" class="nav-link"><i class="icon-users4"></i> Персонал</a></li>
-                          <li class="nav-item"><a href="#" class="nav-link"><i class="icon-circle-small"></i> Все страницы</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.certificate.index') }}" class="nav-link"><i class="icon-certificate"></i> Сертификаты</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.timeline.page.index') }}" class="nav-link"><i class="icon-stairs"></i> Timeline</a></li>
                     </ul>
                 </li>
 

@@ -5,7 +5,7 @@ namespace App\Repositories\Content;
 
 
 use App\Repositories\CoreRepository;
-use App\Models\ContentSheetWorkerCategory as Model;
+use App\Models\Content\ContentSheetWorkerCategory as Model;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\ImageHelper;
 
@@ -57,7 +57,7 @@ class ContentSheetWorkerCategoryRepository extends CoreRepository
 
         foreach ($categories as $category) {
             foreach ($category->workers as $worker) {
-                $this->imageHelper->getImgPathFromModel($worker, 'extralarge');
+                $this->imageHelper->getImgPathFromModel($worker, 'large');
             }
 
             $category->workers = $category->workers->chunk(4);

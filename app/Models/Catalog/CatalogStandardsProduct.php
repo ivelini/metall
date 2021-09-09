@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Catalog;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CatalogFlantsy extends Model
+class CatalogStandardsProduct extends Model
 {
     use HasFactory;
-    protected $table = 'catalog_flantsy';
+    protected $table = 'catalog_standards_product';
+
 }

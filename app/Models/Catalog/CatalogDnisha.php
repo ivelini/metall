@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Catalog;
 
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CatalogPerehody extends Model
+class CatalogDnisha extends Model
 {
     use HasFactory;
-    protected $table = 'catalog_perehody';
+    protected $table = 'catalog_dnisha';
 
     public function company() {
         return $this->belongsTo(Company::class, 'company_id', 'id');

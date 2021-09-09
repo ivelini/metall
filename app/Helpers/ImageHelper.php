@@ -53,10 +53,27 @@ class ImageHelper
         return false;
     }
 
-    public function saveImage($image)
+    protected function saveImage($image)
     {
         $imgPath = $this->getImgPath();
         $img = Image::make($image);
+
+        $imgW = $img->width();
+        $imgH = $img->height();
+
+        $sizeH = 600;
+        $sizeW = 800;
+
+        if ($imgW / $imgH >= 1) {
+            $img->resize(null, $sizeH, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
+        else {
+            $img->resize($sizeW, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
         $img->save(Storage::path('public') . '' . $imgPath, 100);
 
         $this->crop($imgPath);
@@ -64,13 +81,13 @@ class ImageHelper
         return $imgPath;
     }
 
-    public function crop($imgPath)
+
+    protected function crop($imgPath)
     {
         $template = [
-            'small' =>  [150,150],
-            'medium' => [250,250],
-            'large' =>  [350,350],
-            'extralarge' =>  [450,450]
+            'small' =>  [250,250],
+            'medium' => [350,350],
+            'large' =>  [450,450],
         ];
 
         $img = Image::make(Storage::path('public') . '' . $imgPath);
@@ -167,11 +184,14 @@ class ImageHelper
         return $content;
     }
 
-    public function getImgPathFromModel($model, $format = 'medium')
+    public function getImgPathFromModel($model, $format = 'medium', $originalPath = false)
     {
+
         if(!empty($model->image->path)) {
             $model->img = '/storage' . mb_substr($model->image->path, 0, mb_strripos($model->image->path, '.'))
                 . '_' . $format . '.jpg';
+
+            $originalPath == true ? $model->img_original = '/storage' . $model->image->path : NULL;
         }
 
         return $model;

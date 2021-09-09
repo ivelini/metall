@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                            <button type="submit" class="btn btn-primary">Сохранить <i class="icon-floppy-disk ml-2"></i></button>
                         </div>
                     </div>
                 </div>

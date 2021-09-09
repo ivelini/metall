@@ -6,7 +6,7 @@ namespace App\Repositories\Content;
 
 use App\Helpers\ImageHelper;
 use App\Repositories\CoreRepository;
-use App\Models\ContentSheetWorker as Model;
+use App\Models\Content\ContentSheetWorker as Model;
 use Illuminate\Support\Facades\Auth;
 
 class ContentSheetWorkerRepository extends CoreRepository

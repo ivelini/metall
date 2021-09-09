@@ -9,7 +9,7 @@ use App\Repositories\Content\ContentSheetWorkerRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ContentPageWorkerController extends Controller
+class ContentSheetWorkerController extends Controller
 {
     protected $contentSheetWorkerCategoryRepository;
     protected $company;
@@ -128,8 +128,6 @@ class ContentPageWorkerController extends Controller
         return redirect()
             ->route('content.sheet.worker.index')
             ->with(['success' => 'Сотрудник обновлен']);
-
-
     }
 
     /**
@@ -140,6 +138,10 @@ class ContentPageWorkerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->contentSheetWorkerRepository->getWorker($id)->delete();
+
+        return redirect()
+            ->route('content.sheet.worker.index')
+            ->with(['success' => 'Сотрудник удален']);
     }
 }

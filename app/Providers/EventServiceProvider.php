@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\ContentRecord;
-use App\Models\ContentRecordCategory;
+use App\Models\Content\ContentRecord;
+use App\Models\Content\ContentRecordCategory;
 use App\Observers\ContentRecordCategoryObserver;
 use App\Observers\ContentRecordObserver;
 use Illuminate\Auth\Events\Registered;

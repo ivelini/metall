@@ -9,8 +9,11 @@ use App\Http\Controllers\AdminPanel\Catalog\CatalogDnishaController;
 use App\Http\Controllers\AdminPanel\Catalog\CatalogProductCategoryController;
 use App\Http\Controllers\AdminPanel\Content\ContentRecordCategoryController;
 use App\Http\Controllers\AdminPanel\Content\ContentRecordController;
-use App\Http\Controllers\AdminPAnel\Content\ContentPageWorkerCategoryController;
-use App\Http\Controllers\AdminPAnel\Content\ContentPageWorkerController;
+use App\Http\Controllers\AdminPAnel\Content\ContentSheetWorkerCategoryController;
+use App\Http\Controllers\AdminPAnel\Content\ContentSheetWorkerController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetCertificateController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetTimelineLineController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetTimelinePageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,9 +60,16 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => 'sheet'], function () {
 
             Route::group(['prefix' => 'workers'], function () {
-                Route::match(['put', 'patch'], 'category/order-renew', [ContentPageWorkerCategoryController::class, 'orderRenew'])->name('content.sheet.worker.category.orderrenew');
-                Route::resource('category', ContentPageWorkerCategoryController::class)->names('content.sheet.worker.category');
-                Route::resource('worker', ContentPageWorkerController::class)->names('content.sheet.worker');
+                Route::match(['put', 'patch'], 'category/order-renew', [ContentSheetWorkerCategoryController::class, 'orderRenew'])->name('content.sheet.worker.category.orderrenew');
+                Route::resource('category', ContentSheetWorkerCategoryController::class)->names('content.sheet.worker.category');
+                Route::resource('worker', ContentSheetWorkerController::class)->names('content.sheet.worker');
+            });
+
+            Route::resource('certificate', ContentSheetCertificateController::class)->names('content.sheet.certificate');
+
+            Route::group(['prefix' => 'timelines'], function () {
+                Route::resource('page', ContentSheetTimelinePageController::class)->names('content.sheet.timeline.page');
+                Route::resource('line', ContentSheetTimelineLineController::class)->names('content.sheet.timeline.line');
             });
         });
     });

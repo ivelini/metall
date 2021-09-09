@@ -6,8 +6,6 @@
     <a href="{{ Redirect::back()->getTargetUrl() }}"><i class="icon-arrow-left52 mr-2"></i></a>Добавить сотрудника
 @endsection
 @section('header-js')
-    <script src="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>
-    <link href="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.css" rel="stylesheet">
 
 @endsection
 @section('content-area')
@@ -84,7 +82,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Добавить <i class="icon-paperplane ml-2"></i></button>
+                            <button type="submit" class="btn btn-primary">Добавить <i class="icon-floppy-disk ml-2"></i></button>
                         </div>
                     </div>
                 </div>
@@ -93,10 +91,5 @@
     </form>
 @endsection
 @section('include-footer')
-            <script>
-                $(document).ready(function() {
-                    $('#summernote').summernote();
-                });
-            </script>
 
 @endsection
