@@ -17,7 +17,7 @@ use App\Http\Controllers\AdminPanel\Content\ContentSheetTimelinePageController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes111111111
+| Web Routes
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
