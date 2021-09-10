@@ -64,10 +64,9 @@ class CatalogProductCategoryController extends Controller
 
     public function store(CatalogProductCategoryRequest $request)
     {
-        $input = $request->input();
         $companyId = Auth::user()->company()->first()->id;
 
-        $filterKey = $this->getFilterKey($input);
+        $filterKey = $this->getFilterKey($request->input());
 
         //Если нет ни одного ключа
         if (count($filterKey) == 0) {
@@ -122,9 +121,14 @@ class CatalogProductCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $input = $request->input();
+        $filterKey = $this->getFilterKey($request->input());
 
-        $filterKey = $this->getFilterKey($input);
+        //Если нет ни одного ключа
+        if (count($filterKey) == 0) {
+            return redirect()->back()
+                ->withInput()
+                ->with(['alert' => 'Хотя бы один параметр фильтра должен быть выбран']);
+        }
 
         //Сереализуем фильтр
         $filterKey = json_encode($filterKey);
@@ -138,7 +142,7 @@ class CatalogProductCategoryController extends Controller
 
         return redirect()
             ->route('catalog.product.category.index')
-            ->with(['success' => 'Категория "' . $input['category_name'] . '" успешно добавлена']);
+            ->with(['success' => 'Категория "' . $request->get('category_name') . '" успешно добавлена']);
 
     }
 
