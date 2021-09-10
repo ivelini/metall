@@ -67,7 +67,7 @@
                                 <div class="col-lg-12">
                                     <select name="content_sheet_worker_category_id" class="form-control">
                                         @foreach($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            <option value="{{ $category->id }}">{{ $category->h1 }}</option>
                                         @endforeach
                                     </select>
                                 </div>

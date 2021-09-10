@@ -16,7 +16,7 @@ class CreateContentSheetWorkerCategoryTable extends Migration
         Schema::create('content_sheet_worker_category', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
-            $table->string('name');
+            $table->string('h1');
             $table->integer('order');
             $table->timestamps();
 

@@ -10,6 +10,7 @@ class ContentSheetWorkerCategory extends Model
     use HasFactory;
 
     protected $table = 'content_sheet_worker_category';
+    protected $guarded = [];
 
     public function workers() {
 

@@ -16,7 +16,7 @@ class CreateContentSheetCertificatesTable extends Migration
         Schema::create('content_sheet_certificates', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
-            $table->string('name');
+            $table->string('h1');
             $table->string('description')->nullable();
             $table->timestamps();
 

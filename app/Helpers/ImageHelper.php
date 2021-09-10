@@ -10,6 +10,10 @@ use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use App\Repositories\ImageRepository;
 
+/*
+ *Обработка вставленного изображения
+ */
+
 class ImageHelper
 {
 

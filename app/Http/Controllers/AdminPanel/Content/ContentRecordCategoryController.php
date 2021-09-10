@@ -5,20 +5,22 @@ namespace App\Http\Controllers\AdminPanel\Content;
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Content\ContentRecordCategoryRepository;
-use App\Repositories\ImageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Content\CreateAndUpdateContentTableService;
 
 class ContentRecordCategoryController extends Controller
 {
 
     protected $imageHelper;
     protected $contentRecordCategoryRepository;
+    protected $createAndUpdateContentTableService;
 
     public function __construct()
     {
         $this->imageHelper = new ImageHelper();
         $this->contentRecordCategoryRepository = new ContentRecordCategoryRepository();
+        $this->createAndUpdateContentTableService = new CreateAndUpdateContentTableService();
     }
 
     /**
@@ -65,24 +67,9 @@ class ContentRecordCategoryController extends Controller
             ],
         ]);
 
-        $data = $request->input();
-
         $contentRecordCategoryModel = $this->contentRecordCategoryRepository->startConditions();
 
-        //Обработка поля из редактора summernote
-        $data['description'] = $request->input('description');
-
-        if(!empty($data['description'])) {
-            $data['description'] = $this->imageHelper->saveImageFromSummernote($data['description']);
-        }
-
-        $contentRecordCategoryModel->create([
-            'company_id' => Auth::user()->company()->first()->id,
-            'h1' => $data['h1'],
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'slug' => $data['slug'],
-        ]);
+        $this->createAndUpdateContentTableService->save($contentRecordCategoryModel, $request);
 
         return redirect()
             ->route('content.records.category.index')
@@ -114,7 +101,7 @@ class ContentRecordCategoryController extends Controller
     public function edit($id)
     {
         $category = $this->contentRecordCategoryRepository->getCategory($id);
-        session(['description_lenth' => mb_strlen($category->description)]);
+        session(['content_lenth' => mb_strlen($category->content)]);
 
         return view('admin_panel.content.record.category.edit', compact('category'));
     }
@@ -128,26 +115,9 @@ class ContentRecordCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->input();
 
         $contentRecordCategoryModel = $this->contentRecordCategoryRepository->getCategory($id);
-
-        //Обработка поля из редактора summernote
-        $data['description'] = $request->input('description');
-
-        if(!empty($data['description']) &&
-            mb_strlen($data['description']) != session('description_lenth') - 1) {
-
-            $data['description'] = $this->imageHelper->saveImageFromSummernote($data['description']);
-        }
-
-        $contentRecordCategoryModel->update([
-            'company_id' => Auth::user()->company()->first()->id,
-            'h1' => $data['h1'],
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'slug' => $data['slug'],
-        ]);
+        $this->createAndUpdateContentTableService->update($contentRecordCategoryModel, $request);
 
         return redirect()
             ->route('content.records.category.index')

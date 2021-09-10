@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Content\ContentRecordCategoryRepository;
 use App\Repositories\Content\ContentRecordRepository;
 use App\Repositories\ImageRepository;
+use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +18,7 @@ class ContentRecordController extends Controller
     protected $contentRecordCategoryRepository;
     protected $contentRecordRepository;
     protected $imageRepository;
+    protected $createAndUpdateContentTableService;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class ContentRecordController extends Controller
         $this->contentRecordCategoryRepository = new ContentRecordCategoryRepository();
         $this->contentRecordRepository = new ContentRecordRepository();
         $this->imageRepository = new ImageRepository();
+        $this->createAndUpdateContentTableService = new CreateAndUpdateContentTableService();
 
     }
     /**
@@ -63,28 +66,10 @@ class ContentRecordController extends Controller
         $request->validate([
             'h1' => 'required'
         ]);
-        $data = $request->input();
 
         $contentRecordModel = $this->contentRecordRepository->startConditions();
 
-        //Обработка поля из редактора summernote
-        $data['content'] = $request->input('content');
-
-        if(!empty($data['content'])) {
-            $data['content'] = $this->imageHelper->saveImageFromSummernote($data['content']);
-        }
-
-        $record = $contentRecordModel->create([
-                    'content_record_category_id' => $data['content_record_category_id'],
-                    'h1' => $data['h1'],
-                    'title' => $data['title'],
-                    'content' => $data['content'],
-                    'description' => $data['description'],
-                    'slug' => $data['slug'],
-                    'is_published' => (empty($data['is_published']) == true) ? 0 : 1
-                ]);
-
-        $this->imageHelper->saveOrUpdateImageFromModel($record, $request->file('img'));
+        $this->createAndUpdateContentTableService->save($contentRecordModel, $request);
 
         return redirect()
             ->route('content.records.record.index')
@@ -131,27 +116,7 @@ class ContentRecordController extends Controller
         $data = $request->input();
 
         $contentRecordModel = $this->contentRecordRepository->getRecord($id);
-
-        //Обработка поля из редактора summernote
-        $data['content'] = $request->input('content');
-
-        if(!empty($data['content']) &&
-            mb_strlen($data['content']) != session('content_lenth')) {
-
-            $data['content'] = $this->imageHelper->saveImageFromSummernote($data['content']);
-        }
-
-        $contentRecordModel->update([
-            'h1' => $data['h1'],
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'slug' => $data['slug'],
-            'content' => $data['content'],
-            'content_record_category_id' => $data['content_record_category_id'],
-            'is_published' => (empty($data['is_published']) == true) ? 0 : 1,
-        ]);
-
-        $this->imageHelper->saveOrUpdateImageFromModel($contentRecordModel, $request->file('img'));
+        $this->createAndUpdateContentTableService->update($contentRecordModel, $request);
 
         return redirect()
             ->route('content.records.record.index')

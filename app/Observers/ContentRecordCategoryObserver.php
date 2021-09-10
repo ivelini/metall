@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Helpers\ObserveHelper;
-use App\Models\ContentRecordCategory;
+use App\Models\Content\ContentRecordCategory;
 use Illuminate\Support\Str;
 
 class ContentRecordCategoryObserver

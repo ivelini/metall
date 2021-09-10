@@ -18,11 +18,11 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-9">
-                        <input name="name"
+                        <input name="h1"
                                class="form-control"
                                placeholder="Название подразделения"
                                required
-                               value="{{ old('name', $category->name) }}">
+                               value="{{ old('h1', $category->h1) }}">
                     </div>
                     <div class="col-lg-3">
                         <div class="text-right">

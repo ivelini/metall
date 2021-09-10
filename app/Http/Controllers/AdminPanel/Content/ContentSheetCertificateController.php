@@ -7,17 +7,20 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Content\ContentSheetCertificateRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Content\CreateAndUpdateContentTableService;
 
 class ContentSheetCertificateController extends Controller
 {
     protected $contentSheetCertificateRepository;
     protected $imageHelper;
     protected $company;
+    protected $createAndUpdateContentTableService;
 
     public function __construct()
     {
         $this->contentSheetCertificateRepository = new ContentSheetCertificateRepository();
         $this->imageHelper = new ImageHelper();
+        $this->createAndUpdateContentTableService = new CreateAndUpdateContentTableService();
 
         $this->middleware(function ($request, $next) {
             $this->company= Auth::user()->company()->first();
@@ -56,16 +59,8 @@ class ContentSheetCertificateController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->input();
-
-        $contentSheetCertificateMoel = $this->contentSheetCertificateRepository->startConditions();
-
-        $contentSheetCertificateMoel->company_id = $this->company->id;
-        $contentSheetCertificateMoel->name = $data['name'];
-        $contentSheetCertificateMoel->description = !empty($data['description']) == true ? $data['description'] : NULL;
-        $contentSheetCertificateMoel->save();
-
-        $this->imageHelper->saveOrUpdateImageFromModel($contentSheetCertificateMoel, $request->file('img'));
+        $contentSheetCertificateModel = $this->contentSheetCertificateRepository->startConditions();
+        $this->createAndUpdateContentTableService->save($contentSheetCertificateModel, $request);
 
         return redirect()
             ->route('content.sheet.certificate.index')
@@ -105,16 +100,8 @@ class ContentSheetCertificateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->input();
-
         $certificate = $this->contentSheetCertificateRepository->getCertificate($id);
-
-        $certificate->update([
-            'name' => $data['name'],
-            'description' => $data['description']
-        ]);
-
-        $this->imageHelper->saveOrUpdateImageFromModel($certificate, $request->file('img'));
+        $this->createAndUpdateContentTableService->update($certificate, $request);
 
         return redirect()
             ->route('content.sheet.certificate.index')

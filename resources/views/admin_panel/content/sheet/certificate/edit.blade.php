@@ -22,10 +22,10 @@
                                 <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Cертификат</legend>
                                 <div class="form-group row">
                                     <div class="col-lg-12">
-                                        <input name="name"
+                                        <input name="h1"
                                                class="form-control"
                                                placeholder="Название сертификата"
-                                               value="{{ old('name', $certificate->name) }}"
+                                               value="{{ old('name', $certificate->h1) }}"
                                                required>
                                     </div>
                                 </div>
@@ -33,7 +33,7 @@
                                     <div class="col-lg-12">
                                         <textarea name="description"
                                                   class="form-control"
-                                                  placeholder="Описание сертификата">{{ old('description', $certificate->description) }}"</textarea>
+                                                  placeholder="Описание сертификата">{{ old('content', $certificate->description) }}</textarea>
                                     </div>
                                 </div>
                             </fieldset>

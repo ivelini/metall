@@ -6,6 +6,7 @@ use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Content\ContentSheetWorkerCategoryRepository;
 use App\Repositories\Content\ContentSheetWorkerRepository;
+use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,12 +16,14 @@ class ContentSheetWorkerController extends Controller
     protected $company;
     protected $contentSheetWorkerRepository;
     protected $imageHelper;
+    protected $createAndUpdateContentTableService;
 
     public function __construct()
     {
         $this->contentSheetWorkerCategoryRepository = new ContentSheetWorkerCategoryRepository();
         $this->contentSheetWorkerRepository = new ContentSheetWorkerRepository();
         $this->imageHelper = new ImageHelper();
+        $this->createAndUpdateContentTableService = new CreateAndUpdateContentTableService();
 
         $this->middleware(function ($request, $next) {
             $this->company= Auth::user()->company()->first();
@@ -35,8 +38,6 @@ class ContentSheetWorkerController extends Controller
     public function index()
     {
         $categories = $this->contentSheetWorkerCategoryRepository->getCategoriesIncludeWorkersFromCompany($this->company);
-
-//        dd(__METHOD__, $categories);
 
         return view('admin_panel.content.sheet.worker.page.index', compact('categories'));
     }
@@ -60,17 +61,8 @@ class ContentSheetWorkerController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->input();
-
         $workerModel= $this->contentSheetWorkerRepository->startConditions();
-        $workerModel->content_sheet_worker_category_id = $data['content_sheet_worker_category_id'];
-        $workerModel->name = $data['name'];
-        $workerModel->position = $data['position'];
-        $workerModel->phone = $data['phone'];
-        $workerModel->email = $data['email'];
-        $workerModel->save();
-
-        $this->imageHelper->saveOrUpdateImageFromModel($workerModel, $request->file('img'));
+        $this->createAndUpdateContentTableService->save($workerModel, $request);
 
         return redirect()
             ->route('content.sheet.worker.index')
@@ -111,19 +103,8 @@ class ContentSheetWorkerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->input();
-
         $contentSheetWorkerModel = $this->contentSheetWorkerRepository->getWorker($id);
-
-        $contentSheetWorkerModel->update([
-            'name' => $data['name'],
-            'position' => $data['position'],
-            'phone' => $data['phone'],
-            'email' => $data['email'],
-            'content_sheet_worker_category_id' => $data['content_sheet_worker_category_id'],
-        ]);
-
-        $this->imageHelper->saveOrUpdateImageFromModel($contentSheetWorkerModel, $request->file('img'));
+        $this->createAndUpdateContentTableService->update($contentSheetWorkerModel, $request);
 
         return redirect()
             ->route('content.sheet.worker.index')

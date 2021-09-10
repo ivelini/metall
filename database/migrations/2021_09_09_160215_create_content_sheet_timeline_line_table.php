@@ -17,7 +17,7 @@ class CreateContentSheetTimelineLineTable extends Migration
             $table->id();
             $table->unsignedBigInteger('timeline_page_id');
             $table->string('h1');
-            $table->text('description');
+            $table->text('content');
             $table->integer('order');
             $table->timestamps();
 

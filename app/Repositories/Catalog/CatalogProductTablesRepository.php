@@ -190,7 +190,7 @@ class CatalogProductTablesRepository
 
     public function getModelClass($tableName)
     {
-        $modelClass = 'App\Models\\' . ucfirst(Str::camel($tableName));
+        $modelClass = 'App\Models\Catalog\\' . ucfirst(Str::camel($tableName));
         $model = new $modelClass();
 
         return $model;

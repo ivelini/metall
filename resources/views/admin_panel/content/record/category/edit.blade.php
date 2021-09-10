@@ -28,13 +28,13 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-form-label col-lg-2">Описание</label>
+                            <label class="col-form-label col-lg-2">Контент</label>
                             <div class="col-lg-10">
-                                <textarea name="description"
+                                <textarea name="content"
                                           rows="3"
                                           cols="3"
                                           class="form-control"
-                                          id="summernote">{{ old('description', $category->description) }}</textarea>
+                                          id="summernote">{{ old('content', $category->content) }}</textarea>
                             </div>
                         </div>
                     </fieldset>
@@ -52,6 +52,15 @@
                             <label class="col-form-label col-lg-2">Ярлык</label>
                             <div class="col-lg-10">
                                 <input name="slug" type="text" class="form-control" value="{{ old('slug', $category->slug) }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-lg-2">Описание</label>
+                            <div class="col-lg-10">
+                                <textarea name="description"
+                                          rows="3"
+                                          cols="3"
+                                          class="form-control">{{ old('description', $category->description) }}</textarea>
                             </div>
                         </div>
 

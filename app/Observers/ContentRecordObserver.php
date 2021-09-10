@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Helpers\ObserveHelper;
-use App\Models\ContentRecord;
+use App\Models\Content\ContentRecord;
 
 class ContentRecordObserver
 {

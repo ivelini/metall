@@ -11,6 +11,7 @@ class CatalogProductsCategory extends Model
 {
     use HasFactory;
     protected $table = 'catalog_product_category';
+    protected $guarded = [];
 
     public function company()
     {

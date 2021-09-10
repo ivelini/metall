@@ -94,7 +94,7 @@
                                                     @if($category->id == $worker->category_id)
                                                     selected="selected"
                                                     @endif
-                                            >{{ $category->name }}</option>
+                                            >{{ $category->h1 }}</option>
                                         @endforeach
                                     </select>
                                 </div>

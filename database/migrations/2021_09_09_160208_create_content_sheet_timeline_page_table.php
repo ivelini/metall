@@ -18,6 +18,8 @@ class CreateContentSheetTimelinePageTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->string('h1');
             $table->string('slug');
+            $table->string('title')->nullable();
+            $table->text('content')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
 

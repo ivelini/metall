@@ -24,7 +24,7 @@ class CreateCatalogProductCategoryTable extends Migration
             $table->string('catalog_product_table_name')->nullable();
             $table->string('columns_name')->nullable();
             $table->boolean('is_published')->default('0');
-            $table->string('description')->nullable();
+            $table->string('content')->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company')

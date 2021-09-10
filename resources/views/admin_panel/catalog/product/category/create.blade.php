@@ -86,11 +86,11 @@
                         <div class="col-lg-10">
                             <div class="form-group">
                                 <label>Описание категории</label>
-                                <textarea name="description"
+                                <textarea name="content"
                                           rows="5"
                                           cols="3"
                                           class="form-control"
-                                          id="summernote">{{ old('description') }}</textarea>
+                                          id="summernote">{{ old('content') }}</textarea>
                             </div>
                         </div>
                         <div class="col-lg-2">

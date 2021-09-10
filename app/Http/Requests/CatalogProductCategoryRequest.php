@@ -24,7 +24,8 @@ class CatalogProductCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_name' => 'required'
+            'category_name' => 'required',
+            'img'   =>  'mimes:jpg,bmp,png,jpeg',
         ];
     }
 }

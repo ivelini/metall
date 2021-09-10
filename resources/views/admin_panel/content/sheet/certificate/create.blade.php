@@ -21,7 +21,7 @@
                                 <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Cертификат</legend>
                                 <div class="form-group row">
                                     <div class="col-lg-12">
-                                        <input name="name"
+                                        <input name="h1"
                                                class="form-control"
                                                placeholder="Название сертификата"
                                                required>

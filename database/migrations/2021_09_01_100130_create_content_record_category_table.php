@@ -16,9 +16,10 @@ class CreateContentRecordCategoryTable extends Migration
         Schema::create('content_record_category', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
-            $table->string('title')->nullable();
             $table->string('h1');
+            $table->string('title')->nullable();
             $table->string('slug');
+            $table->text('content')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
 

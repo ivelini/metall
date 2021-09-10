@@ -44,7 +44,7 @@
                                             <li class="p-2 bg-light border rounded cursor-move mt-1 ui-sortable-handle" style="">
                                                 <div style="overflow: hidden">
                                                     <div style="float: left">
-                                                        {{ $category->name }}
+                                                        {{ $category->h1 }}
                                                     </div>
                                                     <div style="float: right">
                                                         <a href="{{ route('content.sheet.worker.category.edit', $category->id) }}"><i class="icon-pencil4"></i> </a>

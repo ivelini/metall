@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminPAnel\Content;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Content\ContentSheetWorkerCategoryRepository;
+use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,10 +13,12 @@ class ContentSheetWorkerCategoryController extends Controller
 
     protected $contentSheetWorkerCategoryRepository;
     protected $company;
+    protected $createAndUpdateContentTableService;
 
     public function __construct()
     {
         $this->contentSheetWorkerCategoryRepository = new ContentSheetWorkerCategoryRepository();
+        $this->createAndUpdateContentTableService = new CreateAndUpdateContentTableService();
 
         $this->middleware(function ($request, $next) {
             $this->company= Auth::user()->company()->first();
@@ -59,10 +62,8 @@ class ContentSheetWorkerCategoryController extends Controller
         $sheetWorkerCategory = $this->contentSheetWorkerCategoryRepository->startConditions();
         $nextOrder = $this->contentSheetWorkerCategoryRepository->getNextOrderFromCompany($this->company);
 
-        $sheetWorkerCategory->company_id = $this->company->id;
-        $sheetWorkerCategory->name = $name;
-        $sheetWorkerCategory->order = $nextOrder;
-        $sheetWorkerCategory->save();
+        $this->createAndUpdateContentTableService->setModifiedData('order', $nextOrder);
+        $this->createAndUpdateContentTableService->save($sheetWorkerCategory, $request);
 
         return redirect()
             ->route('content.sheet.worker.category.index')
@@ -104,9 +105,7 @@ class ContentSheetWorkerCategoryController extends Controller
     public function update(Request $request, $id)
     {
         $category = $this->contentSheetWorkerCategoryRepository->getCategory($id);
-
-        $category->name = $request->input('name');
-        $category->save();
+        $this->createAndUpdateContentTableService->update($category, $request);
 
         return redirect()
             ->route('content.sheet.worker.category.index')
@@ -141,7 +140,6 @@ class ContentSheetWorkerCategoryController extends Controller
                 $contentSheetWorkerCategoryModel->where('id', $value)->update(['order' => $key + 1]);
             }
         }
-
 
         return redirect()
             ->back()
