@@ -28,26 +28,27 @@
                     <tr>
                         <th>Название</th>
                         <th>Дата создания</th>
+                        <th>Редактировать</th>
                         <th>Удалить</th>
                     </tr>
                     </thead>
                     <tbody>
-{{--                    @foreach($records as $record)--}}
-{{--                        <tr @if($record->is_published == 0) class="not-active" @endif>--}}
-{{--                            <td><a href="{{ route('content.records.record.edit', $record->id) }}">{{ $record->h1 }}</a></td>--}}
-{{--                            <td><a href="{{ route('content.records.category.show', $record->category_id) }}">{{ $record->category_h1 }}</a></td>--}}
-{{--                            <td>{{ $record->created_at }}</td>--}}
-{{--                            <td>--}}
-{{--                                <form action="{{ route('content.records.record.destroy', $record->id) }}" method="POST">--}}
-{{--                                    @method('DELETE')--}}
-{{--                                    @csrf--}}
-{{--                                    <div class="text-right">--}}
-{{--                                        <button type="submit" class="btn"> <i class="icon-bin"></i></button>--}}
-{{--                                    </div>--}}
-{{--                                </form>--}}
-{{--                            </td>--}}
-{{--                        </tr>--}}
-{{--                    @endforeach--}}
+                    @foreach($pages as $page)
+                        <tr @if($page->is_published == 0) class="not-active" @endif>
+                            <td><a href="{{ route('content.sheet.timeline.page.show', $page->id) }}">{{ $page->h1 }}</a></td>
+                            <td>{{ $page->created_at }}</td>
+                            <td><a href="{{ route('content.sheet.timeline.page.edit', $page->id) }}"><i class="icon-pencil3"></i></a></td>
+                            <td>
+                                <form action="{{ route('content.sheet.timeline.page.destroy', $page->id) }}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <div class="text-right">
+                                        <button type="submit" class="btn"> <i class="icon-bin"></i></button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>

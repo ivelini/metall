@@ -44,6 +44,13 @@ class CreateAndUpdateContentTableService
         $this->modifiedData[$column] = $value;
     }
 
+    public function setSessionColumnContentLenth($model)
+    {
+        if(!empty($model->content)) {
+            session(['content_lenth' => mb_strlen($model->content)]);
+        }
+    }
+
     /*
      * Обработка входных данных
      * Формирование массива данных вида ['columnName' => value ] для вставки в таблицу
@@ -68,6 +75,7 @@ class CreateAndUpdateContentTableService
             if ($column == 'company_id') {
                 $data[$column] = $this->companyId;
             }
+
 
             //Если таблица содержит поле "content"
             if (

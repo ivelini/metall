@@ -99,7 +99,7 @@ class ContentRecordController extends Controller
         $record = $this->contentRecordRepository->getRecordForEdit($id);
         $categories = $this->contentRecordCategoryRepository->getCategoriesFromCompanyIdForRecord($companyId);
 
-        session(['content_lenth' => mb_strlen($record->content)]);
+        $this->createAndUpdateContentTableService->setSessionColumnContentLenth($record);
 
         return view('admin_panel.content.record.page.edit', compact('record', 'categories'));
     }

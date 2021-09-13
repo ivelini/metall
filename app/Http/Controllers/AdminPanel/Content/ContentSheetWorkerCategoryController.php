@@ -58,7 +58,6 @@ class ContentSheetWorkerCategoryController extends Controller
     public function store(Request $request)
     {
 
-        $name = $request->name;
         $sheetWorkerCategory = $this->contentSheetWorkerCategoryRepository->startConditions();
         $nextOrder = $this->contentSheetWorkerCategoryRepository->getNextOrderFromCompany($this->company);
 

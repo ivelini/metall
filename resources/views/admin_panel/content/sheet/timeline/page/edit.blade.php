@@ -11,8 +11,9 @@
 
 @endsection
 @section('content-area')
-    <form action="{{ route('content.sheet.timeline.page.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('content.sheet.timeline.page.update', $page->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
+        @method('PATCH')
         <div class="row">
             <div class="col-lg-9">
                 <div class="card">
@@ -25,6 +26,7 @@
                                         <input name="h1"
                                                class="form-control"
                                                placeholder="Название страницы"
+                                               value="{{ old('h1', $page->h1) }}"
                                                 required>
                                     </div>
                                 </div>
@@ -35,7 +37,7 @@
                                                   rows="5"
                                                   cols="3"
                                                   class="form-control"
-                                                  id="summernote">{{ old('content') }}</textarea>
+                                                  id="summernote">{{ old('content', $page->content) }}</textarea>
                                     </div>
                                 </div>
 
@@ -45,12 +47,18 @@
 
                                 <div class="form-group row">
                                     <div class="col-lg-12">
-                                        <input name="title" class="form-control" placeholder="Title">
+                                        <input name="title"
+                                               class="form-control"
+                                               placeholder="Title"
+                                               value="{{ old('title', $page->title) }}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-12">
-                                        <input name="slug" class="form-control" placeholder="Ярлык">
+                                        <input name="slug"
+                                               class="form-control"
+                                               placeholder="Ярлык"
+                                               value="{{ old('slug', $page->slug) }}">
                                     </div>
                                 </div>
 
@@ -60,7 +68,7 @@
                                                   placeholder="Описание"
                                                   rows="5"
                                                   cols="3"
-                                                  class="form-control">{{ old('description') }}</textarea>
+                                                  class="form-control">{{ old('description', $page->description) }}</textarea>
                                     </div>
                                 </div>
                             </fieldset>
@@ -90,7 +98,7 @@
                         </div>
 
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Добавить <i class="icon-floppy-disk ml-2"></i></button>
+                            <button type="submit" class="btn btn-primary">Сохранить <i class="icon-floppy-disk ml-2"></i></button>
                         </div>
                     </div>
                 </div>
@@ -102,10 +110,10 @@
                             <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Изображение</legend>
 
                             <div class="card-img-actions m-1">
-                                <img class="card-img img-fluid" src="@if(empty($record->img))
+                                <img class="card-img img-fluid" src="@if(empty($page->img))
                                                                             /admin_panel/global_assets/images/placeholders/placeholder.jpg
                                                                         @else
-                                                                            {{ $record->img}}
+                                                                            {{ $page->img}}
                                                                         @endif" alt="">
                                 <div class="card-img-actions-overlay card-img">
                                     <input name="img" type="file" class="form-control-plaintext" style="width: 65px">

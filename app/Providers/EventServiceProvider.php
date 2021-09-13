@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use App\Models\Content\ContentRecord;
 use App\Models\Content\ContentRecordCategory;
+use App\Models\Content\ContentSheetTimelineLine;
+use App\Models\Content\ContentSheetTimelinePage;
+use App\Observers\Content\ContentSheetTimelineLineObserver;
+use App\Observers\Content\ContentSheetTimelinePageObserver;
 use App\Observers\ContentRecordCategoryObserver;
 use App\Observers\ContentRecordObserver;
 use Illuminate\Auth\Events\Registered;
@@ -33,5 +37,7 @@ class EventServiceProvider extends ServiceProvider
     {
         ContentRecordCategory::observe(ContentRecordCategoryObserver::class);
         ContentRecord::observe(ContentRecordObserver::class);
+        ContentSheetTimelinePage::observe(ContentSheetTimelinePageObserver::class);
+        ContentSheetTimelineLine::observe(ContentSheetTimelineLineObserver::class);
     }
 }

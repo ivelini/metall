@@ -18,8 +18,6 @@ use App\Http\Controllers\AdminPanel\Content\ContentSheetTimelinePageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
-
-11111
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
@@ -62,7 +60,8 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => 'sheet'], function () {
 
             Route::group(['prefix' => 'workers'], function () {
-                Route::match(['put', 'patch'], 'category/order-renew', [ContentSheetWorkerCategoryController::class, 'orderRenew'])->name('content.sheet.worker.category.orderrenew');
+                Route::match(['put', 'patch'], 'category/order-renew', [ContentSheetWorkerCategoryController::class, 'orderRenew'])
+                    ->name('content.sheet.worker.category.orderrenew');
                 Route::resource('category', ContentSheetWorkerCategoryController::class)->names('content.sheet.worker.category');
                 Route::resource('worker', ContentSheetWorkerController::class)->names('content.sheet.worker');
             });
@@ -71,7 +70,10 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
 
             Route::group(['prefix' => 'timelines'], function () {
                 Route::resource('page', ContentSheetTimelinePageController::class)->names('content.sheet.timeline.page');
-                Route::resource('line', ContentSheetTimelineLineController::class)->names('content.sheet.timeline.line');
+
+                Route::resource('page/{page}/line', ContentSheetTimelineLineController::class)->names('content.sheet.timeline.line');
+                Route::match(['put', 'patch'], 'page/{page}/order-renew', [ContentSheetTimelinePageController::class, 'orderRenew'])
+                    ->name('content.sheet.timeline.page.orderrenew');
             });
         });
     });

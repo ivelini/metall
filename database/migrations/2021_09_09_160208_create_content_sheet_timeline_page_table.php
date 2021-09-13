@@ -21,6 +21,7 @@ class CreateContentSheetTimelinePageTable extends Migration
             $table->string('title')->nullable();
             $table->text('content')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('is_published')->default('0');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')

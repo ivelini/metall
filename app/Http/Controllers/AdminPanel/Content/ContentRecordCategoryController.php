@@ -101,7 +101,7 @@ class ContentRecordCategoryController extends Controller
     public function edit($id)
     {
         $category = $this->contentRecordCategoryRepository->getCategory($id);
-        session(['content_lenth' => mb_strlen($category->content)]);
+        $this->createAndUpdateContentTableService->setSessionColumnContentLenth($category);
 
         return view('admin_panel.content.record.category.edit', compact('category'));
     }
