@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Content\ContentRecord;
 use App\Models\Content\ContentRecordCategory;
+use App\Models\Content\ContentSheetShipment;
 use App\Models\Content\ContentSheetTimelineLine;
 use App\Models\Content\ContentSheetTimelinePage;
+use App\Observers\Content\ContentSheetShipmentObserver;
 use App\Observers\Content\ContentSheetTimelineLineObserver;
 use App\Observers\Content\ContentSheetTimelinePageObserver;
 use App\Observers\ContentRecordCategoryObserver;
@@ -39,5 +41,6 @@ class EventServiceProvider extends ServiceProvider
         ContentRecord::observe(ContentRecordObserver::class);
         ContentSheetTimelinePage::observe(ContentSheetTimelinePageObserver::class);
         ContentSheetTimelineLine::observe(ContentSheetTimelineLineObserver::class);
+        ContentSheetShipment::observe(ContentSheetShipmentObserver::class);
     }
 }

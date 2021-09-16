@@ -10,9 +10,13 @@ namespace App\Services\Content;
  * Если есть изображение, то вставляем в таблицу img с привязкой к id обрабатываемой модели
  */
 
+use App\Repositories\FileRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use App\Helpers\ImageHelper;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CreateAndUpdateContentTableService
 {
@@ -20,10 +24,12 @@ class CreateAndUpdateContentTableService
     private $columnsListing;
     private $companyId;
     private $modifiedData = [];
+    protected $fileRepository;
 
     public function __construct()
     {
         $this->imageHelper = new ImageHelper();
+        $this->fileRepository = new FileRepository();
     }
 
 
@@ -107,13 +113,69 @@ class CreateAndUpdateContentTableService
         return $insertColumns;
     }
 
+    /**
+     * Сохраняем прикрепленный файл в каталог app/public/UserID/files
+     *
+     * @param $model
+     * @param $file
+     * @return bool
+     */
+    private function saveOrUpdateFileFromModel($model, $file)
+    {
+        if(!empty($file)) {
+
+            $pathToFile = 'User' . Auth::user()->id . '/files';
+            $fileName = Str::random(6) . mb_substr($file->getClientOriginalName(), mb_strripos($file->getClientOriginalName(), '.'));
+
+            $filePath = $file->storeAs($pathToFile, $fileName, 'public');
+
+            if (empty($model->file)) {
+
+                $fileModel = $this->fileRepository->startConditions();
+                $fileModel->path = $filePath;
+                $model->file()->save($fileModel);
+            }
+            else {
+
+                $model->file->update(['path' => $filePath]);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function saveOrUpdateMedia($model, $request)
+    {
+        //Если прикреплено основное изображение - поле "img"
+        if (!empty($request->file('img'))) {
+            $this->imageHelper->saveOrUpdateImageFromModel($model, $request->file('img'));
+        }
+
+        //Если прикреплена галлерея - поле "gallery"
+        if (!empty($request->file('gallery'))) {
+
+            foreach($request->file('gallery') as $img) {
+
+                $this->imageHelper->saveOrUpdateImageFromModel($model, $img, 'gallery');
+            }
+        }
+
+        //Если прикреплен файл- поле "file"
+        if (!empty($request->file('file'))) {
+            $this->saveOrUpdateFileFromModel($model, $request->file('file'));
+        }
+    }
+
 
     public function save($model, $request)
     {
         $this->fillProperty($model, $request);
         $data = $this->dataProcessing($request->input());
         $model = $model->create($data);
-        $this->imageHelper->saveOrUpdateImageFromModel($model, $request->file('img'));
+
+        $this->saveOrUpdateMedia($model, $request);
 
         return $model;
     }
@@ -124,7 +186,8 @@ class CreateAndUpdateContentTableService
         $data = $this->dataProcessing($request->input(), true);
 
         $model->update($data);
-        $this->imageHelper->saveOrUpdateImageFromModel($model, $request->file('img'));
+
+        $this->saveOrUpdateMedia($model, $request);
 
         return $model;
     }

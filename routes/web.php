@@ -14,6 +14,8 @@ use App\Http\Controllers\AdminPAnel\Content\ContentSheetWorkerController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetCertificateController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetTimelineLineController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetTimelinePageController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetStandartController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetShipmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +77,9 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
                 Route::match(['put', 'patch'], 'page/{page}/order-renew', [ContentSheetTimelinePageController::class, 'orderRenew'])
                     ->name('content.sheet.timeline.page.orderrenew');
             });
+
+            Route::resource('standard', ContentSheetStandartController::class)->names('content.sheet.standard');
+            Route::resource('shipment', ContentSheetShipmentController::class)->names('content.sheet.shipment');
         });
     });
 });

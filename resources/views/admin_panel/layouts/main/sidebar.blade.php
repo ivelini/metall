@@ -119,6 +119,8 @@
                         <li class="nav-item"><a href="{{ route('content.sheet.worker.index') }}" class="nav-link"><i class="icon-users4"></i> Персонал</a></li>
                         <li class="nav-item"><a href="{{ route('content.sheet.certificate.index') }}" class="nav-link"><i class="icon-certificate"></i> Сертификаты</a></li>
                         <li class="nav-item"><a href="{{ route('content.sheet.timeline.page.index') }}" class="nav-link"><i class="icon-stairs"></i> Timeline</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.standard.index') }}" class="nav-link"><i class="icon-file-pdf"></i> Стандарты</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.shipment.index') }}" class="nav-link"><i class="icon-truck"></i> Отгрузки</a></li>
                     </ul>
                 </li>
 

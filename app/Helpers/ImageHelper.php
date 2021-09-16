@@ -32,29 +32,23 @@ class ImageHelper
         return $imgPath;
     }
 
-    public  function saveOrUpdateImageFromModel($model, $requestImg)
+    public  function saveOrUpdateImageFromModel($model, $img, $relation = 'image')
     {
-        if (!empty($requestImg)) {
+            $imgPath = $this->saveImage($img);
 
-            $image = $requestImg;
-            $imgPath = $this->saveImage($image);
+            if (empty($model->$relation) || $relation = 'gallery') {
 
-            $imageModel = $this->imageRepository->startConditions();
-            $imageModel->path = $imgPath;
-
-            if (empty($model->image)) {
-
-                $model->image()->save($imageModel);
+                $imageModel = $this->imageRepository->startConditions();
+                $imageModel->path = $imgPath;
+                $imageModel->is_head = $relation == 'image' ? 1 : 0;
+                $model->$relation()->save($imageModel);
             }
-            else {
+            elseif($relation == 'image') {
 
-                $model->image->update(['path' => $imageModel->path]);
+                $model->image->update(['path' => $imgPath]);
             }
 
             return true;
-        }
-
-        return false;
     }
 
     protected function saveImage($image)
@@ -188,15 +182,32 @@ class ImageHelper
         return $content;
     }
 
+    public function getImgPathGalleryFromModel($model, $format = 'medium', $originalPath = false)
+    {
+        if($model->gallery->count() > 0) {
+            foreach ($model->gallery as $img) {
+                $this->getPath($img, $format, $originalPath);
+            }
+        }
+        return $model;
+    }
+
     public function getImgPathFromModel($model, $format = 'medium', $originalPath = false)
     {
 
         if(!empty($model->image->path)) {
-            $model->img = '/storage' . mb_substr($model->image->path, 0, mb_strripos($model->image->path, '.'))
-                . '_' . $format . '.jpg';
-
-            $originalPath == true ? $model->img_original = '/storage' . $model->image->path : NULL;
+            $this->getPath($model->image, $format, $originalPath);
         }
+
+        return $model;
+    }
+
+    private function getPath($model, $format = 'medium', $originalPath = false)
+    {
+        $model->img = '/storage' . mb_substr($model->path, 0, mb_strripos($model->path, '.'))
+            . '_' . $format . '.jpg';
+
+        $originalPath == true ? $model->img_original = '/storage' . $model->path : NULL;
 
         return $model;
     }
