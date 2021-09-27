@@ -16,6 +16,8 @@ use App\Http\Controllers\AdminPanel\Content\ContentSheetTimelineLineController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetTimelinePageController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetStandartController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetShipmentController;
+use App\Http\Controllers\AdminPanel\Media\ImageController;
+use App\Http\Controllers\AdminPanel\Settings\CompanyInformationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,11 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'admin_panel.dashboard')->name('dashboard');
+
+    Route::group(['prefix' => 'media'], function () {
+
+        Route::delete('image/{image}', [ImageController::class, 'destroy'])->name('media.image.destroy');
+    });
 
     Route::group(['prefix' => 'catalog'], function () {
 
@@ -81,5 +88,13 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
             Route::resource('standard', ContentSheetStandartController::class)->names('content.sheet.standard');
             Route::resource('shipment', ContentSheetShipmentController::class)->names('content.sheet.shipment');
         });
+    });
+
+    Route::group(['prefix' => 'settings'], function () {
+
+        Route::get('company_information', [CompanyInformationController::class, 'edit'])
+            ->name('settings.companyInformation.edit');
+        Route::match(['put', 'patch'], 'company_information', [CompanyInformationController::class, 'update'])
+            ->name('settings.companyInformation.update');
     });
 });

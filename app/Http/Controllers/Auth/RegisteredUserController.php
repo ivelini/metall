@@ -48,6 +48,7 @@ class RegisteredUserController extends Controller
 
         $userDir = Storage::disk('public')->makeDirectory('User' . $user->id);
         Storage::disk('public')->makeDirectory($userDir . '/images');
+        Storage::disk('public')->makeDirectory($userDir . '/files');
 
         event(new Registered($user));
 

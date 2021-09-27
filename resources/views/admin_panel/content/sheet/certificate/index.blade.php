@@ -32,14 +32,14 @@
                     <div class="col-sm-6 col-xl-3">
                         <div class="card">
                             <div class="card-img-actions mx-1 mt-1">
-                                @if(!empty($certificate->img))
-                                    <img class="card-img img-fluid" src="{{ $certificate->img }}" alt="">
+                                @if(!empty($certificate->image->img))
+                                    <img class="card-img img-fluid" src="{{ $certificate->image->img }}" alt="">
                                     <div class="card-img-actions-overlay card-img">
-                                        <a href="{{ $certificate->img_original }}" class="btn btn-outline-white border-2 btn-icon rounded-pill" data-popup="lightbox" data-gallery="gallery1">
+                                        <a href="{{ $certificate->image->img_original }}" class="btn btn-outline-white border-2 btn-icon rounded-pill" data-popup="lightbox" data-gallery="gallery1">
                                             <i class="icon-eye"></i>
                                         </a>
                                     </div>
-                                @elseif(empty($certificate->img))
+                                @elseif(empty($certificate->image->img))
                                     <img class="card-img img-fluid" src="/admin_panel/global_assets/images/placeholders/placeholder.jpg" alt="">
                                     <div class="card-img-actions-overlay card-img">
                                         <a href="/admin_panel/global_assets/images/placeholders/placeholder.jpg" class="btn btn-outline-white border-2 btn-icon rounded-pill" data-popup="lightbox" data-gallery="gallery1">

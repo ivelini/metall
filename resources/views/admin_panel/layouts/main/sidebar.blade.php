@@ -6,11 +6,7 @@
             <div class="sidebar-user-material">
                 <div class="sidebar-section-body">
                     <div class="d-flex">
-                        <div class="flex-1">
-                            <button type="button" class="btn btn-outline-light border-transparent btn-icon btn-sm rounded-pill">
-                                <i class="icon-wrench"></i>
-                            </button>
-                        </div>
+                        <div class="flex-1"></div>
                         <a href="#" class="flex-1 text-center"><img src="/admin_panel/global_assets/images/placeholders/placeholder.jpg" class="img-fluid rounded-circle shadow-sm" width="80" height="80" alt=""></a>
                         <div class="flex-1 text-right">
                             <button type="button" class="btn btn-outline-light border-transparent btn-icon rounded-pill btn-sm sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
@@ -29,46 +25,9 @@
                     </div>
                 </div>
 
-                <div class="sidebar-user-material-footer">
-                    <a href="#user-nav" class="d-flex justify-content-between align-items-center text-shadow-dark dropdown-toggle" data-toggle="collapse"><span>My account</span></a>
-                </div>
             </div>
 
-            <div class="collapse border-bottom" id="user-nav">
-                <ul class="nav nav-sidebar">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="icon-user-plus"></i>
-                            <span>My profile</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="icon-coins"></i>
-                            <span>My balance</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="icon-comment-discussion"></i>
-                            <span>Messages</span>
-                            <span class="badge badge-teal badge-pill align-self-center ml-auto">58</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="icon-cog5"></i>
-                            <span>Account settings</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="icon-switch2"></i>
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+
         </div>
         <!-- /user menu -->
 
@@ -123,7 +82,18 @@
                         <li class="nav-item"><a href="{{ route('content.sheet.shipment.index') }}" class="nav-link"><i class="icon-truck"></i> Отгрузки</a></li>
                     </ul>
                 </li>
+                <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs mt-1">Настройки</div> <i class="icon-menu" title="Main"></i></li>
+                <li class="nav-item"><a href="{{ route('settings.companyInformation.edit') }}" class="nav-link"><i class="icon-profile"></i> Карточка компании</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="icon-stack-picture"></i> Слайдер</a></li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-pencil7"></i> <span>Записи</span></a>
 
+                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                        <li class="nav-item"><a href="{{ route('content.records.record.create') }}" class="nav-link"><i class="icon-circle-small"></i> Добавить запись</a></li>
+                        <li class="nav-item"><a href="{{ route('content.records.record.index') }}" class="nav-link"><i class="icon-circle-small"></i> Все записи</a></li>
+                        <li class="nav-item"><a href="{{ route('content.records.category.index') }}" class="nav-link"><i class="icon-circle-small"></i> Рубрики</a></li>
+                    </ul>
+                </li>
 
                 <!-- /page kits -->
 

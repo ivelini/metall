@@ -33,22 +33,22 @@
                     </tr>
                     </thead>
                     <tbody>
-{{--                    @foreach($standards as $standardt)--}}
-{{--                        <tr>--}}
-{{--                            <td><a href="{{ route('content.sheet.standard.edit', $standardt->id) }}">{{ $standardt->h1 }}</a></td>--}}
-{{--                            <td>{{ $standardt->description }}</td>--}}
-{{--                            <td><a href="{{ $standardt->file }}"><i class="icon-upload"></i></a></td>--}}
-{{--                            <td>--}}
-{{--                                <form action="{{ route('content.sheet.standard.destroy', $standardt->id) }}" method="POST">--}}
-{{--                                    @method('DELETE')--}}
-{{--                                    @csrf--}}
-{{--                                    <div class="text-right">--}}
-{{--                                        <button type="submit" class="btn"> <i class="icon-bin"></i></button>--}}
-{{--                                    </div>--}}
-{{--                                </form>--}}
-{{--                            </td>--}}
-{{--                        </tr>--}}
-{{--                    @endforeach--}}
+                    @foreach($pages as $page)
+                        <tr @if($page->is_published == 0) class="not-active" @endif>
+                            <td><a href="{{ route('content.sheet.shipment.edit', $page->id) }}">{{ $page->h1 }}</a></td>
+                            <td>{{ $page->point }}</td>
+                            <td>{{ $page->date }}</td>
+                            <td>
+                                <form action="{{ route('content.sheet.shipment.destroy', $page->id) }}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <div class="text-right">
+                                        <button type="submit" class="btn"> <i class="icon-bin"></i></button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>

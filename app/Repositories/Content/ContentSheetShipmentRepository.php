@@ -7,6 +7,7 @@ namespace App\Repositories\Content;
 use App\Repositories\CoreRepository;
 use App\Models\Content\ContentSheetShipment as Model;
 use App\Helpers\ImageHelper;
+use Illuminate\Support\Facades\Auth;
 
 
 class ContentSheetShipmentRepository extends CoreRepository
@@ -46,6 +47,16 @@ class ContentSheetShipmentRepository extends CoreRepository
             ->first();
 
         return $object;
+    }
+
+    public function getShipmentForIndex()
+    {
+        $pages = $this->startConditions()
+            ->select('id', 'company_id', 'h1', 'date', 'point', 'is_published')
+            ->where('company_id', Auth::user()->company()->first()->id)
+            ->get();
+
+        return $pages;
     }
 
 }

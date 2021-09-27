@@ -8,6 +8,8 @@
 @section('header-js')
     <script src="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>
     <link href="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.css" rel="stylesheet">
+    <script src="/admin_panel/global_assets/js/plugins/media/glightbox.min.js"></script>
+    <script src="/admin_panel/global_assets/js/demo_pages/gallery.js"></script>
     <script>
         $(document).ready(function(){
             var i = $('#data_inputs .form-control').length;
@@ -47,7 +49,8 @@
                                     <input name="h1"
                                            class="form-control"
                                            placeholder="Название записи"
-                                           value="{{ old('h1', $page->h1) }}">
+                                           value="{{ old('h1', $page->h1) }}"
+                                           required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -57,7 +60,8 @@
                                            type="date"
                                            class="form-control"
                                            placeholder="Дата отгрузки"
-                                            value="{{ old('date', $page->date) }}">
+                                            value="{{ old('date', $page->date) }}"
+                                           required>
                                 </div>
                                 <div class="col-lg-6">
                                     <label>Город отгрузки</label>
@@ -65,7 +69,8 @@
                                            type="text"
                                            class="form-control"
                                            placeholder="Город отгрузки"
-                                           value="{{ old('point', $page->point) }}">
+                                           value="{{ old('point', $page->point) }}"
+                                           required>
                                 </div>
                             </div>
 
@@ -96,10 +101,11 @@
                                                                     <a href="{{ $img->img_original }}" class="btn btn-outline-white border-2 btn-icon rounded-pill" data-popup="lightbox" data-gallery="gallery1">
                                                                         <i class="icon-plus3"></i>
                                                                     </a>
-
-                                                                    <a href="#" class="btn btn-outline-white border-2 btn-icon rounded-pill ml-2">
-                                                                        <i class="icon-bin"></i>
-                                                                    </a>
+                                                                    <a href="#" class="btn btn-outline-white border-2 btn-icon rounded-pill ml-2"
+                                                                       data-toggle="modal"
+                                                                       data-target="#modal_delete"
+                                                                       data-id = "{{ $img->id }}"
+                                                                    ><i class="icon-bin"></i></a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -123,8 +129,7 @@
                             <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Отгруженная подукция</legend>
                             <div class="form-group row">
                                 <div class="col-lg-12">
-
-                                            <a href="#" id="add">Добавить</a> | <a href="#" id="remove">Удалить</a>
+                                    <a href="#" id="add">Добавить</a> | <a href="#" id="remove">Удалить</a>
                                             @if(!empty($products))
                                                 <div class="inputs" id="data_inputs">
                                                     @php $i = 1 @endphp
@@ -150,7 +155,7 @@
                                                         @php $i++ @endphp
                                                     @endforeach
                                                 </div>
-                                            @elseif(empty($products) == false)
+                                            @elseif(!empty($products) == false)
                                                 <div class="inputs"></div>
                                             @endif
                                     </div>
@@ -250,12 +255,40 @@
     </form>
 
 
+    <div id="modal_delete" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="card">
+                    <div class="card-header bg-light header-elements-inline">
+                        <h6 class="card-title">Удалить?</h6>
+                    </div>
 
+                    <div class="card-body">
+                        <form method="POST" id="formmodaldelete" action="">
+                            @method('DELETE')
+                            @csrf
+                            <div class="text-right">
+                                <button type="button" class="btn btn-link" data-dismiss="modal">Нет</button>
+                                <button type="submit" class="btn bg-warning">Да <i class="icon-bin ml-2"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('include-footer')
             <script>
                 $(document).ready(function() {
                     $('#summernote').summernote();
+                });
+            </script>
+            <script>
+                $('#modal_delete').on('shown.bs.modal', function (event) {
+                    var data_id = $( event.relatedTarget ).data( "id" );
+                    route = "/admin-panel/media/image/" + data_id;
+                    $("#formmodaldelete").attr("action", route)
                 });
             </script>
 @endsection

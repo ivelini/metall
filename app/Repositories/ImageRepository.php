@@ -12,4 +12,13 @@ class ImageRepository extends CoreRepository
     {
         return Model::class;
     }
+
+    public function getObject($id)
+    {
+        $object = $this->startConditions()
+            ->where('id', $id)
+            ->first();
+
+        return $object;
+    }
 }

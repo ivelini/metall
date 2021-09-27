@@ -25,11 +25,24 @@ class CreateAndUpdateContentTableService
     private $companyId;
     private $modifiedData = [];
     protected $fileRepository;
+    private $relationsImages = [];
+    private $relationsFiles = [];
 
     public function __construct()
     {
         $this->imageHelper = new ImageHelper();
         $this->fileRepository = new FileRepository();
+
+        $this->relationsImages = [
+            'images',
+            'logo',
+        ];
+
+        $this->relationsFiles = [
+            'file',
+            'price',
+            'requisites',
+        ];
     }
 
 

@@ -29,7 +29,9 @@ class ContentSheetShipmentController extends Controller
      */
     public function index()
     {
-        return view('admin_panel.content.sheet.shipment.index');
+        $pages = $this->contentSheetShipmentRepository->getShipmentForIndex();
+
+        return view('admin_panel.content.sheet.shipment.index', compact('pages'));
     }
 
     /**
@@ -98,7 +100,10 @@ class ContentSheetShipmentController extends Controller
     {
         $object = $this->contentSheetShipmentRepository->getObject($id);
         $this->createAndUpdateContentTableService->update($object, $request);
-        dd(__METHOD__, $request,$id);
+
+        return redirect()
+            ->route('content.sheet.shipment.edit', $id)
+            ->with(['success' => 'Запись обновлена']);
     }
 
     /**
@@ -109,6 +114,10 @@ class ContentSheetShipmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->contentSheetShipmentRepository->getObject($id)->delete();
+
+        return redirect()
+            ->route('content.sheet.shipment.index')
+            ->with(['success' => 'Отгрузка удалена']);
     }
 }

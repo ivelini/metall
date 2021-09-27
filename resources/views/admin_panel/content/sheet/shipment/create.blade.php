@@ -43,17 +43,28 @@
 
                             <div class="form-group row">
                                 <div class="col-lg-12">
-                                    <input name="h1" class="form-control" placeholder="Название записи">
+                                    <input name="h1"
+                                           class="form-control"
+                                           placeholder="Название записи"
+                                           required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-6">
                                     <label>Дата отгрузки</label>
-                                    <input name="date" type="date" class="form-control" placeholder="Дата отгрузки">
+                                    <input name="date"
+                                           type="date"
+                                           class="form-control"
+                                           placeholder="Дата отгрузки"
+                                           required>
                                 </div>
                                 <div class="col-lg-6">
                                     <label>Город отгрузки</label>
-                                    <input name="point" type="text" class="form-control" placeholder="Город отгрузки">
+                                    <input name="point"
+                                           type="text"
+                                           class="form-control"
+                                           placeholder="Город отгрузки"
+                                           required>
                                 </div>
                             </div>
 

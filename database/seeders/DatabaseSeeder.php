@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserRoleSeeder::class,
             CompanySeeder::class,
+            CompanyInformationSeeder::class,
             UserCompanySeeder::class,
             MarkiStaliSeeder::class,
             StandardProductsSeeder::class,

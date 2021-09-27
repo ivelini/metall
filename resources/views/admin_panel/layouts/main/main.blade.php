@@ -25,6 +25,8 @@
     <script src="/admin_panel/global_assets/js/plugins/pickers/daterangepicker.js"></script>
 
     <script src="/admin_panel/assets/js/app.js"></script>
+    <script src="/admin_panel/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+    <script src="/admin_panel/global_assets/js/plugins/notifications/noty.min.js"></script>
 
     @yield('header-js')
 
@@ -91,5 +93,6 @@
 </div>
 <!-- /page content -->
 @yield('include-footer')
+@include('admin_panel.layouts.main.alerts-js')
 </body>
 </html>

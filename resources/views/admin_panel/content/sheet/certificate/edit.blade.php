@@ -47,10 +47,10 @@
                             <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Изображение</legend>
 
                             <div class="card-img-actions m-1">
-                                <img class="card-img img-fluid" src="@if(empty($certificate->img))
+                                <img class="card-img img-fluid" src="@if(empty($certificate->image->img))
                                                                         /admin_panel/global_assets/images/placeholders/placeholder.jpg
                                                                     @else
-                                                                        {{ $certificate->img}}
+                                                                        {{ $certificate->image->img}}
                                                                     @endif" alt="">
                                 <div class="card-img-actions-overlay card-img">
                                     <input name="img" type="file" class="form-control-plaintext" style="width: 65px">

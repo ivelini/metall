@@ -17,10 +17,18 @@ class CreateFileTable extends Migration
             $table->id();
             $table->string('path');
             $table->unsignedBigInteger('content_sheet_standarts_id')->nullable();
+            $table->unsignedBigInteger('price_company_information_id')->nullable();
+            $table->unsignedBigInteger('requisites_company_information_id')->nullable();
             $table->timestamps();
 
             $table->foreign('content_sheet_standarts_id')->references('id')
                 ->on('content_sheet_standarts')->cascadeOnUpdate()->cascadeOnDelete();
+
+            $table->foreign('price_company_information_id')->references('id')
+                ->on('company_information')->cascadeOnUpdate()->cascadeOnDelete();
+
+            $table->foreign('requisites_company_information_id')->references('id')
+                ->on('company_information')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 
