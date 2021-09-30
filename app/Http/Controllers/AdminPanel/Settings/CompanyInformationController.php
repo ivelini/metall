@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\AdminPanel\Settings;
 
-use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
-use App\Repositories\CompanyRepository;
 use App\Repositories\Settings\SettingsCompanyInformationRepository;
 use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
@@ -21,8 +19,9 @@ class CompanyInformationController extends Controller
     public function edit()
     {
         $page = $this->settingsCompanyInformationRepository->getEdit();
-
-        return view('admin_panel.settings.company_information.edit', compact('page'));
+        $storages = $page->storages_json;
+        $agencys = $page->agency_json;
+        return view('admin_panel.settings.company_information.edit', compact('page', 'storages', 'agencys'));
 
     }
 
@@ -30,12 +29,11 @@ class CompanyInformationController extends Controller
     public function update(Request $request, CreateAndUpdateContentTableService $createAndUpdateContentTableService)
     {
         $page = $this->settingsCompanyInformationRepository->getObject();
-        $createAndUpdateContentTableService->update($page, $request);
-        dd(__METHOD__, $request,$page);
-    }
 
-    public function destroy()
-    {
-        //
+        $createAndUpdateContentTableService->update($page, $request);
+
+        return redirect()
+            ->route('settings.companyInformation.edit')
+            ->with(['success' => 'Информация обновлена']);
     }
 }

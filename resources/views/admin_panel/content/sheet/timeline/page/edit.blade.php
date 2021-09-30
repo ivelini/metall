@@ -81,7 +81,7 @@
                     <div class="card-body">
                         <div class="custom-control custom-control-right custom-switch text-right mb-2">
                             <input type="checkbox" name="is_published" class="custom-control-input" id="sc_rs_c"
-                            >
+                                   @if ($page->is_published == 1) checked @endif>
                             <label class="custom-control-label" for="sc_rs_c">Опубликованна</label>
                         </div>
 

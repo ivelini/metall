@@ -34,10 +34,9 @@ class ImageHelper
 
     public  function saveOrUpdateImageFromModel($model, $img, $relation = 'image')
     {
-        dd(__METHOD__, $model, $img, $relation);
             $imgPath = $this->saveImage($img);
 
-            if (!empty($model->$relation) || $relation = 'gallery') {
+            if (empty($model->$relation) || $relation == 'gallery') {
 
                 $imageModel = $this->imageRepository->startConditions();
                 $imageModel->path = $imgPath;

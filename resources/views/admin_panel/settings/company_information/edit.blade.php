@@ -3,7 +3,7 @@
     Карточка компании
 @endsection
 @section('pageheader-title')
-    <a href=""><i class="icon-arrow-left52 mr-2"></i></a>Подразделения
+    <a href=""><i class="icon-arrow-left52 mr-2"></i></a>Карточка компании
 @endsection
 @section('header-js')
     <script>
@@ -16,7 +16,7 @@
                 i = i / 2 + 1;
             }
             $('#add').click(function() {
-                $('<div class="field form-group row"><div class="col-lg-12"><div class="form-group row"><div class="col-6"><input class="form-control" type="text" name="stocks_json[' + i + '][address]" value="" placeholder="Адрес"></div><div class="col-2"><input class="form-control" type="text" name="stocks_json[' + i + '][worktime]" value="" placeholder="Время работы"></div><div class="col-4"><input class="form-control" type="text" name="stocks_json[' + i + '][phones]" value="" placeholder="Телефоны"></div></div></div></div>').fadeIn('slow').appendTo('.inputs');
+                $('<div class="field form-group row"><div class="col-lg-12"><div class="form-group row"><div class="col-6"><input class="form-control" type="text" name="storages_json[' + i + '][address]" value="" placeholder="Адрес"></div><div class="col-2"><input class="form-control" type="text" name="storages_json[' + i + '][worktime]" value="" placeholder="Время работы"></div><div class="col-4"><input class="form-control" type="text" name="storages_json[' + i + '][phones]" value="" placeholder="Телефоны"></div></div></div></div>').fadeIn('slow').appendTo('.inputs');
                 i++;
             });
 
@@ -27,21 +27,21 @@
                 }
             });
 
-            var j = $('#data_inputs_filial .form-control').length;
+            var j = $('#data_inputs_agency .form-control').length;
             if (j == 0) {
                 j = 1;
             }
             else {
                 j = j / 2 + 1;
             }
-            $('#add_filial').click(function() {
-                $('<div class="field_filial form-group row"><div class="col-lg-12"><div class="form-group row"><div class="col-6"><input class="form-control" type="text" name="filial_json[' + j + '][address]" value="" placeholder="Адрес"></div><div class="col-2"><input class="form-control" type="text" name="filial_json[' + j + '][worktime]" value="" placeholder="Время работы"></div><div class="col-4"><input class="form-control" type="text" name="filial_json[' + j + '][phones]" value="" placeholder="Телефоны"></div></div></div></div>').fadeIn('slow').appendTo('.inputs_filial');
+            $('#add_agency').click(function() {
+                $('<div class="field_agency form-group row"><div class="col-lg-12"><div class="form-group row"><div class="col-6"><input class="form-control" type="text" name="agency_json[' + j + '][address]" value="" placeholder="Адрес"></div><div class="col-2"><input class="form-control" type="text" name="agency_json[' + j + '][worktime]" value="" placeholder="Время работы"></div><div class="col-4"><input class="form-control" type="text" name="agency_json[' + j + '][phones]" value="" placeholder="Телефоны"></div></div></div></div>').fadeIn('slow').appendTo('.inputs_agency');
                 j++;
             });
 
-            $('#remove_filial').click(function() {
+            $('#remove_agency').click(function() {
                 if(j > 1) {
-                    $('.field_filial:last').remove();
+                    $('.field_agency:last').remove();
                     j--;
                 }
             });

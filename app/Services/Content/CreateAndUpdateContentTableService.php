@@ -25,18 +25,12 @@ class CreateAndUpdateContentTableService
     private $companyId;
     private $modifiedData = [];
     protected $fileRepository;
-    private $relationsImages = [];
     private $relationsFiles = [];
 
     public function __construct()
     {
         $this->imageHelper = new ImageHelper();
         $this->fileRepository = new FileRepository();
-
-        $this->relationsImages = [
-            'images',
-            'logo',
-        ];
 
         $this->relationsFiles = [
             'file',
@@ -80,7 +74,7 @@ class CreateAndUpdateContentTableService
      */
     private function dataProcessing($data, $is_update = false)
     {
-        //Если найдены измененные данные
+          //Если найдены измененные данные
         if(count($this->modifiedData) > 0) {
             foreach ($this->modifiedData as $column => $value) {
                 $data[$column] = $value;
@@ -116,10 +110,13 @@ class CreateAndUpdateContentTableService
                 $data[$column] = 1;
             }
 
-            //Если табличное поле с отправленным
+            //Сравниваем табличное поле с отправленным
             //Если найдено, то вставляем
-            if (!empty($data[$column])) {
+            if (!empty($data[$column]) || $data[$column] == 0) {
                 $insertColumns[$column] = $data[$column];
+            }
+            elseif ($is_update == false) {
+                $insertColumns[$column] = null;
             }
         }
 
@@ -131,9 +128,10 @@ class CreateAndUpdateContentTableService
      *
      * @param $model
      * @param $file
+     * @param $relation
      * @return bool
      */
-    private function saveOrUpdateFileFromModel($model, $file)
+    private function saveOrUpdateFileFromModel($model, $file, $relation = 'file')
     {
         if(!empty($file)) {
 
@@ -142,15 +140,15 @@ class CreateAndUpdateContentTableService
 
             $filePath = $file->storeAs($pathToFile, $fileName, 'public');
 
-            if (empty($model->file)) {
+            if (empty($model->$relation)) {
 
                 $fileModel = $this->fileRepository->startConditions();
                 $fileModel->path = $filePath;
-                $model->file()->save($fileModel);
+                $model->$relation()->save($fileModel);
             }
             else {
 
-                $model->file->update(['path' => $filePath]);
+                $model->$relation->update(['path' => $filePath]);
             }
 
             return true;
@@ -175,10 +173,14 @@ class CreateAndUpdateContentTableService
             }
         }
 
-        //Если прикреплен файл- поле "file"
-        if (!empty($request->file('file'))) {
-            $this->saveOrUpdateFileFromModel($model, $request->file('file'));
+        //Если прикреплен файл
+        foreach ($this->relationsFiles as $relations) {
+
+            if (!empty($request->file($relations))) {
+                $this->saveOrUpdateFileFromModel($model, $request->file($relations), $relations);
+            }
         }
+
     }
 
 

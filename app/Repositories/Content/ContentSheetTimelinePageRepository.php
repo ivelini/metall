@@ -27,7 +27,8 @@ class ContentSheetTimelinePageRepository extends CoreRepository
     public function getPagesForIndex()
     {
         $pages = $this->startConditions()
-            ->select('id', 'h1', 'created_at', 'is_published')
+            ->select('id', 'company_id', 'h1', 'created_at', 'is_published')
+            ->where('company_id', Auth::user()->company->first()->id)
             ->get();
 
         return $pages;
@@ -42,7 +43,6 @@ class ContentSheetTimelinePageRepository extends CoreRepository
         $this->imageHelper->getImgPathFromModel($page, 'medium');
 
         return $page;
-
     }
 
     public function getPage($id)

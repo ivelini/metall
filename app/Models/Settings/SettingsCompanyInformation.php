@@ -13,11 +13,11 @@ class SettingsCompanyInformation extends Model
     protected $table = 'company_information';
     protected $guarded = [];
     protected $casts = [
-        'storages' => 'array',
-        'agency' => 'array',
+        'storages_json' => 'array',
+        'agency_json' => 'array',
     ];
 
-    public function logo() {
+    public function image() {
         return $this->hasOne(Image::class, 'company_information_id', 'id');
     }
 

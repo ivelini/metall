@@ -25,6 +25,7 @@ class CreateImageTable extends Migration
             $table->unsignedBigInteger('content_sheet_timeline_line_id')->nullable();
             $table->unsignedBigInteger('content_sheet_shipment_id')->nullable();
             $table->unsignedBigInteger('company_information_id')->nullable();
+            $table->unsignedBigInteger('slider_image_id')->nullable();
             $table->boolean('is_head')->default('0');
             $table->timestamps();
 
@@ -54,6 +55,9 @@ class CreateImageTable extends Migration
 
             $table->foreign('company_information_id')->references('id')
                 ->on('company_information')->cascadeOnUpdate()->cascadeOnDelete();
+
+            $table->foreign('slider_image_id')->references('id')->on('slider_image')
+                ->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

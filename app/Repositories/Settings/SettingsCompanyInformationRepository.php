@@ -6,8 +6,6 @@ namespace App\Repositories\Settings;
 use App\Models\Settings\SettingsCompanyInformation as Model;
 use App\Repositories\CoreRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 class SettingsCompanyInformationRepository extends CoreRepository
 {
@@ -30,7 +28,7 @@ class SettingsCompanyInformationRepository extends CoreRepository
     {
         $object = $this->startConditions()
             ->where('company_id', Auth::user()->company()->first()->id)
-            ->with('logo','price','requisites')
+            ->with('image','price','requisites')
             ->first();
 
         return $object;

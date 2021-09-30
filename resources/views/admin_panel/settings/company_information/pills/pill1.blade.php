@@ -22,7 +22,7 @@
                                 type="text"
                                 class="form-control"
                                 required
-                                value="{{ old('full_name', $page->slim_name) }}">
+                                value="{{ old('slim_name', $page->slim_name) }}">
                     </div>
                 </div>
             </div>
@@ -35,14 +35,14 @@
                                type="text"
                                class="form-control"
                                required
-                               value="{{ old('full_name', $page->index) }}">
+                               value="{{ old('index', $page->index) }}">
                     </div>
                     <div class="col-lg-4">
                         <label>Область</label>
                         <input name="oreal"
                                type="text"
                                class="form-control"
-                               value="{{ old('full_name', $page->oreal) }}">
+                               value="{{ old('oreal', $page->oreal) }}">
                     </div>
                     <div class="col-lg-4">
                         <label>Город</label>
@@ -50,7 +50,7 @@
                                type="text"
                                class="form-control"
                                required
-                               value="{{ old('full_name', $page->sity) }}">
+                               value="{{ old('sity', $page->sity) }}">
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                            type="text"
                            class="form-control"
                            required
-                           value="{{ old('full_name', $page->address) }}">
+                           value="{{ old('address', $page->address) }}">
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
                                type="text"
                                class="form-control"
                                required
-                               value="{{ old('full_name', $page->phone) }}">
+                               value="{{ old('phone', $page->phone) }}">
                     </div>
                     <div class="col-lg-6">
                         <label>Email</label>
@@ -85,7 +85,7 @@
                                type="text"
                                class="form-control"
                                readonly
-                               value="{{ old('full_name', $page->email) }}">
+                               value="{{ old('email', $page->email) }}">
                     </div>
                 </div>
             </div>
@@ -98,6 +98,9 @@
                             <input name="img"
                                    type="file"
                                    class="form-control">
+                            <a href="">
+                                Логотип
+                            </a>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -106,6 +109,9 @@
                             <input name="requisites"
                                    type="file"
                                    class="form-control">
+                            <a href="">
+                                Реквизиты
+                            </a>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -114,6 +120,9 @@
                             <input name="price"
                                    type="file"
                                    class="form-control">
+                            <a href="">
+                                Прайс
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -122,17 +131,17 @@
             <div class="row">
                 <div class="col-lg-12">
                     <label>Код Google/Yandex карты</label>
-                        <input name="full_name"
+                        <input name="map"
                                type="text"
                                class="form-control"
-                               value="{{ old('full_name', $page->full_name) }}">
+                               value="{{ old('map', $page->map) }}">
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-lg-12 text-right">
-                    <button type="submit" class="btn btn-primary">Добавить <i class="icon-floppy-disk ml-2"></i></button>
+                    <button type="submit" class="btn btn-primary">Сохранить <i class="icon-floppy-disk ml-2"></i></button>
                 </div>
             </div>
         </div>

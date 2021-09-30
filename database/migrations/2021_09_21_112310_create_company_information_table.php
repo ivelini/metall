@@ -23,9 +23,9 @@ class CreateCompanyInformationTable extends Migration
             $table->string('sity')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->json('storages')->nullable();
-            $table->json('agency')->nullable();
-            $table->string('card_map')->nullable();
+            $table->json('storages_json')->nullable();
+            $table->json('agency_json')->nullable();
+            $table->string('map')->nullable();
 
             $table->timestamps();
 

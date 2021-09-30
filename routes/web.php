@@ -18,6 +18,8 @@ use App\Http\Controllers\AdminPanel\Content\ContentSheetStandartController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetShipmentController;
 use App\Http\Controllers\AdminPanel\Media\ImageController;
 use App\Http\Controllers\AdminPanel\Settings\CompanyInformationController;
+use App\Http\Controllers\AdminPanel\Settings\SliderController;
+use App\Http\Controllers\AdminPanel\Settings\SliderImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,5 +98,8 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
             ->name('settings.companyInformation.edit');
         Route::match(['put', 'patch'], 'company_information', [CompanyInformationController::class, 'update'])
             ->name('settings.companyInformation.update');
+
+        Route::resource('slider', SliderController::class)->names('settings.slider');
+        Route::resource('slider/{slider}/slide', SliderImageController::class)->names('settings.slider.slide');
     });
 });
