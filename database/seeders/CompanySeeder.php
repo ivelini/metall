@@ -15,11 +15,7 @@ class CompanySeeder extends Seeder
     public function run()
     {
         DB::table('company')->insert([
-            'name' => 'АО ЮУАЗ "СТАН-2000"',
-            'full_name' => 'Акционерное общество Южно-Уральский Арматурный завод "СТАН-2000"',
-            'address' => 'г.Челябинск, ул.Автоматики д.9',
-            'email' => 'info@stan2000.ru',
-            'phone' => '8-800-775-12-74'
+            'domain' => 'as42aaa.metall',
         ]);
     }
 }

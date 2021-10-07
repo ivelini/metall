@@ -101,6 +101,7 @@ class CreateAndUpdateContentTableService
                 $data[$column] = $this->imageHelper->saveImageFromSummernote($data[$column]);
             }
 
+
             //Если таблица содержит поле "is_published" и request с полем "is_published" пусто,
             //то data[is_published] = 0
             if ($column == 'is_published' && empty($data[$column])) {
@@ -112,7 +113,7 @@ class CreateAndUpdateContentTableService
 
             //Сравниваем табличное поле с отправленным
             //Если найдено, то вставляем
-            if (!empty($data[$column]) || $data[$column] == 0) {
+            if (!empty($data[$column]) || $column == 'is_published') {
                 $insertColumns[$column] = $data[$column];
             }
             elseif ($is_update == false) {

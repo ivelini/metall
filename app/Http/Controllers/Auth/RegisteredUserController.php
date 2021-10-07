@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Company;
 use App\Providers\RouteServiceProvider;
+use http\Url;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
@@ -45,6 +48,10 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $companyUrl = Str::random(6) . '.' . \url('/');
+        $company = new Company(['url' => $companyUrl]);
+        $user->company()->save($company);
 
         $userDir = Storage::disk('public')->makeDirectory('User' . $user->id);
         Storage::disk('public')->makeDirectory($userDir . '/images');

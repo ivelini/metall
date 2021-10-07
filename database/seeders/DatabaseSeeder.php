@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             UserCompanySeeder::class,
             MarkiStaliSeeder::class,
             StandardProductsSeeder::class,
-            ContentRecordCategorySeeder::class
+            ContentRecordCategorySeeder::class,
+            ThemeSeeder::class
         ]);
     }
 }

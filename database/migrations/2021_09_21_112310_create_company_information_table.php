@@ -26,6 +26,10 @@ class CreateCompanyInformationTable extends Migration
             $table->json('storages_json')->nullable();
             $table->json('agency_json')->nullable();
             $table->string('map')->nullable();
+            $table->string('site_phone')->nullable();
+            $table->string('site_email')->nullable();
+            $table->string('site_name')->nullable();
+            $table->string('site_description')->nullable();
 
             $table->timestamps();
 

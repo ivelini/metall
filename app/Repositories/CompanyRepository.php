@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyRepository extends CoreRepository
 {
-    private $company;
-
-    public function __construct()
-    {
-        $this->company = Auth::user()->company()->first();
-    }
 
     public function getModelClass()
     {
@@ -22,9 +16,28 @@ class CompanyRepository extends CoreRepository
 
     public function getInformationFromCompany()
     {
-        $information = $this->company->information;
+        $information = Auth::user()->company()->first()->information;
 
         return $information;
     }
 
+    public function getCompaniesUrl()
+    {
+        $companies = $this->startConditions()
+            ->select('id', 'domain')
+            ->get();
+
+         return $companies;
+    }
+
+    public function getCompanyFromDomainForTheme()
+    {
+        $company = $this->startConditions()
+            ->select('id', 'domain')
+            ->where('domain', $_SERVER['HTTP_HOST'])
+            ->with('theme', 'information', 'information.image')
+            ->first();
+
+        return $company;
+    }
 }
