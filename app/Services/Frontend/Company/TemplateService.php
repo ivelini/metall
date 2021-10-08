@@ -6,8 +6,12 @@ namespace App\Services\Frontend\Company;
 use App\Repositories\CompanyRepository;
 use App\Repositories\Frontend\Company\Theme\ThemeSettingsRepository;
 use App\Repositories\Settings\SettingsCompanyInformationRepository;
+use App\Repositories\Singletone\Frontend\Company\CompanyInformationSingleton;
 use Illuminate\Support\Str;
 
+/*
+ * Получает все данные о загруженном шаблоне
+ */
 
 class TemplateService
 {
@@ -17,8 +21,9 @@ class TemplateService
 
     public function __construct()
     {
-        $companyRepository = new CompanyRepository();
-        $this->company = $companyRepository->getCompanyFromDomainForTheme();
+
+
+        $this->company = CompanyInformationSingleton::getCompanyFromDomain();
 
         $this->themeSettingsRepository = new ThemeSettingsRepository();
         $this->settingsCompanyInformationRepository = new SettingsCompanyInformationRepository();

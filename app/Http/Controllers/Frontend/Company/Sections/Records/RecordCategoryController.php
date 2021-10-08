@@ -10,8 +10,8 @@ class RecordCategoryController extends Controller
     public function show($id)
     {
 //        dd(__METHOD__);
-        $headMetateg = collect();
+//        $headMetateg = collect();
 
-        return view('frontend.company.tpl1.sections.records.category', compact('headMetateg'));
+        return view('frontend.company.tpl1.sections.records.category');
     }
 }
