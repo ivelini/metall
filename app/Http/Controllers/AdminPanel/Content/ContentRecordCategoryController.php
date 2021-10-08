@@ -121,7 +121,7 @@ class ContentRecordCategoryController extends Controller
 
         return redirect()
             ->route('content.records.category.index')
-            ->with(['success' => 'Категория "' . $data['h1'] . '" успешно обновлена']);
+            ->with(['success' => 'Категория успешно обновлена']);
     }
 
     /**

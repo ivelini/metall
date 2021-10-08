@@ -20,6 +20,7 @@ use App\Http\Controllers\AdminPanel\Media\ImageController;
 use App\Http\Controllers\AdminPanel\Settings\CompanyInformationController;
 use App\Http\Controllers\AdminPanel\Settings\SliderController;
 use App\Http\Controllers\AdminPanel\Settings\SliderImageController;
+use App\Http\Controllers\AdminPanel\Settings\MenuController;
 
 
 Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
@@ -87,6 +88,9 @@ Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware
             ->name('settings.companyInformation.generalEdit');
         Route::match(['put', 'patch'], 'general', [CompanyInformationController::class, 'generalUpdate'])
             ->name('settings.companyInformation.generalUpdate');
+
+        Route::get('menu', [MenuController::class, 'edit'])
+            ->name('settings.menu.edit');
 
         Route::get('company_information', [CompanyInformationController::class, 'edit'])
             ->name('settings.companyInformation.edit');

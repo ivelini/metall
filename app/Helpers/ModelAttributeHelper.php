@@ -68,4 +68,19 @@ class ModelAttributeHelper
 
         return $this->camelCaseNameAttributes($filtered);
     }
+
+    public function getAttributesFromCollectionModels($collection, $attributes = [])
+    {
+        $attributes = collect($attributes);
+
+        $arr = [];
+        foreach ($collection as $model) {
+
+            $arr[] = $this->findAttributes($model, $attributes);
+        }
+
+        $arr = collect($arr);
+
+        return $arr;
+    }
 }

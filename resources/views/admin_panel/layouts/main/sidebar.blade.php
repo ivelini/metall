@@ -83,14 +83,22 @@
                     </ul>
                 </li>
                 <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs mt-1">Настройки</div> <i class="icon-menu" title="Main"></i></li>
-                <li class="nav-item"><a href="{{ route('settings.companyInformation.generalEdit') }}" class="nav-link"><i class="icon-sphere"></i> Общие</a></li>
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-pencil7"></i> <span>Шаблон</span></a>
+                    <a href="#" class="nav-link"><i class="icon-brush"></i> <span>Внешний вид</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="{{ route('content.records.record.create') }}" class="nav-link"><i class="icon-circle-small"></i> Выбор шаблона</a></li>
+                        <li class="nav-item"><a href="{{ route('settings.companyInformation.generalEdit') }}" class="nav-link"><i class="icon-sphere"></i> Общие</a></li>
+                        <li class="nav-item"><a href="{{ route('settings.menu.edit') }}" class="nav-link"><i class="icon-menu2"></i> Меню</a></li>
+                        <li class="nav-item nav-item-submenu">
+                            <a href="#" class="nav-link"><i class="icon-insert-template"></i> <span>Шаблон</span></a>
+
+                            <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                                <li class="nav-item"><a href="{{ route('content.records.record.create') }}" class="nav-link"><i class="icon-circle-small"></i> Выбор шаблона</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
+
                 <li class="nav-item"><a href="{{ route('settings.companyInformation.edit') }}" class="nav-link"><i class="icon-profile"></i> Карточка компании</a></li>
                 <li class="nav-item"><a href="{{ route('settings.slider.index') }}" class="nav-link"><i class="icon-stack-picture"></i> Слайдер</a></li>
 

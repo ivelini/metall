@@ -75,7 +75,7 @@
                                                         <div class="row">
                                                             <div class="col-lg-3">
                                                                 <div class="card-img-actions mb-3">
-                                                                    <img src="{{ $line->img }}" alt="">
+                                                                    <img src="{{ $line->image->img }}" alt="">
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-8">

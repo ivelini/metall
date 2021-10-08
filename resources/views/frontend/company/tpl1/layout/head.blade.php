@@ -2,12 +2,11 @@
 <!-- Meta Tags -->
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-<meta name="description" content="KonsultPlus | Business Consulting & Corporate Finance HTML5 Template" />
-<meta name="keywords" content="advisor,corporate,business,accountant,consulting,finance,financial,insurance,trading" />
-<meta name="author" content="ThemeMascot" />
+<meta name="description" content="@yield('head-description')" />
+<meta name="keywords" content="@yield('head-keywords')" />
 
 <!-- Page Title -->
-<title>KonsultPlus | Business Consulting & Corporate Finance HTML5 Template</title>
+<title>@yield('head-title')</title>
 
 <!-- Favicon and Touch Icons -->
 <link href="/themes/tpl1/images/favicon.png" rel="shortcut icon" type="image/png">

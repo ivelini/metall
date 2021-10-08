@@ -68,10 +68,10 @@
                             <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Фото</legend>
 
                             <div class="card-img-actions m-1">
-                                <img class="card-img img-fluid" src="@if(empty($worker->img))
+                                <img class="card-img img-fluid" src="@if(empty($worker->image->img))
                                                                             /admin_panel/global_assets/images/placeholders/placeholder.jpg
                                                                         @else
-                                                                            {{ $worker->img}}
+                                                                            {{ $worker->image->img }}
                                                                         @endif" alt="">
                                 <div class="card-img-actions-overlay card-img">
                                     <input name="img" type="file" class="form-control-plaintext" style="width: 65px">

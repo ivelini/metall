@@ -33,10 +33,10 @@
                                 <div class="col-xl-3 col-sm-6">
                                     <div class="card">
                                         <div class="card-img-actions">
-                                            <img class="card-img-top img-fluid" src="@if(empty($worker->img))
+                                            <img class="card-img-top img-fluid" src="@if(empty($worker->image->img))
                                                     /admin_panel/global_assets/images/placeholders/placeholder.jpg
 @else
-                                            {{ $worker->img}}
+                                            {{ $worker->image->img}}
                                             @endif" alt="">
                                             <div class="card-img-actions-overlay card-img-top">
                                                 <a href="{{ route('content.sheet.worker.edit', $worker->id) }}" class="btn btn-outline-white border-2 btn-icon rounded-pill">
