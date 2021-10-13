@@ -2,16 +2,30 @@
 
 namespace App\Http\Controllers\Frontend\Company\Sections\Records;
 
+use App\Helpers\FrontendCompanyViewHelper;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Repositories\Content\ContentRecordCategoryRepository;
+use App\Repositories\Content\ContentRecordRepository;
 
 class RecordCategoryController extends Controller
 {
-    public function show($id)
+    public function show(FrontendCompanyViewHelper $frontendCompanyViewHelper, $id)
     {
-//        dd(__METHOD__);
-//        $headMetateg = collect();
+        $contentRecordCategoryRepository = new ContentRecordCategoryRepository();
+        $contentRecordRepository = new ContentRecordRepository();
 
-        return view('frontend.company.tpl1.sections.records.category');
+        $category = $contentRecordCategoryRepository->getCategory($id);
+        $recordsAttribute = $contentRecordRepository->getAttributeRecordsFromCategoryIdForFrontedCategory($id);
+
+        $frontendCompanyViewHelper->addValue('records', $recordsAttribute);
+        $frontendCompanyViewHelper->setHeadMetateg($category);
+        $frontendCompanyViewHelper->setInnerBanner($category);
+        $frontendCompanyViewHelper->setViewPath('sections.records.category');
+
+        $view =  $frontendCompanyViewHelper->getView();
+
+        return $view;
+
+
     }
 }

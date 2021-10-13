@@ -1,9 +1,9 @@
-<footer id="footer" class="footer" data-bg-img="images/footer-bg.png" data-bg-color="#152029">
+<footer id="footer" class="footer" data-bg-img="{{ asset('/frontend/company/themes/tpl1/images/footer-bg.png') }}" data-bg-color="#152029">
     <div class="container pt-70 pb-40">
         <div class="row border-bottom">
             <div class="col-sm-6 col-md-3">
                 <div class="widget dark">
-                    <img class="mt-5 mb-20" alt="" src="images/logo-white-footer1.png">
+                    <img class="mt-5 mb-20" alt="" src="{{ asset('/frontend/company/themes/tpl1/images/logo-white-footer1.png') }}">
                     <p>203, Envato Labs, Behind Alis Steet, Melbourne, Australia.</p>
                     <ul class="list-inline mt-5">
                         <li class="m-0 pl-10 pr-10"> <i class="fa fa-phone text-theme-colored2 mr-5"></i> <a class="text-gray" href="#">123-456-789</a> </li>

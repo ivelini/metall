@@ -8,15 +8,17 @@ use App\Helpers\ImageHelper;
 use App\Repositories\CoreRepository;
 use App\Models\Content\ContentRecord as Model;
 use Illuminate\Support\Facades\Auth;
-
+use App\Helpers\ModelAttributeHelper;
 class ContentRecordRepository extends CoreRepository
 {
     protected $imageHelper;
+    protected $modelAttributeHelper;
 
     public function __construct()
     {
         parent::__construct();
         $this->imageHelper = new ImageHelper();
+        $this->modelAttributeHelper = new ModelAttributeHelper();
     }
 
     public function getModelClass()
@@ -92,5 +94,41 @@ class ContentRecordRepository extends CoreRepository
         $record->category_h1 = $record->category->h1;
 
         return $record;
+    }
+
+    public function getAttributeRecordsFromCategoryIdForFrontedCategory($id)
+    {
+        $records = $this->getRecordsFromCategoryId($id);
+
+        foreach ($records as $record) {
+
+            $created_at['j'] = $record->created_at->format('j');
+            $created_at['m'] = $record->created_at->format('M');
+
+            $record->created = $created_at;
+
+            $record->category_id = $record->content_record_category_id;
+
+        }
+
+        $records = $this->modelAttributeHelper->getAttributesFromCollectionModels($records, ['id', 'category_id', 'h1', 'slug', 'description', 'img', 'created']);
+
+        return $records;
+    }
+
+    private function getRecordsFromCategoryId($id)
+    {
+        $records = $this->startConditions()
+            ->where('content_record_category_id', $id)
+            ->where('is_published', 1)
+            ->with('image')
+            ->get();
+
+        foreach ($records as $record) {
+            $this->imageHelper->getImgPathFromModel($record, 'medium');
+            $record->img = !empty($record->image->img) == true ? $record->image->img : '';
+        }
+
+        return $records;
     }
 }

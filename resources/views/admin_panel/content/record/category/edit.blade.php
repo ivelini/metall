@@ -14,7 +14,7 @@
     <div class="card">
         <div class="card-body">
             @include('admin_panel.layouts.main.alerts')
-                <form action="{{ route('content.records.category.update', $category->id) }}" method="POST">
+                <form action="{{ route('content.records.category.update', $category->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <fieldset class="mb-3">
@@ -35,6 +35,14 @@
                                           cols="3"
                                           class="form-control"
                                           id="summernote">{{ old('content', $category->content) }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-lg-2">Изображение</label>
+                            <div class="col-lg-10">
+                                <input name="img"
+                                          class="form-control"
+                                          type="file">
                             </div>
                         </div>
                     </fieldset>

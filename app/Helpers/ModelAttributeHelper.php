@@ -23,19 +23,21 @@ class ModelAttributeHelper
     public function getAttributesFromModel($model, $attributes = [])
     {
         $attributes = collect($attributes);
-        $relations = $model->getRelations();
-
         $filtered = $this->findAttributes($model, $attributes);
 
-        if (count($relations) > 0) {
-            foreach ($relations as $key => $relation) {
-                $filtered = $filtered->merge($this->findAttributes($relation, $attributes));
-            }
-        }
 
         return $filtered;
     }
 
+
+    /**
+     * Поиск аттрибутов у модели
+     * Все, если массив $attributes пустой, либо толькко знаяений массива
+     *
+     * @param $model
+     * @param array $attributes
+     * @return \Illuminate\Support\Collection
+     */
     private function findAttributes($model, $attributes = [])
     {
         $modelAttributes = collect($model->getAttributes());

@@ -8,15 +8,18 @@ use App\Helpers\ModelAttributeHelper;
 use App\Repositories\CoreRepository;
 use App\Models\Content\ContentRecordCategory as Model;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\ImageHelper;
 
 class ContentRecordCategoryRepository extends CoreRepository
 {
     private $modelAttributeHelper;
+    private $imageHelper;
 
     public function __construct()
     {
         parent::__construct();
         $this->modelAttributeHelper = new ModelAttributeHelper();
+        $this->imageHelper = new ImageHelper();
 
     }
 
@@ -109,5 +112,15 @@ class ContentRecordCategoryRepository extends CoreRepository
             ->get();
 
         return $categories;
+    }
+
+    public function getAttributeCategoryForFrontendCategory($category)
+    {
+        $this->imageHelper->getImgPathFromModel($category, 'small', true);
+        $category->img_original = $category->image->img_original;
+
+        $filtered = $this->modelAttributeHelper->getAttributesFromModel($category, ['h1', 'img_original']);
+
+        return $filtered;
     }
 }

@@ -2,11 +2,11 @@
 <!-- Meta Tags -->
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-<meta name="description" content="@yield('head-description')" />
-<meta name="keywords" content="@yield('head-keywords')" />
+<meta name="description" content="{{ $headMetateg->get('description') }}" />
+<meta name="keywords" content="{{ $headMetateg->get('keywords') }}" />
 
 <!-- Page Title -->
-<title>@yield('head-title')</title>
+<title>{{ $headMetateg->get('title') }}</title>
 
 <!-- Favicon and Touch Icons -->
 <link href="{{ asset('/frontend/company/themes/tpl1/images/favicon.png') }}" rel="shortcut icon" type="image/png">
