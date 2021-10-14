@@ -25,12 +25,12 @@
                                             </div>
                                             <div class="media-body pl-15">
                                                 <div class="event-content pull-left flip">
-                                                    <h4 class="entry-title text-white text-uppercase m-0 mt-5"><a href="{{ route('frontend.company.record', [$record->get('category_id'), $record->get('id')]) }}">{{ $record->get('h1') }}</a></h4>
+                                                    <h4 class="entry-title text-white text-uppercase m-0 mt-5"><a href="{{ route('frontend.company.content.record', [$record->get('category_id'), $record->get('id')]) }}">{{ $record->get('h1') }}</a></h4>
                                                 </div>
                                             </div>
                                         </div>
                                         <p class="mt-10">{{ $record->get('description') }}</p>
-                                        <a class="btn btn-theme-colored2 btn-sm text-white" href="{{ route('frontend.company.record', [$record->get('category_id'), $record->get('id')]) }}"> Подробнее</a>
+                                        <a class="btn btn-theme-colored2 btn-sm text-white" href="{{ route('frontend.company.content.record', [$record->get('category_id'), $record->get('id')]) }}"> Подробнее</a>
                                         <div class="clearfix"></div>
                                     </div>
                                 </article>

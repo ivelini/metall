@@ -9,6 +9,8 @@ use App\Repositories\CoreRepository;
 use App\Models\Content\ContentRecord as Model;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\ModelAttributeHelper;
+
+
 class ContentRecordRepository extends CoreRepository
 {
     protected $imageHelper;
@@ -88,7 +90,7 @@ class ContentRecordRepository extends CoreRepository
                     ])
             ->first();
 
-        $this->imageHelper->getImgPathFromModel($record, 'large');
+        $this->imageHelper->getImgPathFromModel($record, 'large', true);
 
         $record->category_id = $record->category->id;
         $record->category_h1 = $record->category->h1;
@@ -130,5 +132,15 @@ class ContentRecordRepository extends CoreRepository
         }
 
         return $records;
+    }
+
+    public function getAttributeRecordForFrontendContent($id)
+    {
+        $record = $this->getRecordForEdit($id);
+        $record->img = $record->image->img_original;
+        $record->created = $record->created_at->format('j.m.Y');
+        $content = $this->modelAttributeHelper->getAttributesFromModel($record, ['h1', 'img', 'content', 'created']);
+
+        return $content;
     }
 }

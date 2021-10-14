@@ -4,6 +4,7 @@
 namespace App\Helpers;
 
 
+use App\Helpers\BreadcrumbsStepHelper;
 use \App\Services\Frontend\Company\TemplateService;
 
 
@@ -23,7 +24,16 @@ class FrontendCompanyViewHelper
     {
         $this->templateService = new TemplateService();
         $this->compactValues['headMetateg'] = collect();
-        $this->compactValues['innerBanner'] = collect();
+        $this->compactValues['headerPage'] = collect();
+        $this->compactValues['breadcrumbs'] = collect();
+    }
+
+    public function addModel($model)
+    {
+        $this->setHeadMetateg($model);
+        $this->setHeaderPageValue($model);
+        $this->setBreadcrumbs($model);
+
     }
 
     public function addValue($key, $value)
@@ -51,7 +61,7 @@ class FrontendCompanyViewHelper
      *
      * @param $model
      */
-    public function setHeadMetateg($model)
+    private function setHeadMetateg($model)
     {
         $headMetateg = collect();
 
@@ -69,14 +79,29 @@ class FrontendCompanyViewHelper
 
     }
 
-    public function setInnerBanner($model)
+    /**
+     * @param $model
+     */
+    private function setHeaderPageValue($model)
     {
-        $innerBanner = collect();
+        $headerPage = collect();
 
-        $innerBanner->put('h1', $model->h1);
-//        dd(__METHOD__, $model);
+        $headerPage->put('h1', $model->h1);
 
-        $this->compactValues['innerBanner'] = $innerBanner;
+        if (!empty($model->breadcrumbsParent->image)) {
+            $headerPage->put('img', '/storage' . $model->breadcrumbsParent->image->path);
+        }
+        else {
+            $headerPage->put('img', $model->img);
+        }
+
+        $this->compactValues['headerPage'] = $headerPage;
+    }
+
+    private function setBreadcrumbs($model)
+    {
+        $breadcrumbsStepHelper = new BreadcrumbsStepHelper();
+        $this->compactValues['breadcrumbs'] = $breadcrumbsStepHelper->getBreadcrumbsFromModel($model);
     }
 
     /**
@@ -89,6 +114,4 @@ class FrontendCompanyViewHelper
 //        dd(__METHOD__, $this->compactValues);
         return view($this->viewPath, $this->compactValues);
     }
-
-
 }

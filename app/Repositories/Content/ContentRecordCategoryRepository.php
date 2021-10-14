@@ -117,10 +117,23 @@ class ContentRecordCategoryRepository extends CoreRepository
     public function getAttributeCategoryForFrontendCategory($category)
     {
         $this->imageHelper->getImgPathFromModel($category, 'small', true);
-        $category->img_original = $category->image->img_original;
+        $category->img = $category->image->img_original;
 
-        $filtered = $this->modelAttributeHelper->getAttributesFromModel($category, ['h1', 'img_original']);
+        $filtered = $this->modelAttributeHelper->getAttributesFromModel($category, ['id', 'h1', 'img']);
 
         return $filtered;
+    }
+
+    public function getCategoryAndImageRelation($id)
+    {
+        $category = $this->startConditions()
+            ->where('id', $id)
+            ->with(['image'])
+            ->first();
+
+        $this->imageHelper->getImgPathFromModel($category, 'small', true);
+        $category->img = $category->image->img_original;
+
+        return $category;
     }
 }

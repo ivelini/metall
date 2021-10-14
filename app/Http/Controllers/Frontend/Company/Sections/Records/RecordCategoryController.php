@@ -14,12 +14,11 @@ class RecordCategoryController extends Controller
         $contentRecordCategoryRepository = new ContentRecordCategoryRepository();
         $contentRecordRepository = new ContentRecordRepository();
 
-        $category = $contentRecordCategoryRepository->getCategory($id);
+        $category = $contentRecordCategoryRepository->getCategoryAndImageRelation($id);
         $recordsAttribute = $contentRecordRepository->getAttributeRecordsFromCategoryIdForFrontedCategory($id);
 
+        $frontendCompanyViewHelper->addModel($category);
         $frontendCompanyViewHelper->addValue('records', $recordsAttribute);
-        $frontendCompanyViewHelper->setHeadMetateg($category);
-        $frontendCompanyViewHelper->setInnerBanner($category);
         $frontendCompanyViewHelper->setViewPath('sections.records.category');
 
         $view =  $frontendCompanyViewHelper->getView();
