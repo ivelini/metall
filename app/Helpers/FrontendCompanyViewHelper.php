@@ -92,7 +92,7 @@ class FrontendCompanyViewHelper
             $headerPage->put('img', '/storage' . $model->breadcrumbsParent->image->path);
         }
         else {
-            $headerPage->put('img', $model->img);
+            $headerPage->put('img', !empty($model->image->img) ? $model->image->img : NULL);
         }
 
         $this->compactValues['headerPage'] = $headerPage;

@@ -23,7 +23,7 @@
         @foreach($categories as $category)
             <div class="mb-3">
                 <h6 class="mb-0 font-weight-semibold">
-                    {{ $category->name }}
+                    {{ $category->h1 }}
                 </h6>
             </div>
             @if($category->workers->count() > 0)

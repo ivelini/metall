@@ -43,7 +43,14 @@ class BreadcrumbsStepHelper
     {
         $step['route_title'] = $model->h1;
 
-        $route_name = 'frontend.company.' . str_replace('_', '.', $model->getTable());
+        $route_name_table = str_replace('_', '.', $model->getTable());
+
+        if(mb_strripos($model->getTable(), 'worker') > 0) {
+            $route_name_table = 'workers';
+        }
+
+        $route_name = 'frontend.company.' . $route_name_table;
+
         $step['route_name'] = $route_name;
 
         $route_parameter[] = $model->id;
