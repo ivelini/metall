@@ -22,7 +22,7 @@ class InputPriceService
     protected $catalogMarkiStaliRepository;
     protected $catalogStandardRepository;
     protected $catalogProductTablesRepository;
-    protected $catalogCatgoryProductRepository;
+    protected $catalogCategoryProductRepository;
     protected $etalonKeys = [];
     protected $companyId;
 
@@ -31,7 +31,7 @@ class InputPriceService
         $this->catalogMarkiStaliRepository = new CatalogMarkiStaliRepository();
         $this->catalogStandardRepository = new CatalogStandardRepository();
         $this->catalogProductTablesRepository = new CatalogProductTablesRepository();
-        $this->catalogCatgoryProductRepository = new CatalogCategoryProductRepository();
+        $this->catalogCategoryProductRepository = new CatalogCategoryProductRepository();
 
         /*
          * Обязательнве табличные значения для листов
@@ -477,13 +477,13 @@ class InputPriceService
         $tablesProductName = $this->catalogProductTablesRepository->getTablesName($sheetName);
 
         //Получаенм список названий категорий по ID компании
-        $listCategoryNamesFromCompanyId = $this->catalogCatgoryProductRepository
+        $listCategoryNamesFromCompanyId = $this->catalogCategoryProductRepository
             ->getListNameCategoryFromCompanyId($this->companyId);
 
         //Если нет ни одной категории
         if ($listCategoryNamesFromCompanyId->count() == 0) {
 
-            $categoryModel = $this->catalogCatgoryProductRepository->startConditions();
+            $categoryModel = $this->catalogCategoryProductRepository->startConditions();
             $categoryModel->category_name = 'Без категории';
             $categoryModel->company_id = $this->companyId;
             $categoryModel->save();
@@ -499,7 +499,7 @@ class InputPriceService
 
             $collectSheetTable->each(function ($value, $key) {
 
-                $categoryModel = $this->catalogCatgoryProductRepository->startConditions();
+                $categoryModel = $this->catalogCategoryProductRepository->startConditions();
                 $categoryModel->category_name = $key;
                 $categoryModel->catalog_product_table_name = $value;
                 $categoryModel->company_id = $this->companyId;

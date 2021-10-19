@@ -51,5 +51,8 @@ Route::middleware(MappingDomainCompany::class)->group(function () {
     Route::group(['prefix' => 'catalog'], function () {
         Route::get('/', [CatalogCategoryController::class, 'index'])
             ->name('frontend.company.catalog.category.index');
+
+        Route::get('/category/{category}', [CatalogCategoryController::class, 'showParent'])
+            ->name('frontend.company.catalog.category.parent');
     });
 });

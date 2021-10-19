@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Helpers\ImageHelper;
 
 abstract class CoreRepository
 {
