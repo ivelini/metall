@@ -8,6 +8,10 @@ use App\Http\Controllers\Frontend\Company\Sections\Records\RecordController;
 use App\Http\Controllers\Frontend\Company\Page\WorkerController;
 use \App\Http\Controllers\Frontend\Company\Page\CertificateController;
 use App\Http\Controllers\Frontend\Company\Page\TimelinePageController;
+use App\Http\Controllers\Frontend\Company\Page\StandardController;
+use App\Http\Controllers\Frontend\Company\Page\ShipmentController;
+use App\Http\Controllers\Frontend\Company\Page\ContactController;
+use App\Http\Controllers\Frontend\Company\Sections\Catalog\CatalogCategoryController;
 
 Route::group(['domain' => env('APP_URL')], function () {
     Route::get('/', [\App\Http\Controllers\Frontend\Main\MainController::class, 'index']);
@@ -31,4 +35,21 @@ Route::middleware(MappingDomainCompany::class)->group(function () {
 
     Route::get('/timeline/{timeline}', [TimelinePageController::class, 'show'])
         ->name('frontend.company.content.sheet.timeline.page');
+
+    Route::get('/standards', [StandardController::class, 'index'])
+        ->name('frontend.company.content.sheet.standarts');
+
+    Route::get('/shipment', [ShipmentController::class, 'index'])
+        ->name('frontend.company.content.sheet.shipment');
+
+    Route::get('/shipment/{shipment}', [ShipmentController::class, 'show'])
+        ->name('frontend.company.content.sheet.shipment.page');
+
+    Route::get('/contacts', [ContactController::class, 'index'])
+        ->name('frontend.company.company.information');
+
+    Route::group(['prefix' => 'catalog'], function () {
+        Route::get('/', [CatalogCategoryController::class, 'index'])
+            ->name('frontend.company.catalog.category.index');
+    });
 });

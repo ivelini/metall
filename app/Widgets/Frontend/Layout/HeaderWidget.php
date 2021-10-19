@@ -24,6 +24,8 @@ class HeaderWidget extends AbstractWidget
         $tpl = $templateService->getThemeSettings();
         $headerValues = $templateService->getValuesForHeaderTemplate();
 
+//        dd(__METHOD__, $headerValues);
+
         $menu = Menus::find(1);
         $header_menu = $menu->items->toArray();
 

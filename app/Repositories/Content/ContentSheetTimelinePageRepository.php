@@ -103,7 +103,7 @@ class ContentSheetTimelinePageRepository extends CoreRepository
         $arr['content'] = $this->modelAttributeHelper->getAttributesFromModel($page, ['h1', 'content', 'img']);
 
         foreach($page->lines as $line) {
-            $this->imageHelper->getImgPathFromModel($line, 'medium');
+            $this->imageHelper->getImgPathFromModel($line, 'large');
             $line->img = !empty($line->image->img) ? $line->image->img : NULL;
         }
 

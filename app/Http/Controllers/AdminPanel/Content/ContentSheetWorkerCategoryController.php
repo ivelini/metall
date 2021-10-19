@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\AdminPAnel\Content;
+namespace App\Http\Controllers\AdminPanel\Content;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Content\ContentSheetWorkerCategoryRepository;

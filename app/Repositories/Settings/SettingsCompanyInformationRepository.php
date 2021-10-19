@@ -60,6 +60,7 @@ class SettingsCompanyInformationRepository extends CoreRepository
             ];
 
         $values = $this->modelAttributeHelper->getAttributesFromModelCamelCase($company->information, $findAttrributes);
+//        dd(__METHOD__, $company->information);
 
         return $values;
     }
