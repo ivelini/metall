@@ -31,9 +31,20 @@ class CatalogCategoryController extends Controller
 
     public function showParent(FrontendCompanyViewHelper $frontendCompanyViewHelper, $id)
     {
-//        dd(__METHOD__, $id);
+        $childrenCat = $this->catalogCategoryProductRepository->getChildrenCategoryFromParentIdForCompanyFrontend($id);
 
+        $frontendCompanyViewHelper->addValue('childrenCat', $childrenCat);
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.parent');
+
+        return $frontendCompanyViewHelper->getView();
+    }
+
+    public function show(FrontendCompanyViewHelper $frontendCompanyViewHelper, $parentId, $id)
+    {
+        $porducts = $this->catalogCategoryProductRepository->getProductsFromFilterCategoryId($id);
+
+        $frontendCompanyViewHelper->setViewPath('sections.catalog.category.show');
+        $frontendCompanyViewHelper->addValue('products', $porducts);
 
         return $frontendCompanyViewHelper->getView();
     }

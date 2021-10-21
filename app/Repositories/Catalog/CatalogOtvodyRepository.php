@@ -5,9 +5,14 @@ namespace App\Repositories\Catalog;
 
 use App\Repositories\CoreRepository;
 use App\Models\Catalog\CatalogOtvody as Model;
+use App\Helpers\ModelAttributeHelper;
+use App\Repositories\Catalog\Traits\CatalogFilterTrait;
+use App\Repositories\Catalog\Interfaces\CatalogFilterInterface;
 
-class CatalogOtvodyRepository extends CoreRepository
+
+class CatalogOtvodyRepository extends CoreRepository implements CatalogFilterInterface
 {
+    use CatalogFilterTrait;
 
     public function getModelClass()
     {
@@ -42,7 +47,18 @@ class CatalogOtvodyRepository extends CoreRepository
             return $product;
         });
 
-//        dd($list->first());
         return $list;
+    }
+
+    // TODO: Implement getFilteredProducts() method.
+    public function getFilteredProducts($params)
+    {
+        $modelAttributeHelper = new ModelAttributeHelper();
+
+        $products = $this->filterForRepository($params);
+
+        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du', 'h', 'ugol_giba', 'gost', 'steel']);
+
+        return $result;
     }
 }

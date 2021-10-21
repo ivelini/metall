@@ -3,11 +3,16 @@
 
 namespace App\Repositories\Catalog;
 
+use App\Helpers\ModelAttributeHelper;
+use App\Repositories\Catalog\Interfaces\CatalogFilterInterface;
+use App\Repositories\Catalog\Traits\CatalogFilterTrait;
 use App\Repositories\CoreRepository;
 use App\Models\Catalog\CatalogTroiniki as Model;
 
-class CatalogTroinikiRepository extends CoreRepository
+class CatalogTroinikiRepository extends CoreRepository implements CatalogFilterInterface
 {
+
+    use CatalogFilterTrait;
 
     public function getModelClass()
     {
@@ -49,5 +54,17 @@ class CatalogTroinikiRepository extends CoreRepository
         });
 
         return $list;
+    }
+
+    // TODO: Implement getFilteredProducts() method.
+    public function getFilteredProducts($params)
+    {
+        $modelAttributeHelper = new ModelAttributeHelper();
+
+        $products = $this->filterForRepository($params);
+
+        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du1', 'h1', 'du2', 'h2', 'gost', 'steel']);
+
+        return $result;
     }
 }

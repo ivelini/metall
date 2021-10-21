@@ -3,11 +3,15 @@
 
 namespace App\Repositories\Catalog;
 
+use App\Helpers\ModelAttributeHelper;
+use App\Repositories\Catalog\Interfaces\CatalogFilterInterface;
+use App\Repositories\Catalog\Traits\CatalogFilterTrait;
 use App\Repositories\CoreRepository;
 use App\Models\Catalog\CatalogPerehody as Model;
 
-class CatalogPerehodyRepository extends CoreRepository
+class CatalogPerehodyRepository extends CoreRepository implements CatalogFilterInterface
 {
+    use CatalogFilterTrait;
 
     public function getModelClass()
     {
@@ -49,5 +53,17 @@ class CatalogPerehodyRepository extends CoreRepository
 
 //        dd($list->first());
         return $list;
+    }
+
+    // TODO: Implement getFilteredProducts() method.
+    public function getFilteredProducts($params)
+    {
+        $modelAttributeHelper = new ModelAttributeHelper();
+
+        $products = $this->filterForRepository($params);
+
+        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du1', 'h1', 'du2', 'h2', 'model', 'gost', 'steel']);
+
+        return $result;
     }
 }

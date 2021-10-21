@@ -13,7 +13,22 @@
                 <div class="col-md-9 blog-pull-right">
                     <div class="blog-posts single-post">
                         <article class="post clearfix mb-0">
-
+                            @if($childrenCat->count() > 0)
+                                <div class="row">
+                                    @foreach($childrenCat as $child)
+                                        <a href="{{ route('frontend.company.catalog.category.show', [$child->get('parent_id'), $child->get('id')]) }}">
+                                            <div class="col-xs-12 col-sm-4 col-md-4" style="padding-top: 15px;">
+                                                <div class="image-box-thum">
+                                                    <img src="{{ $child->get('img') }}" alt="">
+                                                </div>
+                                                <div class="image-box-details text-center p-20 pt-30 pb-30 bg-lighter">
+                                                    <h3 class="title mt-0">{{ $child->get('category_name') }}</h3>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
                         </article>
                     </div>
                 </div>

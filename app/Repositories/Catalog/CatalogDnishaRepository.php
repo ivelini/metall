@@ -3,11 +3,16 @@
 
 namespace App\Repositories\Catalog;
 
+use App\Helpers\ModelAttributeHelper;
+use App\Repositories\Catalog\Interfaces\CatalogFilterInterface;
+use App\Repositories\Catalog\Traits\CatalogFilterTrait;
 use App\Repositories\CoreRepository;
 use App\Models\Catalog\CatalogDnisha as Model;
 
-class CatalogDnishaRepository extends CoreRepository
+class CatalogDnishaRepository extends CoreRepository implements CatalogFilterInterface
 {
+
+    use CatalogFilterTrait;
 
     public function getModelClass()
     {
@@ -43,5 +48,17 @@ class CatalogDnishaRepository extends CoreRepository
         });
 
         return $list;
+    }
+
+    // TODO: Implement getFilteredProducts() method.
+    public function getFilteredProducts($params)
+    {
+        $modelAttributeHelper = new ModelAttributeHelper();
+
+        $products = $this->filterForRepository($params);
+
+        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du', 'h', 'gost', 'steel']);
+
+        return $result;
     }
 }

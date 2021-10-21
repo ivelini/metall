@@ -3,6 +3,7 @@
 
 namespace App\Repositories\Catalog;
 
+use App\Helpers\CatalogFilterHelper;
 use App\Models\Catalog\CatalogProductsCategory as Model;
 use App\Repositories\CoreRepository;
 use Illuminate\Support\Facades\Storage;
@@ -108,7 +109,12 @@ class CatalogCategoryProductRepository extends CoreRepository
             if ($value->category_name == 'Без категории') {
                 return true;
             }
+
+            if ($value->children->count() == 0) {
+                return true;
+            }
         });
+
         foreach ($categories as $category) {
             $category->children = $this->modelAttributeHelper->getAttributesFromCollectionModels($category->children);
         }
@@ -116,5 +122,44 @@ class CatalogCategoryProductRepository extends CoreRepository
         $categories = $this->modelAttributeHelper->getAttributesFromCollectionModels($categories);
 
         return $categories;
+    }
+
+    public function getChildrenCategoryFromParentIdForCompanyFrontend($id)
+    {
+        $children = $this->startConditions()
+            ->where('id', $id)
+            ->with([
+                'children' => function($query) {
+                    $query
+                        ->select('id', 'parent_id', 'company_id', 'category_name')
+                        ->where('is_published', 1);
+                },
+                'children.image:id,path,catalog_product_category_id'
+            ])
+            ->first()
+            ->children;
+
+        foreach ($children as $child) {
+            $this->imageHelper->getImgPathFromModel($child, 'medium');
+            $child->img = !empty($child->image->img) ? $child->image->img : NULL;
+        }
+
+        $children = $this->modelAttributeHelper->getAttributesFromCollectionModels($children, ['id', 'parent_id', 'category_name', 'img']);
+
+        return $children;
+    }
+
+    public function getProductsFromFilterCategoryId($id)
+    {
+        $category = $this->getCategory($id);
+        $catalogFilterHelper = new CatalogFilterHelper();
+
+        $catalogFilterHelper->setTable($category->catalog_product_table_name);
+        $catalogFilterHelper->addParams($category->columns_name);
+
+        $result = $catalogFilterHelper->getResult();
+
+//        dd(__METHOD__, $result);
+        return $result;
     }
 }
