@@ -57,5 +57,8 @@ Route::middleware(MappingDomainCompany::class)->group(function () {
 
         Route::get('/{parent}/{category}', [CatalogCategoryController::class, 'show'])
             ->name('frontend.company.catalog.category.show');
+
+        Route::get('/{category}/{standard}/{du}', [CatalogCategoryController::class, 'categoryFilter'])
+            ->name('frontend.company.catalog.category.standard.du');
     });
 });

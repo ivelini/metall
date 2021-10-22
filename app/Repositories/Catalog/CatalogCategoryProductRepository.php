@@ -6,7 +6,6 @@ namespace App\Repositories\Catalog;
 use App\Helpers\CatalogFilterHelper;
 use App\Models\Catalog\CatalogProductsCategory as Model;
 use App\Repositories\CoreRepository;
-use Illuminate\Support\Facades\Storage;
 use App\Helpers\ImageHelper;
 use App\Helpers\ModelAttributeHelper;
 
@@ -159,7 +158,34 @@ class CatalogCategoryProductRepository extends CoreRepository
 
         $result = $catalogFilterHelper->getResult();
 
-//        dd(__METHOD__, $result);
         return $result;
+    }
+
+    public function getProductsFromCategoryStandardDu($category, $standard, $du)
+    {
+        $catalogFilterHelper = new CatalogFilterHelper();
+
+        $catalogFilterHelper->setTable('catalog_' . $category);
+
+        $du = explode('-', $du);
+
+        if (!empty($du)) {
+
+            if (count($du) > 1) {
+                for ($i = 1; $i <= count($du); $i++) {
+                    $catalogFilterHelper->addParams('du' . $i, $du[$i - 1]);
+                }
+            }
+            else {
+                $catalogFilterHelper->addParams('du', $du);
+            }
+        }
+
+        $catalogStandardepository = new CatalogStandardRepository();
+
+        $catalogFilterHelper->addParams('catalog_standards_product_id', $catalogStandardepository->getIDFromStandardCode($standard));
+
+        $catalogFilterHelper->getResult();
+        dd(__METHOD__, $category, $standard, $du, $catalogFilterHelper->getResult());
     }
 }

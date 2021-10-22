@@ -60,7 +60,7 @@ class CatalogFilterHelper
                         $filtr[] = $value;;
                     }
 
-                    $this->params = array_merge($this->params, $filtr);
+                    $this->params[] = $filtr;
                     break;
             }
         }
@@ -70,7 +70,7 @@ class CatalogFilterHelper
             $filtr[] = '=';
             $filtr[] = $value[1];;
 
-            $this->params = array_merge($this->params, $filtr);
+            $this->params[] = $filtr;
         }
     }
 

@@ -62,7 +62,20 @@ class CatalogPerehodyRepository extends CoreRepository implements CatalogFilterI
 
         $products = $this->filterForRepository($params);
 
-        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du1', 'h1', 'du2', 'h2', 'model', 'gost', 'steel']);
+        foreach ($products as $product) {
+            $product->du1 = trim(number_format($product->du1, 2, '.', ' '), '0.');
+            $product->h1 = trim(number_format($product->h1, 2, '.', ' '), '0.');
+            $product->du2 = trim(number_format($product->du2, 2, '.', ' '), '0.');
+            $product->h2 = trim(number_format($product->h2, 2, '.', ' '), '0.');
+            $filter[] = $product->category;
+            $filter[] = $product->standard_code;
+            $filter[] = $product->du1 . '-' . $product->du2;
+            $product->filter = $filter;
+            unset($filter);
+        }
+
+        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products,
+            ['id', 'du1', 'h1', 'du2', 'h2', 'model', 'gost', 'steel', 'filter']);
 
         return $result;
     }

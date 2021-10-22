@@ -17,12 +17,18 @@ trait CatalogFilterTrait
     {
         $products = $this->startConditions()
             ->where($params)
-            ->with('standardProduct:id,name', 'markaStali:id,name')
+            ->with('standardProduct:id,name,code', 'markaStali:id,name')
             ->get();
 
         foreach ($products as $product) {
             $product->gost = $product->standardProduct->name;
-            $product->steel = $product->markaStali->name;;
+            $product->steel = $product->markaStali->name;
+            $product->standard_code = $product->standardProduct->code;
+            $product->category = mb_substr($product->getTable(), mb_strripos($product->getTable(), '_') + 1);
+            $filter[] = $product->category;
+            $filter[] = $product->standard_code;
+            $product->filter = $filter;
+            unset($filter);
         }
 
         return $products;

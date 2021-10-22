@@ -57,8 +57,22 @@ class CatalogOtvodyRepository extends CoreRepository implements CatalogFilterInt
 
         $products = $this->filterForRepository($params);
 
-        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du', 'h', 'ugol_giba', 'gost', 'steel']);
+        foreach ($products as $product) {
+            $product->ugol_giba = trim(number_format($product->ugol_giba, 2, '.', ' '), '0.');
+            $product->du = trim(number_format($product->du, 2, '.', ' '), '0.');
+            $product->h = trim(number_format($product->h, 2, '.', ' '), '0.');
+            $filter[] = $product->category;
+            $filter[] = $product->standard_code;
+            $filter[] = $product->du;
+            $product->filter = $filter;
+            unset($filter);
+        }
 
+//        dd(__METHOD__, $products[0]);
+        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products,
+            ['id', 'du', 'h', 'ugol_giba', 'gost', 'steel', 'filter']);
+
+//        dd(__METHOD__, $result[400]->get('filter'));
         return $result;
     }
 }

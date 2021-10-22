@@ -26,4 +26,15 @@ class CatalogStandardRepository extends CoreRepository
             ->id;
         return $id;
     }
+
+    public function getIDFromStandardCode($code)
+    {
+        $id = $this->startConditions()
+            ->select('id','code')
+            ->where('code', $code)
+            ->first()
+            ->id;
+
+        return $id;
+    }
 }

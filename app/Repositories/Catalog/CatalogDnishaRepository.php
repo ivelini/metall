@@ -57,7 +57,17 @@ class CatalogDnishaRepository extends CoreRepository implements CatalogFilterInt
 
         $products = $this->filterForRepository($params);
 
-        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du', 'h', 'gost', 'steel']);
+        foreach ($products as $product) {
+            $product->du = trim(number_format($product->du, 2, '.', ' '), '0.');
+            $product->h = trim(number_format($product->h, 2, '.', ' '), '0.');
+            $filter[] = $product->category;
+            $filter[] = $product->standard_code;
+            $filter[] = $product->du;
+            $product->filter = $filter;
+            unset($filter);
+        }
+
+        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du', 'h', 'gost', 'steel', 'filter']);
 
         return $result;
     }

@@ -14,10 +14,8 @@
         @foreach($du as $ugolGiba)
             @foreach($ugolGiba as $product)
                 <tr>
-                    @if($loop->first)
-                        <td rowspan="{{ $ugolGiba->count() }}" style="vertical-align : middle;text-align:center;">Отводы {{ $product->get('du') }}</td>
-                        <td rowspan="{{ $ugolGiba->count() }}" style="vertical-align : middle;text-align:center;">{{ $product->get('ugol_giba') }}</td>
-                    @endif
+                    <td style="vertical-align : middle;text-align:center;"><a href="{{ route('frontend.company.catalog.category.standard.du', $product->get('filter')) }}">Отводы {{ $product->get('du') }}</a></td>
+                    <td style="vertical-align : middle;text-align:center;">{{ $product->get('ugol_giba') }}</td>
                     <td>{{ $product->get('du') }}х{{ $product->get('h') }}</td>
                     <td>{{ $product->get('steel') }}</td>
                     <td>{{ $product->get('gost') }}</td>

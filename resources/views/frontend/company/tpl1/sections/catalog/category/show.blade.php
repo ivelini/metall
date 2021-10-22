@@ -13,7 +13,7 @@
                 <div class="col-md-9 blog-pull-right">
                     <div class="blog-posts single-post">
                         <article class="post clearfix mb-0">
-                            @include('frontend.company.tpl1.sections.catalog.category.include.table.gost-perehody')
+                            @include('frontend.company.tpl1.sections.catalog.category.include.table.gost-otvody')
                         </article>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 
 <!-- Footer Scripts -->
 <!-- JS | Custom script for all pages -->
-<script src="{{ asset('/frontend/company/themes/tpl1/js/custom.js') }}"></script>
+{{--<script src="{{ asset('/frontend/company/themes/tpl1/js/custom.js') }}"></script>--}}
 
 <!-- SLIDER REVOLUTION 5.0 EXTENSIONS
       (Load Extensions only on Local File Systems !

@@ -48,4 +48,14 @@ class CatalogCategoryController extends Controller
 
         return $frontendCompanyViewHelper->getView();
     }
+
+    /*
+     * Выборка продуктов по параметрам Категория -> ГОСТ -> DU
+     */
+    public function categoryFilter(FrontendCompanyViewHelper $frontendCompanyViewHelper, $category, $standard, $du)
+    {
+        $porducts = $this->catalogCategoryProductRepository->getProductsFromCategoryStandardDu($category, $standard, $du);
+
+        dd(__METHOD__, $porducts);
+    }
 }
