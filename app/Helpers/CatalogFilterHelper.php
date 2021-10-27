@@ -18,6 +18,7 @@ class CatalogFilterHelper
     private $params;
     //Репозиторрий таблицы, участвующей в фильтрации
     private $tableRepositoryClass;
+    protected $is_filterForGost = false;
 
     public function __construct()
     {
@@ -74,50 +75,27 @@ class CatalogFilterHelper
         }
     }
 
-    private function groupProducts($products)
+    private function groupProducts($products, $endLevel)
     {
         //Если фильтруем только по полю ГОСТ
         if (count($this->params) == 1 && $this->params[0][0] == 'catalog_standards_product_id') {
 
-            //Группируем продукты в зависимости от категории
+            $result = $products->groupBy('name');
+
             switch ($this->tableName) {
-                case 'catalog_otvody':
-                    $groups = $products->groupBy('du');
-
-                    $groups->transform(function ($value) {
-                        return $value->groupBy('ugol_giba');
-                    });
-
-                    $result = $groups->transform(function ($groupDU) {
-                        return $groupDU->transform(function ($groupUgolGiba, $key) {
-                                    return $groupUgolGiba->sortBy('h');
-                                });
-                    });
-                    break;
-
                 case 'catalog_perehody':
-
-                    $groups = $products->groupBy('du1');
-
-                    $result = $groups->transform(function ($groupDU1) {
-                                    return $groupDU1->sortBy('du2')->groupBy('du2');
-                                });
-
-                    break;
-
                 case 'catalog_troiniki':
 
-                    $groups = $products->groupBy('du1');
-
-                    $result = $groups->transform(function ($groupDU1) {
-                                return $groupDU1->sortBy('du2')->groupBy('du2');
-                            });
-
+                $result->transform(function ($groupProducts) {
+                    return $groupProducts->sortBy('h1');
+                });
                     break;
 
                 default:
 
-                    $result = $products->groupBy('du');
+                    $result->transform(function ($groupProducts) {
+                        return $groupProducts->sortBy('h');
+                    });
             }
         }
         else {
@@ -125,27 +103,38 @@ class CatalogFilterHelper
                 case 'catalog_perehody':
                 case 'catalog_troiniki':
 
-                    $result = $products->groupBy('du1');
+                if ($endLevel == false) {
+                    $result = $products->sortBy('du1')->sortBy('h1');
+                }
+                else {
+                    $result = $products->sortBy('du1');
+                }
+
                     break;
 
                 default:
 
-                    $result = $products->groupBy('du');
+                    if ($endLevel == false) {
+                        $result = $products->sortBy('du');
+                    }
+                    else {
+                        $result = $products->sortBy('du')->sortBy('h');
+                    }
             }
-
         }
-
         return $result;
     }
 
-    public function getResult()
+    public function getResult($endLevel = false)
     {
         $tableRepository = new $this->tableRepositoryClass();
 
         $products = $tableRepository->getFilteredProducts($this->params);
-        $result = $this->groupProducts($products);
+
+        $result = $this->groupProducts($products, $endLevel);
 
         return $result;
     }
+
 
 }

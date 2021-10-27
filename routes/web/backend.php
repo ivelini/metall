@@ -45,6 +45,10 @@ Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware
             Route::resource('category', CatalogProductCategoryController::class)->names('catalog.product.category');
             Route::get('category/{category}/create', [CatalogProductCategoryController::class, 'createFromParent'])
                 ->name('catalog.product.parentcategory.create');
+            Route::get('category/{category}', [CatalogProductCategoryController::class, 'editParent'])
+                ->name('catalog.product.category.editParent');
+            Route::match(['put', 'patch'], 'category/{category}', [CatalogProductCategoryController::class, 'updateParent'])
+                ->name('catalog.product.category.updateParent');
         });
     });
 

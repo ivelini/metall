@@ -73,10 +73,14 @@ class CatalogTroinikiRepository extends CoreRepository implements CatalogFilterI
             $filter[] = $product->du1 . '-' . $product->du2;
             $product->filter = $filter;
             unset($filter);
+            $product->name = 'Тройник ' . $product->du1 . 'х' . $product->du2;
+            $product->razmer = $product->du1 . 'х' . $product->h1 . ' - ' . $product->du2 . 'х' . $product->h2;
+            $product->name2 = 'Трройник ' . $product->du1 . 'х' . $product->h1 . '-'
+                . $product->du2 . 'х' . $product->h2 . ' ст.' . $product->steel . ' ' . $product->gost;
         }
 
         $result = $modelAttributeHelper->getAttributesFromCollectionModels($products,
-            ['id', 'du1', 'h1', 'du2', 'h2', 'gost', 'steel', 'filter']);
+            ['id', 'du1', 'h1', 'du2', 'h2', 'gost', 'steel', 'filter', 'name', 'name2', 'razmer']);
 
         return $result;
     }

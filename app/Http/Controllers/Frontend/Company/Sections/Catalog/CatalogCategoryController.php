@@ -42,9 +42,16 @@ class CatalogCategoryController extends Controller
     public function show(FrontendCompanyViewHelper $frontendCompanyViewHelper, $parentId, $id)
     {
         $porducts = $this->catalogCategoryProductRepository->getProductsFromFilterCategoryId($id);
+        $content = $this->catalogCategoryProductRepository->getCategoryContentForForntendCompany($id);
+        $category = $this->catalogCategoryProductRepository->getCategory($id);
 
-        $frontendCompanyViewHelper->setViewPath('sections.catalog.category.show');
+        $frontendCompanyViewHelper->addModel($category);
+
+        $frontendCompanyViewHelper->addValue('is_filterForGostOnly', $this->catalogCategoryProductRepository->is_filterForGostOnly($id));
+        $frontendCompanyViewHelper->addValue('is_endLevel', false);
+        $frontendCompanyViewHelper->addValue('content', $content);
         $frontendCompanyViewHelper->addValue('products', $porducts);
+        $frontendCompanyViewHelper->setViewPath('sections.catalog.category.show');
 
         return $frontendCompanyViewHelper->getView();
     }
@@ -55,7 +62,15 @@ class CatalogCategoryController extends Controller
     public function categoryFilter(FrontendCompanyViewHelper $frontendCompanyViewHelper, $category, $standard, $du)
     {
         $porducts = $this->catalogCategoryProductRepository->getProductsFromCategoryStandardDu($category, $standard, $du);
+        $content = collect();
 
-        dd(__METHOD__, $porducts);
+        $frontendCompanyViewHelper->addValue('is_filterForGostOnly', false);
+        $frontendCompanyViewHelper->addValue('is_endLevel', true);
+        $frontendCompanyViewHelper->addValue('products', $porducts);
+        $frontendCompanyViewHelper->addValue('content', $content);
+
+        $frontendCompanyViewHelper->setViewPath('sections.catalog.category.show');
+
+        return $frontendCompanyViewHelper->getView();
     }
 }

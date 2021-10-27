@@ -67,10 +67,13 @@ class CatalogCategoryProductRepository extends CoreRepository
             ->with('image')
             ->first();
 
-        if(!empty($category->image->path)) {
-            $category->img = '/storage' . mb_substr($category->image->path, 0, mb_strripos($category->image->path, '.'))
-                . '_medium.jpg';
-        }
+        $this->imageHelper->getImgPathFromModel($category);
+        $category->img = !empty($category->image->img) ? $category->image->img : NULL;
+
+//        if(!empty($category->image->path)) {
+//            $category->img = '/storage' . mb_substr($category->image->path, 0, mb_strripos($category->image->path, '.'))
+//                . '_medium.jpg';
+//        }
 
         return $category;
     }
@@ -167,6 +170,7 @@ class CatalogCategoryProductRepository extends CoreRepository
 
         $catalogFilterHelper->setTable('catalog_' . $category);
 
+        //Если DU состоит из несольких параметров, разделенных "-"
         $du = explode('-', $du);
 
         if (!empty($du)) {
@@ -177,7 +181,7 @@ class CatalogCategoryProductRepository extends CoreRepository
                 }
             }
             else {
-                $catalogFilterHelper->addParams('du', $du);
+                $catalogFilterHelper->addParams('du', $du[0]);
             }
         }
 
@@ -185,7 +189,32 @@ class CatalogCategoryProductRepository extends CoreRepository
 
         $catalogFilterHelper->addParams('catalog_standards_product_id', $catalogStandardepository->getIDFromStandardCode($standard));
 
-        $catalogFilterHelper->getResult();
-        dd(__METHOD__, $category, $standard, $du, $catalogFilterHelper->getResult());
+        $products = $catalogFilterHelper->getResult(true);
+
+        return $products;
+
+    }
+
+    public function is_filterForGostOnly($categoryId)
+    {
+        $category = $this->getCategory($categoryId);
+
+        $filter = (array) json_decode($category->columns_name);
+
+        if(count($filter) == 1 && !empty($filter['catalog_standards_product_id'])){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getCategoryContentForForntendCompany($categoryId)
+    {
+        $category = $this->getCategory($categoryId);
+
+        $content = $this->modelAttributeHelper->getAttributesFromModel($category,
+            ['h1', 'content', 'img']);
+
+        return $content;
     }
 }

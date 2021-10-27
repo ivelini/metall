@@ -66,13 +66,15 @@ class CatalogOtvodyRepository extends CoreRepository implements CatalogFilterInt
             $filter[] = $product->du;
             $product->filter = $filter;
             unset($filter);
+            $product->name = 'Отвод ' . $product->du;
+            $product->razmer = $product->du . 'х' . $product->h;
+            $product->name2 = 'Отвод ' . $product->ugol_giba. ' ' . $product->du . 'х' . $product->h . ' ст.' . $product->steel . ' ' . $product->gost;
         }
 
-//        dd(__METHOD__, $products[0]);
-        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products,
-            ['id', 'du', 'h', 'ugol_giba', 'gost', 'steel', 'filter']);
+        $products = $modelAttributeHelper->getAttributesFromCollectionModels($products,
+            ['id', 'du', 'h', 'ugol_giba', 'gost', 'steel', 'filter', 'category', 'name', 'name2', 'razmer']);
 
-//        dd(__METHOD__, $result[400]->get('filter'));
-        return $result;
+
+        return $products;
     }
 }

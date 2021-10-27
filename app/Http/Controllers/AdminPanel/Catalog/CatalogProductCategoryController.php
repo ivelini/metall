@@ -119,6 +119,16 @@ class CatalogProductCategoryController extends Controller
         return view('admin_panel.catalog.product.category.edit', compact('category', 'uniqVolumesAndSelected'));
     }
 
+    public function editParent($id)
+    {
+//        dd(__METHOD__);
+        $category = $this->catalogProductCategoryRepository->getCategory($id);
+
+        $columns = $this->catalogProductTablesRepository->getColumnsFromTableNameForFilter($category->catalog_product_table_name);
+
+        return view('admin_panel.catalog.product.category.edit-parent', compact('category'));
+    }
+
     public function update(Request $request, $id)
     {
         $filterKey = $this->getFilterKey($request->input());
@@ -142,7 +152,23 @@ class CatalogProductCategoryController extends Controller
 
         return redirect()
             ->route('catalog.product.category.index')
-            ->with(['success' => 'Категория "' . $request->get('category_name') . '" успешно добавлена']);
+            ->with(['success' => 'Категория "' . $request->get('category_name') . '" успешно обновлена']);
+
+    }
+
+    public function updateParent(Request $request, $id)
+    {
+
+        //Обновляем категорию
+        $prouctCategoryTable = $this->catalogProductCategoryRepository->startConditions()
+            ->where('id', $id)
+            ->first();
+
+        $this->createAndUpdateContentTableService->update($prouctCategoryTable, $request);
+
+        return redirect()
+            ->route('catalog.product.category.index')
+            ->with(['success' => 'Категория "' . $request->get('category_name') . '" успешно обновлена']);
 
     }
 

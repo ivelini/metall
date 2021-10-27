@@ -82,6 +82,19 @@ class ContentSheetShipmentRepository extends CoreRepository
         return $pages;
     }
 
+    public function getShipmentForMainFrontendFromCompany($company)
+    {
+        $shipments = $this->getShipmentForIndexFrontendFromCompany($company);
+
+        foreach ($shipments as $shipment) {
+            $shipment->put('date_d', Carbon::make($shipment->get('date'))->format('d'));
+            $shipment->put('date_m', Carbon::make($shipment->get('date'))->format('M'));
+            $shipment->put('date', Carbon::make($shipment->get('date'))->format('d.m.y'));
+        }
+
+        return $shipments;
+    }
+
     public function getObjectForFrontendPage($id)
     {
         $page = $this->startConditions()

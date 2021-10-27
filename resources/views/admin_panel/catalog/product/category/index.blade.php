@@ -20,7 +20,10 @@
                             <div class="mb-3">
                                 <div class="row">
                                     <div class="col-lg-2">
-                                        <h4 class="font-weight-semibold">{{ $category->category_name }}
+                                        <h4 class="font-weight-semibold">
+                                            <a href="{{ route('catalog.product.category.editParent', $category->id) }}">
+                                                {{ $category->category_name }}
+                                            </a>
                                             <a href="{{ route('catalog.product.parentcategory.create', $category->id) }}" class="btn">
                                                 <i class="icon-plus22"></i>
                                             </a></h4>

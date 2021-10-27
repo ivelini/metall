@@ -27,4 +27,9 @@ class CatalogProductsCategory extends Model
     {
         return $this->hasOne(Image::class, 'catalog_product_category_id', 'id');
     }
+
+    public function breadcrumbsParent()
+    {
+        return $this->belongsTo(CatalogProductsCategory::class, 'parent_id', 'id');
+    }
 }

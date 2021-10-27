@@ -65,9 +65,13 @@ class CatalogDnishaRepository extends CoreRepository implements CatalogFilterInt
             $filter[] = $product->du;
             $product->filter = $filter;
             unset($filter);
+            $product->name = 'Днище ' . $product->du;
+            $product->razmer = $product->du . 'х' . $product->h;
+            $product->name2 = 'Днище ' . $product->du . 'х' . $product->h . ' ст.' . $product->steel . ' ' . $product->gost;
         }
 
-        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products, ['id', 'du', 'h', 'gost', 'steel', 'filter']);
+        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products,
+            ['id', 'du', 'h', 'gost', 'steel', 'filter', 'name', 'name2', 'razmer']);
 
         return $result;
     }

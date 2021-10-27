@@ -72,11 +72,15 @@ class CatalogPerehodyRepository extends CoreRepository implements CatalogFilterI
             $filter[] = $product->du1 . '-' . $product->du2;
             $product->filter = $filter;
             unset($filter);
+            $product->name = 'Переход ' . $product->du1 . 'х' . $product->du2;
+            $product->name2 = 'Переход ' . $product->model . ' ' . $product->du1 . 'х' . $product->h1 . '-'
+                . $product->du2 . 'х' . $product->h2 . ' ст.' . $product->steel . ' ' . $product->gost;
+            $product->razmer = $product->du1 . 'х' . $product->h1 . ' - ' . $product->du2 . 'х' . $product->h2;
         }
 
-        $result = $modelAttributeHelper->getAttributesFromCollectionModels($products,
-            ['id', 'du1', 'h1', 'du2', 'h2', 'model', 'gost', 'steel', 'filter']);
+        $products = $modelAttributeHelper->getAttributesFromCollectionModels($products,
+            ['id', 'du1', 'h1', 'du2', 'h2', 'model', 'gost', 'steel', 'filter', 'name', 'name2', 'razmer']);
 
-        return $result;
+        return $products;
     }
 }

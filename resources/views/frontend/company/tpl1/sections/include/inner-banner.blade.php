@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="title text-white">{{ $headerPage->get('h1') }}</h2>
-                    {{ Breadcrumbs::render('breadcrumbsFrontendCompany', $breadcrumbs) }}
+{{--                    {{ Breadcrumbs::render('breadcrumbsFrontendCompany', $breadcrumbs) }}--}}
                 </div>
             </div>
         </div>
