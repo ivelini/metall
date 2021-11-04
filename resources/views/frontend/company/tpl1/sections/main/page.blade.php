@@ -13,5 +13,8 @@
     @if($shipments->count() > 0)
         @include('frontend.company.tpl1.sections.main.include.shipments')
     @endif
-    @include('frontend.company.tpl1.sections.main.include.managers')
+    @if($workers->count() > 0)
+        @include('frontend.company.tpl1.sections.main.include.managers')
+    @endif
+    @include('frontend.company.tpl1.sections.main.include.email')
 @endsection

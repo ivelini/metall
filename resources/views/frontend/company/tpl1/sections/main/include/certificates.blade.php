@@ -17,7 +17,7 @@
                             <div class="testimonial pt-10">
                                 <div class="thumb pull-left mb-0 mr-0 pr-20">
                                     <a class="image-popup-vertical-fit" href="{{ $certificat->get('img_original') }}">
-                                        <img src="{{ $certificat->get('img') }}">
+                                        <img src="{{ $certificat->get('img_original') }}" style="height: 300px">
                                     </a>
                                 </div>
                                 <div class="ml-100 ">

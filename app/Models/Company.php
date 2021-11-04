@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Catalog\CatalogProductsCategory;
+use App\Models\Content\ContentSheetMainPage;
 use App\Models\Content\ContentSheetWorkerCategory;
 use App\Models\Settings\SettingsCompanyInformation;
 use App\Models\Settings\ThemeSettings;
@@ -34,5 +35,9 @@ class Company extends Model
 
     public function theme() {
         return $this->hasOne(ThemeSettings::class, 'company_id', 'id');
+    }
+
+    public function contentSheetMainPage() {
+        return $this->hasOne(ContentSheetMainPage::class, 'company_id', 'id');
     }
 }

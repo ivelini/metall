@@ -89,6 +89,18 @@
                     </div>
                 </div>
             </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>Часы работы</label>
+                    <input name="clock_work"
+                           type="text"
+                           class="form-control"
+                           required
+                           value="{{ old('clock_work', $page->clock_work) }}">
+                </div>
+            </div>
+        </div>
 
             <div class="form-group">
                 <div class="row">

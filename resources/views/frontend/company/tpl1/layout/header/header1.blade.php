@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="widget text-white">
-                        <i class="fa fa-clock-o text-theme-colored2"></i> Часы рработы:  Mon - Tues : 6.00 am - 10.00 pm, Sunday Closed
+                        <i class="fa fa-clock-o text-theme-colored2"></i> Часы работы:  {{ $headerValues->get('clockWork') }}
                     </div>
                 </div>
                 <div class="col-md-4">

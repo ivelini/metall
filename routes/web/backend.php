@@ -21,6 +21,7 @@ use App\Http\Controllers\AdminPanel\Settings\CompanyInformationController;
 use App\Http\Controllers\AdminPanel\Settings\SliderController;
 use App\Http\Controllers\AdminPanel\Settings\SliderImageController;
 use App\Http\Controllers\AdminPanel\Settings\MenuController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetMainPageController;
 
 
 Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
@@ -60,6 +61,10 @@ Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware
         });
 
         Route::group(['prefix' => 'sheet'], function () {
+
+            Route::get('main', [ContentSheetMainPageController::class, 'edit'])->name('content.sheet.main.edit');
+            Route::match(['put', 'patch'], 'main', [ContentSheetMainPageController::class, 'update'])
+                ->name('content.sheet.main.update');
 
             Route::group(['prefix' => 'workers'], function () {
                 Route::match(['put', 'patch'], 'category/order-renew', [ContentSheetWorkerCategoryController::class, 'orderRenew'])

@@ -12,6 +12,7 @@ use App\Http\Controllers\Frontend\Company\Page\StandardController;
 use App\Http\Controllers\Frontend\Company\Page\ShipmentController;
 use App\Http\Controllers\Frontend\Company\Page\ContactController;
 use App\Http\Controllers\Frontend\Company\Sections\Catalog\CatalogCategoryController;
+use App\Http\Controllers\Frontend\Company\Action\SendFormController;
 
 Route::group(['domain' => env('APP_URL')], function () {
     Route::get('/', [\App\Http\Controllers\Frontend\Main\MainController::class, 'index']);
@@ -20,6 +21,8 @@ Route::group(['domain' => env('APP_URL')], function () {
 Route::middleware(MappingDomainCompany::class)->group(function () {
 
     Route::get('/', [MainController::class, 'index'])->name('home');
+    Route::match(['put', 'putch'], 'send/request', [SendFormController::class, 'sendRequest'])
+        ->name('frontend.company.action.send.request');
 
     Route::get('/record/cat/{category}', [RecordCategoryController::class, 'show'])
         ->name('frontend.company.content.record.category');

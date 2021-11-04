@@ -22,10 +22,11 @@ class CreateCompanyInformationTable extends Migration
             $table->string('oreal')->nullable();
             $table->string('sity')->nullable();
             $table->string('address')->nullable();
+            $table->string('clock_work')->nullable();
             $table->string('phone')->nullable();
             $table->json('storages_json')->nullable();
             $table->json('agency_json')->nullable();
-            $table->string('map')->nullable();
+            $table->text('map')->nullable();
             $table->string('site_phone')->nullable();
             $table->string('site_email')->nullable();
             $table->string('site_name')->nullable();

@@ -50,6 +50,8 @@ class SettingsCompanyInformationRepository extends CoreRepository
     {
         $this->imageHelper->getImgPathFromModel($company->information, 'medium', true);
 
+        $company->information->img_original = !empty($company->information->image->img_original) ? $company->information->image->img_original : NULL;
+
         $findAttrributes = [
             'site_name',
             'site_description',
@@ -57,10 +59,11 @@ class SettingsCompanyInformationRepository extends CoreRepository
             'site_email',
             'address',
             'img_original',
+            'clock_work',
             ];
 
         $values = $this->modelAttributeHelper->getAttributesFromModelCamelCase($company->information, $findAttrributes);
-//        dd(__METHOD__, $company->information);
+//        dd(__METHOD__, $company->information,$values);
 
         return $values;
     }

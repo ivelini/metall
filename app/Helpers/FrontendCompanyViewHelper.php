@@ -111,7 +111,7 @@ class FrontendCompanyViewHelper
      */
     public function getView()
     {
-//        dd(__METHOD__, $this->compactValues);
+        dd(__METHOD__, $this->compactValues);
         return view($this->viewPath, $this->compactValues);
     }
 }

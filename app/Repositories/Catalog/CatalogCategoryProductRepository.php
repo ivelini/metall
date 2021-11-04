@@ -84,8 +84,8 @@ class CatalogCategoryProductRepository extends CoreRepository
         $categories = $this->getCategoriesFromCompanyId($company);
 
         foreach ($categories as $category) {
-            $this->imageHelper->getImgPathFromModel($category, 'medium');
-            $category->img = !empty($category->image->img) ? $category->image->img : NULL;
+            $this->imageHelper->getImgPathFromModel($category, 'small', true);
+            $category->img = !empty($category->image->img_original) ? $category->image->img_original : NULL;
         }
 
         $categories = $this->modelAttributeHelper->getAttributesFromCollectionModels($categories, ['id', 'category_name', 'img']);

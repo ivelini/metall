@@ -32,12 +32,15 @@ class CompanyRepository extends CoreRepository
 
     public function getCompanyFromDomainForTheme()
     {
-        $company = $this->startConditions()
-            ->select('id', 'domain')
-            ->where('domain', $_SERVER['HTTP_HOST'])
-            ->with('theme', 'information', 'information.image')
-            ->first();
+        if (!empty($_SERVER['HTTP_HOST'])) {
+            $company = $this->startConditions()
+                ->select('id', 'domain')
+                ->where('domain', $_SERVER['HTTP_HOST'])
+                ->with('theme', 'information', 'information.image')
+                ->first();
 
-        return $company;
+            return $company;
+        }
+
     }
 }

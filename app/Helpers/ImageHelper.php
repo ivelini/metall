@@ -18,10 +18,12 @@ class ImageHelper
 {
 
     protected $imageRepository;
+    private $customCrop;
 
     public function __construct()
     {
         $this->imageRepository = new ImageRepository();
+        $customCrop = null;
     }
 
     protected function getImgPath()
@@ -30,6 +32,12 @@ class ImageHelper
         $imgPath = '/User' . $userId . '/images/' . Str::random(6) . '.jpg';
 
         return $imgPath;
+    }
+
+    public function setCustomCrop($size, $name)
+    {
+        $this->customCrop['size'] = $size;
+        $this->customCrop['name'] = $name;
     }
 
     public  function saveOrUpdateImageFromModel($model, $img, $relation = 'image')
@@ -56,22 +64,22 @@ class ImageHelper
         $imgPath = $this->getImgPath();
         $img = Image::make($image);
 
-        $imgW = $img->width();
-        $imgH = $img->height();
-
-        $sizeH = 600;
-        $sizeW = 800;
-
-        if ($imgW / $imgH >= 1) {
-            $img->resize(null, $sizeH, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-        }
-        else {
-            $img->resize($sizeW, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-        }
+//        $imgW = $img->width();
+//        $imgH = $img->height();
+//
+//        $sizeH = 600;
+//        $sizeW = 800;
+//
+//        if ($imgW / $imgH >= 1) {
+//            $img->resize(null, $sizeH, function ($constraint) {
+//                $constraint->aspectRatio();
+//            });
+//        }
+//        else {
+//            $img->resize($sizeW, null, function ($constraint) {
+//                $constraint->aspectRatio();
+//            });
+//        }
         $img->save(Storage::path('public') . '' . $imgPath, 100);
 
         $this->crop($imgPath);
