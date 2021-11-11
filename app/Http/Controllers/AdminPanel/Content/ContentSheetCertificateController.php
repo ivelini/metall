@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminPanel\Content;
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Content\ContentSheetCertificateRepository;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Content\CreateAndUpdateContentTableService;
@@ -38,7 +39,10 @@ class ContentSheetCertificateController extends Controller
         $certificatesChunk = $this->contentSheetCertificateRepository
             ->getCertificatesFromCompanyForIndex($this->company);
 
-        return view('admin_panel.content.sheet.certificate.index', compact('certificatesChunk'));
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $page = $contentSheetPageInformationRepository->getInformationFromSheetPage('page_certificates');
+
+        return view('admin_panel.content.sheet.certificate.index', compact('certificatesChunk', 'page'));
     }
 
     /**

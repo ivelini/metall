@@ -25,6 +25,15 @@ class ContentSheetMainPageRepository extends CoreRepository
         return Model::class;
     }
 
+    public function getModelFromCompanyId($companyId)
+    {
+        $model = $this->startConditions()
+            ->where('company_id', $companyId)
+            ->first();
+
+        return $model;
+    }
+
     public function getWorkersForFrontenCompanyMain($company)
     {
         $workerCategoryId = $this->startConditions()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminPanel\Content;
 
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
 use App\Repositories\Content\ContentSheetStandartRepository;
@@ -27,8 +28,10 @@ class ContentSheetStandartController extends Controller
     public function index()
     {
         $standards = $this->contentSheetStandartRepository->getStandardsFromIndex();
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $page = $contentSheetPageInformationRepository->getInformationFromSheetPage('page_standards');
 
-        return view('admin_panel.content.sheet.standard.index', compact('standards'));
+        return view('admin_panel.content.sheet.standard.index', compact('standards', 'page'));
     }
 
     /**

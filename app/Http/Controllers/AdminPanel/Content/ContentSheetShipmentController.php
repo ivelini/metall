@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminPanel\Content;
 
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 use App\Repositories\Content\ContentSheetShipmentRepository;
 use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
@@ -30,8 +31,10 @@ class ContentSheetShipmentController extends Controller
     public function index()
     {
         $pages = $this->contentSheetShipmentRepository->getShipmentForIndex();
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $page = $contentSheetPageInformationRepository->getInformationFromSheetPage('page_shipments');
 
-        return view('admin_panel.content.sheet.shipment.index', compact('pages'));
+        return view('admin_panel.content.sheet.shipment.index', compact('pages', 'page'));
     }
 
     /**

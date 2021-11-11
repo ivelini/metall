@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContentSheetMainPageTable extends Migration
+class CreateContentSheetMainCatalogTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateContentSheetMainPageTable extends Migration
      */
     public function up()
     {
-        Schema::create('content_sheet_main_page', function (Blueprint $table) {
+        Schema::create('content_sheet_main_catalog', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
             $table->string('title')->nullable();
+            $table->string('slug')->nullable();
             $table->string('h1')->nullable();
             $table->string('description')->nullable();
+            $table->text('content')->nullable();
             $table->string('keywords')->nullable();
-            $table->unsignedBigInteger('worker_category_id')->nullable();
-            $table->unsignedBigInteger('company_information_id')->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')
@@ -36,6 +36,6 @@ class CreateContentSheetMainPageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('content_sheet_main_page');
+        Schema::dropIfExists('content_sheet_main_catalog');
     }
 }

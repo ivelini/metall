@@ -9,6 +9,7 @@ use App\Repositories\Content\ContentSheetWorkerRepository;
 use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 
 class ContentSheetWorkerController extends Controller
 {
@@ -35,11 +36,14 @@ class ContentSheetWorkerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ContentSheetPageInformationRepository $contentSheetPageInformationRepository)
     {
         $categories = $this->contentSheetWorkerCategoryRepository->getCategoriesIncludeWorkersFromCompany($this->company);
 
-        return view('admin_panel.content.sheet.worker.page.index', compact('categories'));
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $page = $contentSheetPageInformationRepository->getInformationFromSheetPage('page_workers');
+
+        return view('admin_panel.content.sheet.worker.page.index', compact('categories', 'page'));
     }
 
     /**

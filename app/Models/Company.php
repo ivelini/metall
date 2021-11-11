@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Catalog\CatalogProductsCategory;
+use App\Models\Content\ContentSheetMainCatalog;
 use App\Models\Content\ContentSheetMainPage;
 use App\Models\Content\ContentSheetWorkerCategory;
 use App\Models\Settings\SettingsCompanyInformation;
@@ -39,5 +40,9 @@ class Company extends Model
 
     public function contentSheetMainPage() {
         return $this->hasOne(ContentSheetMainPage::class, 'company_id', 'id');
+    }
+
+    public function contentSheetMainCatalog() {
+        return $this->hasOne(ContentSheetMainCatalog::class, 'company_id', 'id');
     }
 }

@@ -34,6 +34,18 @@
                         <!-- End Portfolio Gallery Grid -->
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="blog-posts single-post">
+                            <article class="post clearfix mb-0">
+                                <div class="entry-content mt-10">
+                                    {!! $content !!}
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

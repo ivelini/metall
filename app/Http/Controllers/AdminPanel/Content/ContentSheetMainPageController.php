@@ -22,7 +22,7 @@ class ContentSheetMainPageController extends Controller
         $mainPage = $modelAttributeHelper->getAttributesFromModel($company->contentSheetMainPage);
         $workerCategories = $modelAttributeHelper->getAttributesFromCollectionModels($company->contentSheetWorkerCategory, ['id', 'h1']);
 
-//        dd(__METHOD__, $mainPage,$workerCategories->count());
+//        dd(__METHOD__, $mainPage);
 
         return view('admin_panel.content.sheet.main.edit', compact('mainPage', 'workerCategories'));
 
@@ -45,7 +45,7 @@ class ContentSheetMainPageController extends Controller
 
         return redirect()
             ->route('content.sheet.main.edit')
-            ->with(['success' => 'Страница обновлена обновлена']);
+            ->with(['success' => 'Страница обновлена']);
     }
 
 }

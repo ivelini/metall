@@ -6,6 +6,7 @@ use App\Helpers\FrontendCompanyViewHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Singletone\Frontend\Company\CompanyInformationSingleton;
 use App\Repositories\Catalog\CatalogCategoryProductRepository;
+use App\Repositories\Content\ContentSheetMainCatalogRepository;
 
 
 class CatalogCategoryController extends Controller
@@ -19,11 +20,15 @@ class CatalogCategoryController extends Controller
 
     protected function index(FrontendCompanyViewHelper $frontendCompanyViewHelper)
     {
-
         $company = CompanyInformationSingleton::getCompanyFromDomain();
         $categories = $this->catalogCategoryProductRepository->getPublishedCategoriesFromCompanyForFrontend($company);
+        $contentSheetMainCatalogRepository = new ContentSheetMainCatalogRepository();
+        $content = $contentSheetMainCatalogRepository->getContentFromCompanyId($company->id);
 
+
+        $frontendCompanyViewHelper->addModel($contentSheetMainCatalogRepository->getModelFromCompanyId($company->id));
         $frontendCompanyViewHelper->addValue('categories', $categories);
+        $frontendCompanyViewHelper->addValue('content', $content);
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.index');
 
         return $frontendCompanyViewHelper->getView();

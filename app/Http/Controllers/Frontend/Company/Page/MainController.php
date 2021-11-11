@@ -29,6 +29,7 @@ class MainController extends Controller
         $shipments = $contentSheetShipmentRepository->getShipmentForMainFrontendFromCompany($company);
         $workers = $contentSheetMainPageRepository->getWorkersForFrontenCompanyMain($company);
 
+        $frontendCompanyViewHelper->addModel($contentSheetMainPageRepository->getModelFromCompanyId($company->id));
         $frontendCompanyViewHelper->addValue('slider', $slider);
         $frontendCompanyViewHelper->addValue('catalog', $catalog);
         $frontendCompanyViewHelper->addValue('certificates', $certificates);

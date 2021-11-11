@@ -8,8 +8,36 @@
 @section('header-js')
     <script src="/admin_panel/global_assets/js/plugins/media/glightbox.min.js"></script>
     <script src="/admin_panel/global_assets/js/demo_pages/gallery.js"></script>
+    <script src="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>
+    <link href="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.css" rel="stylesheet">
 @endsection
 @section('content-area')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card-group-control card-group-control-right">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">
+                            <a class="text-body collapsed" data-toggle="collapse" href="#collapsible-control-right-group2" aria-expanded="false">Контент</a>
+                        </h6>
+                    </div>
+
+                    <div id="collapsible-control-right-group2" class="collapse" style="">
+                        <div class="card-body">
+                            <form action="{{ route('content.sheet.info-update') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PATCH')
+                                <input name="sheet_name"
+                                       value="page_certificates"
+                                       hidden>
+                                @include('admin_panel.content.sheet.include.page-info-form')
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-body border-top-primary">
@@ -74,5 +102,5 @@
     @endif
 @endsection
 @section('include-footer')
-
+    @include('admin_panel.content.sheet.include.js-text-edit')
 @endsection
