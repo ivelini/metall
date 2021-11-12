@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Company\Page;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 use App\Repositories\Content\ContentSheetShipmentRepository;
 use App\Helpers\FrontendCompanyViewHelper;
 use App\Repositories\Singletone\Frontend\Company\CompanyInformationSingleton;
@@ -13,15 +14,11 @@ class ShipmentController extends Controller
     {
         $company = CompanyInformationSingleton::getCompanyFromDomain();
         $contentSheetShipmentRepository = new ContentSheetShipmentRepository();
-
-        $page = $contentSheetShipmentRepository->startConditions();
-        $page->title = 'Отгрузки АО ЮУАЗ "СТАН-2000"';
-        $page->description = 'Отгрузки предприятия';
-        $page->h1 = 'Отгрузки';
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
 
         $shipments = $contentSheetShipmentRepository->getShipmentForIndexFrontendFromCompany($company);
 
-        $frontendCompanyViewHelper->addModel($page);
+        $frontendCompanyViewHelper->addModel($contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_shipments', $company->id));
         $frontendCompanyViewHelper->addValue('shipments', $shipments);
         $frontendCompanyViewHelper->setViewPath('sections.shipment.category');
 

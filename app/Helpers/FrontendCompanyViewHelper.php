@@ -6,6 +6,7 @@ namespace App\Helpers;
 
 use App\Helpers\BreadcrumbsStepHelper;
 use \App\Services\Frontend\Company\TemplateService;
+use App\Helpers\ImageHelper;
 
 
 /*
@@ -30,10 +31,11 @@ class FrontendCompanyViewHelper
 
     public function addModel($model)
     {
-        $this->setHeadMetateg($model);
-        $this->setHeaderPageValue($model);
-        $this->setBreadcrumbs($model);
-
+        if(!empty($model)) {
+            $this->setHeadMetateg($model);
+            $this->setHeaderPageValue($model);
+            $this->setBreadcrumbs($model);
+        }
     }
 
     public function addValue($key, $value)
@@ -85,14 +87,20 @@ class FrontendCompanyViewHelper
     private function setHeaderPageValue($model)
     {
         $headerPage = collect();
+        $imageHelper = new ImageHelper();
+
+
 
         $headerPage->put('h1', $model->h1);
 
         if (!empty($model->breadcrumbsParent->image)) {
-            $headerPage->put('img', '/storage' . $model->breadcrumbsParent->image->path);
+            $imageHelper->getImgPathFromModel($model->breadcrumbsParent, 'small', true);
+            $headerPage->put('img', !empty($model->breadcrumbsParent->image->img_original) ? $model->breadcrumbsParent->image->img_original : NULL);
+
         }
         else {
-            $headerPage->put('img', !empty($model->image->img) ? $model->image->img : NULL);
+            $imageHelper->getImgPathFromModel($model, 'small', true);
+            $headerPage->put('img', !empty($model->image->img_original) ? $model->image->img_original : NULL);
         }
 
         $this->compactValues['headerPage'] = $headerPage;

@@ -16,10 +16,6 @@ class CreateContentSheetMainPageTable extends Migration
         Schema::create('content_sheet_main_page', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
-            $table->string('title')->nullable();
-            $table->string('h1')->nullable();
-            $table->string('description')->nullable();
-            $table->string('keywords')->nullable();
             $table->unsignedBigInteger('worker_category_id')->nullable();
             $table->unsignedBigInteger('company_information_id')->nullable();
             $table->timestamps();

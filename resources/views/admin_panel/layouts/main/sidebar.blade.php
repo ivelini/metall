@@ -75,13 +75,13 @@
                     <a href="#" class="nav-link"><i class="icon-files-empty"></i> <span>Страницы</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        <li class="nav-item"><a href="{{ route('content.sheet.worker.index') }}" class="nav-link"><i class="icon-users4"></i> Персонал</a></li>
-                        <li class="nav-item"><a href="{{ route('content.sheet.certificate.index') }}" class="nav-link"><i class="icon-certificate"></i> Сертификаты</a></li>
-                        <li class="nav-item"><a href="{{ route('content.sheet.timeline.page.index') }}" class="nav-link"><i class="icon-stairs"></i> Timeline</a></li>
-                        <li class="nav-item"><a href="{{ route('content.sheet.standard.index') }}" class="nav-link"><i class="icon-file-pdf"></i> Стандарты</a></li>
-                        <li class="nav-item"><a href="{{ route('content.sheet.shipment.index') }}" class="nav-link"><i class="icon-truck"></i> Отгрузки</a></li>
                         <li class="nav-item"><a href="{{ route('content.sheet.main.edit') }}" class="nav-link"><i class="icon-home"></i> Главная страница</a></li>
                         <li class="nav-item"><a href="{{ route('content.sheet.main.catalog.edit') }}" class="nav-link"><i class="icon-stack4"></i> Каталог продукции</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.shipment.index') }}" class="nav-link"><i class="icon-truck"></i> Отгрузки</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.certificate.index') }}" class="nav-link"><i class="icon-certificate"></i> Сертификаты</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.standard.index') }}" class="nav-link"><i class="icon-file-pdf"></i> Стандарты</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.worker.index') }}" class="nav-link"><i class="icon-users4"></i> Персонал</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.timeline.page.index') }}" class="nav-link"><i class="icon-stairs"></i> Timeline</a></li>
                     </ul>
                 </li>
                 <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs mt-1">Настройки</div> <i class="icon-menu" title="Main"></i></li>

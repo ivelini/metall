@@ -131,45 +131,42 @@ class CatalogProductCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $filterKey = $this->getFilterKey($request->input());
+        if ($request->input('parent_id') == 0) {
+            //Обновляем категорию
+            $productCategoryTable = $this->catalogProductCategoryRepository->startConditions()
+                ->where('id', $id)
+                ->first();
 
-        //Если нет ни одного ключа
-        if (count($filterKey) == 0) {
-            return redirect()->back()
-                ->withInput()
-                ->with(['alert' => 'Хотя бы один параметр фильтра должен быть выбран']);
+            $this->createAndUpdateContentTableService->update($productCategoryTable, $request);
+
+            return redirect()
+                ->route('catalog.product.category.index')
+                ->with(['success' => 'Категория "' . $request->get('category_name') . '" успешно обновлена']);
         }
+        else {
+            $filterKey = $this->getFilterKey($request->input());
 
-        //Сереализуем фильтр
-        $filterKey = json_encode($filterKey);
+            //Если нет ни одного ключа
+            if (count($filterKey) == 0) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with(['alert' => 'Хотя бы один параметр фильтра должен быть выбран']);
+            }
 
-        //Обновляем категорию
-        $prouctCategoryTable = $this->catalogProductCategoryRepository->startConditions()
-            ->where('id', $id)
-            ->first();
-        $this->createAndUpdateContentTableService->setModifiedData('columns_name', $filterKey);
-        $this->createAndUpdateContentTableService->update($prouctCategoryTable, $request);
+            //Сереализуем фильтр
+            $filterKey = json_encode($filterKey);
 
-        return redirect()
-            ->route('catalog.product.category.index')
-            ->with(['success' => 'Категория "' . $request->get('category_name') . '" успешно обновлена']);
+            //Обновляем категорию
+            $productCategoryTable = $this->catalogProductCategoryRepository->startConditions()
+                ->where('id', $id)
+                ->first();
+            $this->createAndUpdateContentTableService->setModifiedData('columns_name', $filterKey);
+            $this->createAndUpdateContentTableService->update($productCategoryTable, $request);
 
-    }
-
-    public function updateParent(Request $request, $id)
-    {
-
-        //Обновляем категорию
-        $prouctCategoryTable = $this->catalogProductCategoryRepository->startConditions()
-            ->where('id', $id)
-            ->first();
-
-        $this->createAndUpdateContentTableService->update($prouctCategoryTable, $request);
-
-        return redirect()
-            ->route('catalog.product.category.index')
-            ->with(['success' => 'Категория "' . $request->get('category_name') . '" успешно обновлена']);
-
+            return redirect()
+                ->route('catalog.product.category.index')
+                ->with(['success' => 'Категория "' . $request->get('category_name') . '" успешно обновлена']);
+        }
     }
 
     /**

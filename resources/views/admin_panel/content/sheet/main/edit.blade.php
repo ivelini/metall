@@ -6,53 +6,41 @@
     <a href="{{ Redirect::back()->getTargetUrl() }}"><i class="icon-arrow-left52 mr-2"></i></a>Главная страница
 @endsection
 @section('header-js')
-
+    <script src="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.js"></script>
+    <link href="/admin_panel/global_assets/js/plugins/editors/summernote/summernote.min.css" rel="stylesheet">
 @endsection
 @section('content-area')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card-group-control card-group-control-right">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">
+                            <a class="text-body collapsed" data-toggle="collapse" href="#collapsible-control-right-group2" aria-expanded="false">Контент</a>
+                        </h6>
+                    </div>
+
+                    <div id="collapsible-control-right-group2" class="collapse" style="">
+                        <div class="card-body">
+                            <form action="{{ route('content.sheet.info-update') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PATCH')
+                                <input name="sheet_name"
+                                       value="page_main"
+                                       hidden>
+                                @include('admin_panel.content.sheet.include.page-info-form')
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <form action="{{ route('content.sheet.main.update') }}" method="POST">
         @csrf
         @method('PATCH')
         <div class="card">
             <div class="card-body">
-                <fieldset class="mb-3">
-                    <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">SEO</legend>
-                    <div class="form-group row">
-                        <label class="col-form-label col-lg-2">Title</label>
-                        <div class="col-lg-10">
-                            <input name="title"
-                                   type="text"
-                                   class="form-control"
-                                   value="{{ old('title', $mainPage->get('title')) }}">
-                    </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-lg-2">h1</label>
-                        <div class="col-lg-10">
-                            <input name="h1"
-                                   type="text"
-                                   class="form-control"
-                                   value="{{ old('h1', $mainPage->get('h1')) }}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-lg-2">Description</label>
-                        <div class="col-lg-10">
-                            <input name="description"
-                                   type="text"
-                                   class="form-control"
-                                   value="{{ old('description', $mainPage->get('description')) }}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-lg-2">keywords</label>
-                        <div class="col-lg-10">
-                            <input name="keywords"
-                                   type="text"
-                                   class="form-control"
-                                   value="{{ old('keywords', $mainPage->get('keywords')) }}">
-                        </div>
-                    </div>
-                </fieldset>
                     <fieldset class="mb-3">
                         <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Параметры полей</legend>
                         <div class="form-group row">
@@ -83,5 +71,5 @@
     </form>
 @endsection
 @section('include-footer')
-
+    @include('admin_panel.content.sheet.include.js-text-edit')
 @endsection

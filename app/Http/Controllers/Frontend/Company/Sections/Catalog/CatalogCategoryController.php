@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend\Company\Sections\Catalog;
 
 use App\Helpers\FrontendCompanyViewHelper;
 use App\Http\Controllers\Controller;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 use App\Repositories\Singletone\Frontend\Company\CompanyInformationSingleton;
 use App\Repositories\Catalog\CatalogCategoryProductRepository;
 use App\Repositories\Content\ContentSheetMainCatalogRepository;
@@ -22,11 +23,10 @@ class CatalogCategoryController extends Controller
     {
         $company = CompanyInformationSingleton::getCompanyFromDomain();
         $categories = $this->catalogCategoryProductRepository->getPublishedCategoriesFromCompanyForFrontend($company);
-        $contentSheetMainCatalogRepository = new ContentSheetMainCatalogRepository();
-        $content = $contentSheetMainCatalogRepository->getContentFromCompanyId($company->id);
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $content = $contentSheetPageInformationRepository->getContentFromSheetPageForFontend('page_catalog', $company->id);
 
-
-        $frontendCompanyViewHelper->addModel($contentSheetMainCatalogRepository->getModelFromCompanyId($company->id));
+        $frontendCompanyViewHelper->addModel($contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_catalog', $company->id));
         $frontendCompanyViewHelper->addValue('categories', $categories);
         $frontendCompanyViewHelper->addValue('content', $content);
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.index');
@@ -37,7 +37,9 @@ class CatalogCategoryController extends Controller
     public function showParent(FrontendCompanyViewHelper $frontendCompanyViewHelper, $id)
     {
         $childrenCat = $this->catalogCategoryProductRepository->getChildrenCategoryFromParentIdForCompanyFrontend($id);
+        $parentCategory = $this->catalogCategoryProductRepository->getModelForId($id);
 
+        $frontendCompanyViewHelper->addModel($parentCategory);
         $frontendCompanyViewHelper->addValue('childrenCat', $childrenCat);
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.parent');
 

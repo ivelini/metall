@@ -54,4 +54,59 @@ class ContentSheetPageInformationRepository extends CoreRepository
         return $page;
     }
 
+    public function getoutePage($sheetName)
+    {
+        switch ($sheetName) {
+            case 'page_workers':
+                $routePage = 'worker.index';
+                break;
+
+            case 'page_certificates':
+                $routePage = 'certificate.index';
+                break;
+
+            case 'page_shipments':
+                $routePage = 'shipment.index';
+                break;
+
+            case 'page_standards':
+                $routePage = 'standard.index';
+                break;
+
+            case 'page_catalog':
+                $routePage = 'main.catalog.edit';
+                break;
+
+            case 'page_main':
+                $routePage = 'main.edit';
+                break;
+        }
+
+        $routePage = 'content.sheet.' . $routePage;
+
+        return $routePage;
+    }
+
+    public function getModelFromSheetPageForFontend($sheetName, $companyId)
+    {
+        $page = $this->startConditions()
+            ->where('company_id', $companyId)
+            ->where('sheet_name', $sheetName)
+            ->first();
+
+        return $page;
+    }
+
+    public function getContentFromSheetPageForFontend($sheetName, $companyId)
+    {
+        $page = $this->getModelFromSheetPageForFontend($sheetName, $companyId);
+
+        $content = null;
+        if(!empty($page)) {
+            $content = $page->content;
+        }
+
+        return $content;
+    }
+
 }

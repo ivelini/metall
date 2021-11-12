@@ -41,8 +41,4 @@ class Company extends Model
     public function contentSheetMainPage() {
         return $this->hasOne(ContentSheetMainPage::class, 'company_id', 'id');
     }
-
-    public function contentSheetMainCatalog() {
-        return $this->hasOne(ContentSheetMainCatalog::class, 'company_id', 'id');
-    }
 }

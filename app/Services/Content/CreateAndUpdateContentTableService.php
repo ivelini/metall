@@ -89,7 +89,6 @@ class CreateAndUpdateContentTableService
                 $data[$column] = $this->companyId;
             }
 
-
             //Если таблица содержит поле "content"
             if (
                 ($column == 'content' && !empty($data[$column]) && $is_update == false)
@@ -113,11 +112,17 @@ class CreateAndUpdateContentTableService
 
             //Сравниваем табличное поле с отправленным
             //Если найдено, то вставляем
-            if (!empty($data[$column]) || $column == 'is_published') {
+            if(!empty($data[$column]) || $column == 'is_published') {
                 $insertColumns[$column] = $data[$column];
             }
-            elseif ($is_update == false) {
+            elseif($is_update == false) {
                 $insertColumns[$column] = null;
+            }
+            elseif(empty($data[$column]) && isset($data[$column]) == true && $column != 'is_published') {
+                $insertColumns[$column] = $data[$column];
+            }
+            else {
+                $insertColumns[$column] = NULL;
             }
         }
 

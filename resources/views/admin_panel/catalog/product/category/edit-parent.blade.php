@@ -14,7 +14,7 @@
 @section('content-area')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('catalog.product.category.updateParent', $category->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('catalog.product.category.update', $category->id) }}" method="POST" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                 <input type="hidden" name="catalog_product_table_name" value="{{ $category->catalog_product_table_name }}">

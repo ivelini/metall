@@ -28,26 +28,10 @@ class ContentSheetPageInformationController extends Controller
             $createAndUpdateContentTableService->save($model, $request);
         }
 
-        switch ($sheetName) {
-            case 'page_workers':
-                $routePage = 'worker';
-                break;
-
-            case 'page_certificates':
-                $routePage = 'certificate';
-                break;
-
-            case 'page_shipments':
-                $routePage = 'shipment';
-                break;
-
-            case 'page_standards':
-                $routePage = 'standard';
-                break;
-        }
+        $routePage = $contentSheetPageInformationRepository->getoutePage($sheetName);
 
         return redirect()
-            ->route('content.sheet.' . $routePage . '.index')
+            ->route($routePage)
             ->with(['success' => 'Страница обновлена']);
     }
 }

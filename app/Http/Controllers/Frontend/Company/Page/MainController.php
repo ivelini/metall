@@ -10,6 +10,7 @@ use App\Repositories\Singletone\Frontend\Company\CompanyInformationSingleton;
 use App\Repositories\Catalog\CatalogCategoryProductRepository;
 use App\Repositories\Content\ContentSheetCertificateRepository;
 use App\Repositories\Content\ContentSheetShipmentRepository;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 
 
 class MainController extends Controller
@@ -21,6 +22,7 @@ class MainController extends Controller
         $contentSheetCertificateRepository = new ContentSheetCertificateRepository();
         $contentSheetShipmentRepository = new ContentSheetShipmentRepository();
         $contentSheetMainPageRepository = new ContentSheetMainPageRepository();
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
 
         $company = CompanyInformationSingleton::getCompanyFromDomain();
         $slider = $sliderRepository->getSliderFrontendMainFromCompanyId($company->id);
@@ -29,7 +31,7 @@ class MainController extends Controller
         $shipments = $contentSheetShipmentRepository->getShipmentForMainFrontendFromCompany($company);
         $workers = $contentSheetMainPageRepository->getWorkersForFrontenCompanyMain($company);
 
-        $frontendCompanyViewHelper->addModel($contentSheetMainPageRepository->getModelFromCompanyId($company->id));
+        $frontendCompanyViewHelper->addModel($contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_main', $company->id));
         $frontendCompanyViewHelper->addValue('slider', $slider);
         $frontendCompanyViewHelper->addValue('catalog', $catalog);
         $frontendCompanyViewHelper->addValue('certificates', $certificates);

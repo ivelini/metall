@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend\Company\Page;
 
 use App\Helpers\FrontendCompanyViewHelper;
 use App\Http\Controllers\Controller;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 use App\Repositories\Content\ContentSheetStandartRepository;
 use App\Repositories\Singletone\Frontend\Company\CompanyInformationSingleton;
 
@@ -13,13 +14,9 @@ class StandardController extends Controller
     {
         $company = CompanyInformationSingleton::getCompanyFromDomain();
         $contentSheetStandartRepository = new ContentSheetStandartRepository();
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
 
-        $page = $contentSheetStandartRepository->startConditions();
-        $page->title = 'Стандарты, применяемые на производстве';
-        $page->description = 'Стандарты, применяемые на производстве';
-        $page->h1 = 'Стандарты продукции';
-
-        $frontendCompanyViewHelper->addModel($page);
+        $frontendCompanyViewHelper->addModel($contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_standards', $company->id));
         $standards = $contentSheetStandartRepository->getStandardsForFrontendIndexFromCompany($company);
 
         $frontendCompanyViewHelper->addValue('standards', $standards);
