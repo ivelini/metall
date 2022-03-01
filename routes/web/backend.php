@@ -24,6 +24,7 @@ use App\Http\Controllers\AdminPanel\Settings\MenuController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetMainPageController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetMainCatalogController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetPageInformationController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetMainDividerController;
 
 
 Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
@@ -67,7 +68,14 @@ Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware
             Route::match(['put', 'patch'], 'info-update', [ContentSheetPageInformationController::class, 'update'])
                 ->name('content.sheet.info-update');
 
-            Route::get('main', [ContentSheetMainPageController::class, 'edit'])->name('content.sheet.main.edit');
+            Route::group(['prefix' => 'main'], function () {
+
+                Route::get('/', [ContentSheetMainPageController::class, 'edit'])->name('content.sheet.main.edit');
+
+                Route::resource('divider', ContentSheetMainDividerController::class)
+                    ->names('content.sheet.main.divider');
+            });
+
             Route::match(['put', 'patch'], 'main', [ContentSheetMainPageController::class, 'update'])
                 ->name('content.sheet.main.update');
 

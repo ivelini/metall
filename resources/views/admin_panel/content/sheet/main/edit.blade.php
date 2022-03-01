@@ -16,7 +16,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h6 class="card-title">
-                            <a class="text-body collapsed" data-toggle="collapse" href="#collapsible-control-right-group2" aria-expanded="false">Контент</a>
+                            <a class="text-body collapsed" data-toggle="collapse" href="#collapsible-control-right-group2" aria-expanded="false">
+                                Контент
+                            </a>
                         </h6>
                     </div>
 
@@ -32,6 +34,16 @@
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-body border-top-primary">
+                <div class="text-right">
+                    <a href="{{ route('content.sheet.main.divider.index') }}" class="btn btn-primary"><i class="icon-page-break mr-2"></i> Разделители</a>
+                    <a href="{{ route('content.sheet.worker.create') }}" class="btn btn-light ml-1"><i class="icon-grid4 mr-2"></i> Добавить список</a>
                 </div>
             </div>
         </div>

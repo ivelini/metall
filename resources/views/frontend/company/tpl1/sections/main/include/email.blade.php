@@ -23,11 +23,11 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="form_password">Телефон</label>
-                                    <input name="send_email" class="form-control" type="email">
+                                    <input name="send_phone" class="form-control" type="text">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="form_password">Email</label>
-                                    <input name="send_phone" class="form-control" type="text">
+                                    <input name="send_email" class="form-control" type="email">
                                 </div>
                             </div>
                             <div class="row">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend\Company\Page;
 
 use App\Helpers\FrontendCompanyViewHelper;
 use App\Http\Controllers\Controller;
+use App\Repositories\Content\ContentSheetMainDividerRepository;
 use App\Repositories\Content\ContentSheetMainPageRepository;
 use App\Repositories\Settings\SliderRepository;
 use App\Repositories\Singletone\Frontend\Company\CompanyInformationSingleton;
@@ -23,6 +24,7 @@ class MainController extends Controller
         $contentSheetShipmentRepository = new ContentSheetShipmentRepository();
         $contentSheetMainPageRepository = new ContentSheetMainPageRepository();
         $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $contentSheetMainDividerRepository = new ContentSheetMainDividerRepository();
 
         $company = CompanyInformationSingleton::getCompanyFromDomain();
         $slider = $sliderRepository->getSliderFrontendMainFromCompanyId($company->id);
@@ -30,6 +32,7 @@ class MainController extends Controller
         $certificates = $contentSheetCertificateRepository->getCertificatesFromCompanyForIndexFrontend($company);
         $shipments = $contentSheetShipmentRepository->getShipmentForMainFrontendFromCompany($company);
         $workers = $contentSheetMainPageRepository->getWorkersForFrontenCompanyMain($company);
+        $dividers = $contentSheetMainDividerRepository->getDividersFromCompany($company);
 
         $frontendCompanyViewHelper->addModel($contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_main', $company->id));
         $frontendCompanyViewHelper->addValue('slider', $slider);
@@ -37,6 +40,7 @@ class MainController extends Controller
         $frontendCompanyViewHelper->addValue('certificates', $certificates);
         $frontendCompanyViewHelper->addValue('shipments', $shipments);
         $frontendCompanyViewHelper->addValue('workers', $workers);
+        $frontendCompanyViewHelper->addValue('dividers', $dividers);
 
         $frontendCompanyViewHelper->setViewPath('sections.main.page');
 

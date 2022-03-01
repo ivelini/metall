@@ -8,6 +8,7 @@ use App\Repositories\Content\ContentSheetPageInformationRepository;
 use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Content\ContentSheetMainDividerRepository;
 
 class ContentSheetMainPageController extends Controller
 {
@@ -19,12 +20,13 @@ class ContentSheetMainPageController extends Controller
      */
     public function edit(ModelAttributeHelper $modelAttributeHelper)
     {
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+
         $company = Auth::user()->company()->first();
         $mainPage = $modelAttributeHelper->getAttributesFromModel($company->contentSheetMainPage);
         $workerCategories = $modelAttributeHelper->getAttributesFromCollectionModels($company->contentSheetWorkerCategory, ['id', 'h1']);
-        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
         $page = $contentSheetPageInformationRepository->getInformationFromSheetPage('page_main');
-//
+
 
         return view('admin_panel.content.sheet.main.edit', compact('mainPage', 'workerCategories', 'page'));
 
