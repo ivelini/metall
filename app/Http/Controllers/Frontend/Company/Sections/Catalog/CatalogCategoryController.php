@@ -22,7 +22,7 @@ class CatalogCategoryController extends Controller
     protected function index(FrontendCompanyViewHelper $frontendCompanyViewHelper)
     {
         $company = CompanyInformationSingleton::getCompanyFromDomain();
-        $categories = $this->catalogCategoryProductRepository->getPublishedCategoriesFromCompanyForFrontend($company);
+        $categories = $this->catalogCategoryProductRepository->getPublishedParentCategoriesFromCompanyForFrontend($company);
         $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
         $content = $contentSheetPageInformationRepository->getContentFromSheetPageForFontend('page_catalog', $company->id);
 
@@ -38,9 +38,11 @@ class CatalogCategoryController extends Controller
     {
         $childrenCat = $this->catalogCategoryProductRepository->getChildrenCategoryFromParentIdForCompanyFrontend($id);
         $parentCategory = $this->catalogCategoryProductRepository->getModelForId($id);
+        $content = $parentCategory->content;
 
         $frontendCompanyViewHelper->addModel($parentCategory);
         $frontendCompanyViewHelper->addValue('childrenCat', $childrenCat);
+        $frontendCompanyViewHelper->addValue('content', $content);
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.parent');
 
         return $frontendCompanyViewHelper->getView();
@@ -51,6 +53,7 @@ class CatalogCategoryController extends Controller
         $porducts = $this->catalogCategoryProductRepository->getProductsFromFilterCategoryId($id);
         $content = $this->catalogCategoryProductRepository->getCategoryContentForForntendCompany($id);
         $category = $this->catalogCategoryProductRepository->getCategory($id);
+        $category->img = $this->catalogCategoryProductRepository->getImgPathFromCategoryId($category->parent_id, 'medium', true);
 
         $frontendCompanyViewHelper->addModel($category);
 
@@ -66,14 +69,36 @@ class CatalogCategoryController extends Controller
     /*
      * Выборка продуктов по параметрам Категория -> ГОСТ -> DU
      */
-    public function categoryFilter(FrontendCompanyViewHelper $frontendCompanyViewHelper, $category, $standard, $du)
+    public function categoryFilter(FrontendCompanyViewHelper $frontendCompanyViewHelper, $categoryName, $standard, $du)
     {
-        $porducts = $this->catalogCategoryProductRepository->getProductsFromCategoryStandardDu($category, $standard, $du);
+        $porducts = $this->catalogCategoryProductRepository->getProductsFromCategoryStandardDu($categoryName, $standard, $du);
         $content = collect();
 
+        $filterCategory = $this->catalogCategoryProductRepository->getCategoryForCategoryName($categoryName);
+        $filterCategory->title = $porducts->first()->get('name') . ' ' . $porducts->first()->get('gost');
+        $filterCategory->title = $filterCategory->category_name . ''
+            .mb_substr($filterCategory->title, mb_strpos($filterCategory->title, ' '));
+        $filterCategory->h1 = $filterCategory->title;
+
+        $content->put('h1', $filterCategory->h1);
+
+        $infoFilteredProduct = $this->catalogCategoryProductRepository->getInfoFromFilteredProducts($porducts);
+
+        $infoForCategoryFromStandardName = $this->catalogCategoryProductRepository
+            ->getInfoForCategoryFromStandard($infoFilteredProduct->get('Стандарт'));
+
+        if(empty($infoForCategoryFromStandardName)) {
+            $infoForCategoryFromStandardName = $this->catalogCategoryProductRepository
+                ->getInfoForCategoryId($filterCategory->id);
+        }
+
+        $content->put('img', $infoForCategoryFromStandardName->get('img'));
+
+        $frontendCompanyViewHelper->addModel($filterCategory);
         $frontendCompanyViewHelper->addValue('is_filterForGostOnly', false);
         $frontendCompanyViewHelper->addValue('is_endLevel', true);
         $frontendCompanyViewHelper->addValue('products', $porducts);
+        $frontendCompanyViewHelper->addValue('infoFilteredProduct', $infoFilteredProduct);
         $frontendCompanyViewHelper->addValue('content', $content);
 
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.show');

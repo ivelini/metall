@@ -25,6 +25,7 @@ use App\Http\Controllers\AdminPanel\Content\ContentSheetMainPageController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetMainCatalogController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetPageInformationController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetMainDividerController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetMainServicesController;
 
 
 Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
@@ -74,6 +75,9 @@ Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware
 
                 Route::resource('divider', ContentSheetMainDividerController::class)
                     ->names('content.sheet.main.divider');
+
+                Route::resource('services', ContentSheetMainServicesController::class)
+                    ->names('content.sheet.main.services');
             });
 
             Route::match(['put', 'patch'], 'main', [ContentSheetMainPageController::class, 'update'])

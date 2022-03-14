@@ -58,15 +58,15 @@ class CatalogOtvodyRepository extends CoreRepository implements CatalogFilterInt
         $products = $this->filterForRepository($params);
 
         foreach ($products as $product) {
-            $product->ugol_giba = trim(number_format($product->ugol_giba, 2, '.', ' '), '0.');
-            $product->du = trim(number_format($product->du, 2, '.', ' '), '0.');
-            $product->h = trim(number_format($product->h, 2, '.', ' '), '0.');
+            $product->ugol_giba = number_format($product->ugol_giba, 0);
+            $product->du = rtrim(rtrim($product->du, '0'), '.');
+            $product->h = rtrim(rtrim($product->h, '0'), '.');
             $filter[] = $product->category;
             $filter[] = $product->standard_code;
             $filter[] = $product->du;
             $product->filter = $filter;
             unset($filter);
-            $product->name = 'Отвод ' . $product->du;
+            $product->name = 'Отвод DU ' . $product->du;
             $product->razmer = $product->du . 'х' . $product->h;
             $product->name2 = 'Отвод ' . $product->ugol_giba. ' ' . $product->du . 'х' . $product->h . ' ст.' . $product->steel . ' ' . $product->gost;
         }
@@ -74,7 +74,7 @@ class CatalogOtvodyRepository extends CoreRepository implements CatalogFilterInt
         $products = $modelAttributeHelper->getAttributesFromCollectionModels($products,
             ['id', 'du', 'h', 'ugol_giba', 'gost', 'steel', 'filter', 'category', 'name', 'name2', 'razmer']);
 
-
+//        dd(__METHOD__, $products);
         return $products;
     }
 }

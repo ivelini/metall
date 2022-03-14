@@ -33,7 +33,6 @@ class CatalogProductCategoryController extends Controller
     public function index()
     {
         $modelCompany = Auth::user()->company()->first();
-
         $categories = $this->catalogProductCategoryRepository->getCategoriesFromCompanyId($modelCompany);
 
         return view('admin_panel.catalog.product.category.index', compact('categories'));

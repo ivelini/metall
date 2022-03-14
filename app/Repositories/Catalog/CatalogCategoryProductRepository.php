@@ -54,6 +54,26 @@ class CatalogCategoryProductRepository extends CoreRepository
         return $filtered;
     }
 
+    public function getPublishedParentCategoriesFromCompanyId($modelCompany)
+    {
+
+        $collectCategories = $modelCompany->catalogProductCategories()
+            ->select('id', 'parent_id', 'title', 'h1', 'slug', 'company_id', 'category_name',
+                'catalog_product_table_name', 'columns_name', 'is_published')
+            ->where('parent_id', 0)
+            ->where('is_published', 1)
+            ->with('children', 'image')
+            ->get();
+
+        $filtered = $collectCategories->reject(function ($value) {
+            if ($value->category_name == 'Без категории') {
+                return true;
+            }
+        });
+
+        return $filtered;
+    }
+
     public function getModelForId($id)
     {
         $model =  $this->startConditions()->where('id', $id)->first();
@@ -78,10 +98,10 @@ class CatalogCategoryProductRepository extends CoreRepository
         return $category;
     }
 
-    public function getPublishedCategoriesFromCompanyForFrontend($company)
+    public function getPublishedParentCategoriesFromCompanyForFrontend($company)
     {
 
-        $categories = $this->getCategoriesFromCompanyId($company);
+        $categories = $this->getPublishedParentCategoriesFromCompanyId($company);
 
         foreach ($categories as $category) {
             $this->imageHelper->getImgPathFromModel($category, 'small', true);
@@ -216,5 +236,105 @@ class CatalogCategoryProductRepository extends CoreRepository
             ['h1', 'content', 'img']);
 
         return $content;
+    }
+
+    public function getCategoryForCategoryName($categoryName)
+    {
+
+        $category = $this->startConditions()
+            ->where('parent_id', 0)
+            ->where('catalog_product_table_name', 'catalog_' .$categoryName)
+            ->first();
+
+        return $category;
+    }
+
+    public function getImgPathFromCategoryId($id, $format = 'medium', $originalPath = false)
+    {
+        $category = $this->getCategory($id);
+        $this->imageHelper->getImgPathFromModel($category, $format, $originalPath);
+        $imgPath =  !empty($category->image->img_original) ? $category->image->img_original :
+            !empty($category->image->img) ? $category->image->img: NULL;
+
+        return $imgPath;
+    }
+
+    public function getInfoFromFilteredProducts($products)
+    {
+        $result = collect();
+
+        $porduct = $products->first();
+
+        $result->put('Стандарт', $porduct->get('gost'));
+
+        if (!empty($porduct->get('du'))) {
+            $result->put('Диаметр, мм', $porduct->get('du'));
+
+            if (empty($porduct->get('davlenie'))) {
+                $h = $products->pluck('h')->min() != $products->pluck('h')->max() ?
+                    'от ' . $products->pluck('h')->min() . ' до ' . $products->pluck('h')->max() : $products->pluck('h')->min();
+                $result->put('Толщина стенки, мм', $h);
+            }
+        }
+        else {
+            $result->put('Диаметр 1, мм', $porduct->get('du1'));
+            $h1 = $products->pluck('h1')->min() != $products->pluck('h1')->max() ?
+                'от ' . $products->pluck('h1')->min() . ' до ' . $products->pluck('h1')->max() : $products->pluck('h1')->min();
+            $result->put('Толщина стенки 1, мм', $h1);
+            $result->put('Диаметр 2, мм', $porduct->get('du2'));
+            $h2 = $products->pluck('h2')->min() != $products->pluck('h2')->max() ?
+                'от ' . $products->pluck('h2')->min() . ' до ' . $products->pluck('h2')->max() : $products->pluck('h2')->min();
+            $result->put('Толщина стенки 2, мм', $h2);
+        }
+
+        if (!empty($porduct->get('davlenie'))) {
+
+            $davlenie = 'от ' . $products->pluck('davlenie')->min() . ' до ' . $products->pluck('davlenie')->max();
+            $result->put('Давление, кг/см2', $davlenie);
+        }
+
+        $steel = $products->pluck('steel')->unique()->implode(', ');
+        $result->put('Сталь', $steel);
+
+        return $result;
+    }
+
+    public function getInfoForCategoryFromStandard($standardName)
+    {
+        $catalogStandardReposytory = new CatalogStandardRepository();
+        $standardId = $catalogStandardReposytory->getID($standardName);
+
+        $category = $this->startConditions()
+            ->select('id', 'title', 'columns_name')
+            ->where('columns_name', '{"catalog_standards_product_id":"' . $standardId . '"}')
+            ->with('image:id,path,catalog_product_category_id')
+            ->first();
+
+        if (!empty($category)) {
+            $this->imageHelper->getImgPathFromModel($category, 'medium');
+            $category->img = !empty($category->image->img) ? $category->image->img : NULL;
+
+            $collectInfoFromCategory = $this->modelAttributeHelper->getAttributesFromModel($category, ['title', 'img']);
+        }
+        else {
+            $collectInfoFromCategory = null;
+        }
+
+        return $collectInfoFromCategory;
+    }
+
+    public function getInfoForCategoryId($categoryId) {
+
+        $category = $this->startConditions()
+            ->where('id', $categoryId)
+            ->with('image:id,path,catalog_product_category_id')
+            ->first();
+
+        $this->imageHelper->getImgPathFromModel($category, 'medium');
+        $category->img = !empty($category->image->img) ? $category->image->img : NULL;
+
+        $collectInfoFromCategory = $this->modelAttributeHelper->getAttributesFromModel($category, ['title', 'img']);
+
+        return $collectInfoFromCategory;
     }
 }

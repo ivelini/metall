@@ -15,6 +15,11 @@
                                 <i class="icon-database-insert"></i> Тройники</a>
                         </li>
                         @break
+                @case('flancy')
+                        <li class="nav-item"><a href="#" class="nav-link">
+                                        <i class="icon-database-insert"></i> Фланцы</a>
+                        </li>
+                @break
                 @case('dnisha')
                         <li class="nav-item"><a href="{{ route('catalog.product.dnisha.index') }}" class="nav-link">
                                 <i class="icon-database-insert"></i> Днища</a>

@@ -205,6 +205,7 @@ class CreateAndUpdateContentTableService
     public function update($model, $request)
     {
         $this->fillProperty($model, $request);
+
         $data = $this->dataProcessing($request->input(), true);
 
         $model->update($data);

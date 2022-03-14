@@ -7,9 +7,9 @@ use App\Helpers\ModelAttributeHelper;
 use App\Repositories\Catalog\Interfaces\CatalogFilterInterface;
 use App\Repositories\Catalog\Traits\CatalogFilterTrait;
 use App\Repositories\CoreRepository;
-use App\Models\Catalog\CatalogDnisha as Model;
+use App\Models\Catalog\CatalogFlancy as Model;
 
-class CatalogDnishaRepository extends CoreRepository implements CatalogFilterInterface
+class CatalogFlancyRepository extends CoreRepository implements CatalogFilterInterface
 {
 
     use CatalogFilterTrait;
@@ -32,7 +32,7 @@ class CatalogDnishaRepository extends CoreRepository implements CatalogFilterInt
             $product->steel = $product->markaStali->name;
             $product->standard = $product->standardProduct->name;
 
-            $keyProduct = ['du', 'h'];
+            $keyProduct = ['du', 'davlenie'];
             foreach ($keyProduct as $key) {
                 $product->$key = rtrim(rtrim($product->$key, '0'), '.');
             }
@@ -41,7 +41,7 @@ class CatalogDnishaRepository extends CoreRepository implements CatalogFilterInt
                 $product->price = 'По запросу';
             }
 
-            $product->fullName = 'Днище ' . $product->du . 'х' .
+            $product->fullName = 'Фланец ' . $product->du . 'х' .
                 $product->h . ' ' . $product->steel . ' ' . $product->standard;
 
             return $product;
@@ -59,19 +59,19 @@ class CatalogDnishaRepository extends CoreRepository implements CatalogFilterInt
 
         foreach ($products as $product) {
             $product->du = rtrim(rtrim($product->du, '0'), '.');
-            $product->h = rtrim(rtrim($product->h, '0'), '.');
+            $product->davlenie = rtrim(rtrim($product->davlenie, '0'), '.');
             $filter[] = $product->category;
             $filter[] = $product->standard_code;
             $filter[] = $product->du;
             $product->filter = $filter;
             unset($filter);
-            $product->name = 'Днище ' . $product->du;
-            $product->razmer = $product->du . 'х' . $product->h;
-            $product->name2 = 'Днище ' . $product->du . 'х' . $product->h . ' ст.' . $product->steel . ' ' . $product->gost;
+            $product->name = 'Фланец Ду ' . $product->du;
+            $product->davlenie = $product->davlenie;
+            $product->name2 = 'Фланец Ду ' . $product->du . ' Ру ' . $product->davlenie . ' ст.' . $product->steel . ' ' . $product->gost;
         }
 
         $result = $modelAttributeHelper->getAttributesFromCollectionModels($products,
-            ['id', 'du', 'h', 'gost', 'steel', 'filter', 'name', 'name2', 'razmer']);
+            ['id', 'du', 'h', 'gost', 'steel', 'filter', 'name', 'name2', 'davlenie']);
 
         return $result;
     }

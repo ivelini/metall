@@ -2,7 +2,11 @@
     <thead>
     <tr>
         <td>Название</td>
-        <td>Размер</td>
+        @if (gettype(strripos($products->first()->first()->get('name'), 'Фланец')) == 'integer')
+            <td>Даление</td>
+        @elseif(true)
+            <td>Размер</td>
+        @endif
         <td>Сталь</td>
         <td>Стандарт</td>
         <td>Заказать</td>
@@ -19,7 +23,11 @@
                             </a>
                         </td>
                     @endif
-                    <td>{{ $product->get('razmer') }}</td>
+                    @if (gettype(strripos($products->first()->first()->get('name'), 'Фланец')) == 'integer')
+                            <td>{{ $product->get('davlenie') }}</td>
+                    @elseif(true)
+                            <td>{{ $product->get('razmer') }}</td>
+                    @endif
                     <td>{{ $product->get('steel') }}</td>
                     <td>{{ $product->get('gost') }}</td>
                     <td><a href="#">Заказать</a> </td>

@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class InputPriceService
@@ -69,6 +70,8 @@ class InputPriceService
             $keysFromExcel = $this->collationKeysFromExcel($keysFromExcel, $resultValidate);
         }
 
+//        $this->insertFromJob($spreadsheet, $keysFromExcel, $this->companyId);
+
         // Добавляем задание на загрузку прайса в таблицу
         ImportPriceJob::dispatch($spreadsheet, $keysFromExcel, $this->companyId);
 
@@ -105,8 +108,6 @@ class InputPriceService
      */
     protected function getKyesFromExcel($spreadsheet)
     {
-        ;
-
         $keysFromExcel = [];
         $sheets = $spreadsheet->getAllSheets();
         foreach ($sheets as $sheet) {
@@ -299,6 +300,7 @@ class InputPriceService
                     $diffCollectValue->map(function ($value) use ($modelRepository) {
                         $model = $modelRepository->startConditions();
                         $model->name = $value;
+                        $model->code = Str::slug($value);
                         $model->save();
                     });
 

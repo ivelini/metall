@@ -20,7 +20,7 @@ class CreateCatalogDnishaTable extends Migration
             $table->decimal('h');
             $table->unsignedBigInteger('catalog_standards_product_id');
             $table->unsignedBigInteger('catalog_marki_stali_id');
-            $table->decimal('price')->nullable();
+            $table->decimal('price', $precision = 10, $scale = 2)->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company')

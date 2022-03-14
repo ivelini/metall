@@ -12,6 +12,7 @@ use App\Repositories\Catalog\CatalogCategoryProductRepository;
 use App\Repositories\Content\ContentSheetCertificateRepository;
 use App\Repositories\Content\ContentSheetShipmentRepository;
 use App\Repositories\Content\ContentSheetPageInformationRepository;
+use App\Repositories\Content\ContentSheetMainServicesRepository;
 
 
 class MainController extends Controller
@@ -25,14 +26,16 @@ class MainController extends Controller
         $contentSheetMainPageRepository = new ContentSheetMainPageRepository();
         $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
         $contentSheetMainDividerRepository = new ContentSheetMainDividerRepository();
+        $contentSheetMainServicesRepository = new ContentSheetMainServicesRepository();
 
         $company = CompanyInformationSingleton::getCompanyFromDomain();
         $slider = $sliderRepository->getSliderFrontendMainFromCompanyId($company->id);
-        $catalog = $catalogCategoryProductRepository->getPublishedCategoriesFromCompanyForFrontend($company);
+        $catalog = $catalogCategoryProductRepository->getPublishedParentCategoriesFromCompanyForFrontend($company);
         $certificates = $contentSheetCertificateRepository->getCertificatesFromCompanyForIndexFrontend($company);
         $shipments = $contentSheetShipmentRepository->getShipmentForMainFrontendFromCompany($company);
         $workers = $contentSheetMainPageRepository->getWorkersForFrontenCompanyMain($company);
         $dividers = $contentSheetMainDividerRepository->getDividersFromCompany($company);
+        $services = $contentSheetMainServicesRepository->getServicesFromCompany($company);
 
         $frontendCompanyViewHelper->addModel($contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_main', $company->id));
         $frontendCompanyViewHelper->addValue('slider', $slider);
@@ -41,6 +44,7 @@ class MainController extends Controller
         $frontendCompanyViewHelper->addValue('shipments', $shipments);
         $frontendCompanyViewHelper->addValue('workers', $workers);
         $frontendCompanyViewHelper->addValue('dividers', $dividers);
+        $frontendCompanyViewHelper->addValue('services', $services);
 
         $frontendCompanyViewHelper->setViewPath('sections.main.page');
 

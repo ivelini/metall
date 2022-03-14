@@ -1,9 +1,9 @@
 @extends('admin_panel.layouts.main.main')
 @section('title')
-    Разделитель
+    Услуга
 @endsection
 @section('pageheader-title')
-    Добавить разделитель
+    Добавить услугу
 @endsection
 @section('header-js')
     <script src="/admin_panel/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
@@ -28,7 +28,7 @@
                                         <div class="col-lg-12">
                                             <input name="h1"
                                                    class="form-control"
-                                                   placeholder="Заголовок"
+                                                   placeholder="Заголовок разделителя"
                                                    value="{{ old('h1') }}">
                                         </div>
                                     </div>
@@ -36,7 +36,7 @@
                                     <div class="form-group row">
                                         <div class="col-lg-12">
                                         <input name="description"
-                                                    placeholder="Описание"
+                                                    placeholder="Описание разделителя"
                                                     class="form-control"
                                                     value="{{ old('description') }}">
                                         </div>

@@ -18,7 +18,7 @@
                     @if($categories->count() > 0)
                         @foreach($categories as $category)
                             <div class="mb-3">
-                                <div class="row">
+                                <div class="row @if($category->is_published == 0) not-active @endif">
                                     <div class="col-lg-2">
                                         <h4 class="font-weight-semibold">
                                             <a href="{{ route('catalog.product.category.editParent', $category->id) }}">
@@ -35,7 +35,7 @@
                                             <ul class="list list-unstyled">
                                                 @foreach($category->children as $child)
                                                     <li>
-                                                        <div class="row @if($child->is_published == 0) not-active @endif">
+                                                        <div class="row @if($child->is_published == 0 || $category->is_published == 0) not-active @endif">
                                                             <div class="col-lg-3">
                                                                 <a href="{{ route('catalog.product.category.edit', $child->id) }}">
                                                                     {{ $child->category_name }}</a>

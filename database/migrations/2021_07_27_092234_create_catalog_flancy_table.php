@@ -13,14 +13,14 @@ class CreateCatalogFlantsyTable extends Migration
      */
     public function up()
     {
-        Schema::create('catalog_flantsy', function (Blueprint $table) {
+        Schema::create('catalog_flancy', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
             $table->decimal('du');
             $table->decimal('davlenie');
             $table->unsignedBigInteger('catalog_standards_product_id');
             $table->unsignedBigInteger('catalog_marki_stali_id');
-            $table->decimal('price')->nullable();
+            $table->decimal('price', $precision = 10, $scale = 2)->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company')
@@ -46,6 +46,6 @@ class CreateCatalogFlantsyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('catalog_flantsy');
+        Schema::dropIfExists('catalog_flancy');
     }
 }

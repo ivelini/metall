@@ -4,7 +4,9 @@
     @if($slider->count() > 0)
         @include('frontend.company.tpl1.sections.main.include.header-slider')
     @endif
-    @include('frontend.company.tpl1.sections.main.include.service')
+    @if($services->count() > 0)
+        @include('frontend.company.tpl1.sections.main.include.service')
+    @endif
     @include('frontend.company.tpl1.sections.main.include.divider0')
     @if($catalog->count() > 0)
         @include('frontend.company.tpl1.sections.main.include.catalog')

@@ -89,8 +89,6 @@ class FrontendCompanyViewHelper
         $headerPage = collect();
         $imageHelper = new ImageHelper();
 
-
-
         $headerPage->put('h1', $model->h1);
 
         if (!empty($model->breadcrumbsParent->image)) {

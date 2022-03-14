@@ -43,7 +43,7 @@
             <div class="card card-body border-top-primary">
                 <div class="text-right">
                     <a href="{{ route('content.sheet.main.divider.index') }}" class="btn btn-primary"><i class="icon-page-break mr-2"></i> Разделители</a>
-                    <a href="{{ route('content.sheet.worker.create') }}" class="btn btn-light ml-1"><i class="icon-grid4 mr-2"></i> Добавить список</a>
+                    <a href="{{ route('content.sheet.main.services.index') }}" class="btn btn-primary"><i class="icon-grid4 mr-2"></i> Список услуг</a>
                 </div>
             </div>
         </div>

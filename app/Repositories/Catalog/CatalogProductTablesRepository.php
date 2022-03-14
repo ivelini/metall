@@ -27,6 +27,7 @@ class CatalogProductTablesRepository
 
             $sheet = mb_strtolower($sheet);
             $sheet = $this->translit($sheet);
+
             foreach ($catalogTables as $table) {
 
                 if (strpos($table, $sheet) > 0) {

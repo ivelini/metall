@@ -86,10 +86,17 @@ class CatalogFilterHelper
                 case 'catalog_perehody':
                 case 'catalog_troiniki':
 
-                $result->transform(function ($groupProducts) {
-                    return $groupProducts->sortBy('h1');
-                });
-                    break;
+                    $result->transform(function ($groupProducts) {
+                        return $groupProducts->sortBy('h1');
+                    });
+
+                break;
+                case 'catalog_flancy':
+                    $result->transform(function ($groupProducts) {
+                        return $groupProducts->sortBy('davlenie');
+                    });
+
+                break;
 
                 default:
 

@@ -64,10 +64,10 @@ class CatalogTroinikiRepository extends CoreRepository implements CatalogFilterI
         $products = $this->filterForRepository($params);
 
         foreach ($products as $product) {
-            $product->du1 = trim(number_format($product->du1, 2, '.', ' '), '0.');
-            $product->h1 = trim(number_format($product->h1, 2, '.', ' '), '0.');
-            $product->du2 = trim(number_format($product->du2, 2, '.', ' '), '0.');
-            $product->h2 = trim(number_format($product->h2, 2, '.', ' '), '0.');
+            $product->du1 = rtrim(rtrim($product->du1, '0'), '.');
+            $product->h1 = rtrim(rtrim($product->h1, '0'), '.');
+            $product->du2 = rtrim(rtrim($product->du2, '0'), '.');
+            $product->h2 = rtrim(rtrim($product->h2, '0'), '.');
             $filter[] = $product->category;
             $filter[] = $product->standard_code;
             $filter[] = $product->du1 . '-' . $product->du2;
