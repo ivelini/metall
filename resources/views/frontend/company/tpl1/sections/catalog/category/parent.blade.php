@@ -16,7 +16,7 @@
                             @if($childrenCat->count() > 0)
                                 <div class="row">
                                     @foreach($childrenCat as $child)
-                                        <a href="{{ route('frontend.company.catalog.product.category', [$child->get('parent_id'), $child->get('id')]) }}">
+                                        <a href="{{ route('frontend.company.catalog.product.category', [$parentCategorySlug, $child->get('slug')]) }}">
                                             <div class="col-xs-12 col-sm-4 col-md-4" style="padding-top: 15px;">
                                                 <div class="image-box-thum">
                                                     <img src="{{ $child->get('img') }}" alt="">

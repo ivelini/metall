@@ -55,10 +55,10 @@ Route::middleware(MappingDomainCompany::class)->group(function () {
         Route::get('/', [CatalogCategoryController::class, 'index'])
             ->name('frontend.company.catalog.category.index');
 
-        Route::get('/category/{category}', [CatalogCategoryController::class, 'showParent'])
+        Route::get('/{parentCategorySlug}', [CatalogCategoryController::class, 'showParent'])
             ->name('frontend.company.catalog.category.parent');
 
-        Route::get('/{parent}/{category}', [CatalogCategoryController::class, 'show'])
+        Route::get('/{parentCategorySlug}/{categorySlug}', [CatalogCategoryController::class, 'show'])
             ->name('frontend.company.catalog.product.category');
 
         Route::get('/{category}/{standard}/{du}', [CatalogCategoryController::class, 'categoryFilter'])

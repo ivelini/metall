@@ -9,7 +9,7 @@
             <div class="row mt-40">
                 @foreach($catalog as $category)
                     <div class="col-sm-6 col-md-4 maxwidth500 mb-sm-40">
-                        <a href="{{ route('frontend.company.catalog.category.parent', $category->get('id')) }}">
+                        <a href="{{ route('frontend.company.catalog.category.parent', $category->get('slug')) }}">
                             <div class="project">
                                 <div class="thumb">
                                     <img class="img-fullwidth" src="{{ $category->get('img') }}" alt="">

@@ -58,6 +58,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-form-label col-lg-2">description</label>
+                        <div class="col-lg-10">
+                            <input name="description" type="text" class="form-control" value="{{ old('description', $category->description) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-form-label col-lg-2">slug</label>
                         <div class="col-lg-10">
                             <input name="slug" type="text" class="form-control" value="{{ old('slug', $category->slug) }}">

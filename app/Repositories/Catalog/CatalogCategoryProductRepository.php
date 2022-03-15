@@ -8,6 +8,7 @@ use App\Models\Catalog\CatalogProductsCategory as Model;
 use App\Repositories\CoreRepository;
 use App\Helpers\ImageHelper;
 use App\Helpers\ModelAttributeHelper;
+use Illuminate\Support\Str;
 
 class CatalogCategoryProductRepository extends CoreRepository
 {
@@ -24,6 +25,17 @@ class CatalogCategoryProductRepository extends CoreRepository
     public function getModelClass()
     {
         return Model::class;
+    }
+
+    public function getIdCategoryFromSlug($slug)
+    {
+        $id = $this->startConditions()
+            ->select('id', 'slug')
+            ->where('slug', $slug)
+            ->first()
+            ->id;
+
+        return $id;
     }
 
     public function getListNameCategoryFromCompanyId($companyId)
@@ -108,7 +120,7 @@ class CatalogCategoryProductRepository extends CoreRepository
             $category->img = !empty($category->image->img_original) ? $category->image->img_original : NULL;
         }
 
-        $categories = $this->modelAttributeHelper->getAttributesFromCollectionModels($categories, ['id', 'category_name', 'img']);
+        $categories = $this->modelAttributeHelper->getAttributesFromCollectionModels($categories, ['id', 'slug', 'category_name', 'img']);
 
         return $categories;
     }
@@ -116,12 +128,12 @@ class CatalogCategoryProductRepository extends CoreRepository
     public function getPublishedCategoriesFromCompanyForFrontendSidebar($company)
     {
         $categories = $company->catalogProductCategories()
-            ->select('id', 'category_name', 'is_published')
+            ->select('id', 'category_name', 'is_published', 'slug')
             ->where('parent_id', 0)
             ->where('is_published', 1)
             ->with([
                 'children' => function($query) {
-                    $query->select('id', 'parent_id', 'category_name', 'is_published')
+                    $query->select('id', 'slug', 'parent_id', 'category_name', 'is_published')
                         ->where('is_published', 1);
                 }
             ])
@@ -153,7 +165,7 @@ class CatalogCategoryProductRepository extends CoreRepository
             ->with([
                 'children' => function($query) {
                     $query
-                        ->select('id', 'parent_id', 'company_id', 'category_name')
+                        ->select('id', 'parent_id', 'slug', 'company_id', 'category_name')
                         ->where('is_published', 1);
                 },
                 'children.image:id,path,catalog_product_category_id'
@@ -166,7 +178,8 @@ class CatalogCategoryProductRepository extends CoreRepository
             $child->img = !empty($child->image->img) ? $child->image->img : NULL;
         }
 
-        $children = $this->modelAttributeHelper->getAttributesFromCollectionModels($children, ['id', 'parent_id', 'category_name', 'img']);
+        $children = $this->modelAttributeHelper
+            ->getAttributesFromCollectionModels($children, ['id', 'parent_id', 'slug', 'category_name', 'img']);
 
         return $children;
     }
@@ -314,7 +327,7 @@ class CatalogCategoryProductRepository extends CoreRepository
             $this->imageHelper->getImgPathFromModel($category, 'medium');
             $category->img = !empty($category->image->img) ? $category->image->img : NULL;
 
-            $collectInfoFromCategory = $this->modelAttributeHelper->getAttributesFromModel($category, ['title', 'img']);
+            $collectInfoFromCategory = $this->modelAttributeHelper->getAttributesFromModel($category, ['id', 'title', 'img']);
         }
         else {
             $collectInfoFromCategory = null;
@@ -336,5 +349,47 @@ class CatalogCategoryProductRepository extends CoreRepository
         $collectInfoFromCategory = $this->modelAttributeHelper->getAttributesFromModel($category, ['title', 'img']);
 
         return $collectInfoFromCategory;
+    }
+
+    public function getSynonymizerContentFromCategoryId($categoryId, $data)
+    {
+        if (!empty($categoryId)) {
+            $synonymize_aray = [
+                '[standard]' => 'Стандарт',
+                '[du]' => 'Диаметр, мм',
+                '[du1]' => 'Диаметр 1, мм',
+                '[du2]' => 'Диаметр 2, мм',
+                '[h]' => 'Толщина стенки, мм',
+                '[h1]' => 'Толщина стенки 1, мм',
+                '[h2]' => 'Толщина стенки 2, мм',
+                '[steel]' => 'Сталь',
+                '[davlenie]' => 'Давление, кг/см2'
+            ];
+
+            $category = $this->startConditions()
+                ->select('id', 'synonymizer_content', 'synonymizer_title', 'synonymizer_description')
+                ->where('id', $categoryId)
+                ->first();
+
+            $synonymizer_content = $category->synonymizer_content;
+            $synonymizer_title = $category->synonymizer_title;
+            $synonymizer_description = $category->synonymizer_description;
+
+            foreach ($synonymize_aray as $key => $value) {
+                $synonymizer_content = Str::of($synonymizer_content)->replace($key, $data->get($value));
+                $synonymizer_title = Str::of($synonymizer_title)->replace($key, $data->get($value));
+                $synonymizer_description = Str::of($synonymizer_description)->replace($key, $data->get($value));
+            }
+
+            $synonymized = collect();
+            $synonymized->put('synonymizer_content', $synonymizer_content->jsonSerialize());
+            $synonymized->put('synonymizer_title', $synonymizer_title->jsonSerialize());
+            $synonymized->put('synonymizer_description', $synonymizer_description->jsonSerialize());
+        }
+        else {
+            $synonymized = collect();
+        }
+
+        return $synonymized;
     }
 }

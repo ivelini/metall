@@ -98,6 +98,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-form-label col-lg-2">description</label>
+                        <div class="col-lg-10">
+                            <input name="description" type="text" class="form-control" value="{{ old('description', $category->description) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-form-label col-lg-2">slug</label>
                         <div class="col-lg-10">
                             <input name="slug" type="text" class="form-control" value="{{ old('slug', $category->slug) }}">
@@ -130,6 +136,45 @@
                             </div>
                         </div>
                     </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                        <legend class="text-uppercase font-size-sm font-weight-bold border-bottom">Синонимизаця для фильтра</legend>
+                            <div class="form-group row">
+                                <ul>
+                                    <li>Отводы   =   [du], [h], [steel], [standard]</li>
+                                    <li>Переходы =   [du1], [h1], [du2], [h2], [steel], [standard]</li>
+                                    <li>Тройники =   [du1], [h1], [du2], [h2], [steel], [standard]</li>
+                                    <li>Фланцы   =   [du[, [davlenie], [steel], [standard]</li>
+                                    <li>Днища    =   [du], [h], [steel], [standard]</li>
+                                </ul>
+
+                            </div>
+                        </div>
+                        <label class="col-form-label col-lg-2">title</label>
+                        <div class="col-lg-10">
+                            <input name="synonymizer_title" type="text" class="form-control" value="{{ old('synonymizer_title', $category->synonymizer_title) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-2">description</label>
+                        <div class="col-lg-10">
+                            <input name="synonymizer_description" type="text" class="form-control" value="{{ old('synonymizer_description', $category->synonymizer_description) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-10">
+                            <div class="form-group">
+                                <label>Описание для вывода в фильтре</label>
+                                <textarea name="synonymizer_content"
+                                          rows="5"
+                                          cols="3"
+                                          class="form-control"
+                                          id="summernote2">{{ old('synonymizer_content', $category->synonymizer_content) }}</textarea>
+                            </div>
+                        </div>
+                    </div>
                     </fieldset>
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary">Обновить <i class="icon-paperplane ml-2"></i></button>
@@ -141,6 +186,11 @@
             <script>
                 $(document).ready(function() {
                     $('#summernote').summernote();
+                });
+            </script>
+            <script>
+                $(document).ready(function() {
+                    $('#summernote2').summernote();
                 });
             </script>
 @endsection

@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-4 col-md-6">
                     <div class="widget text-center">
-                        <a class="" href="index-mp-layout1.html"><img src="{{ $headerValues->get('imgOriginal') }}" alt=""></a>
+                        <a class="" href="/"><img src="{{ $headerValues->get('imgOriginal') }}" alt=""></a>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4 col-md-3">

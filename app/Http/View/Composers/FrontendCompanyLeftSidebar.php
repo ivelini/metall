@@ -23,6 +23,7 @@ class FrontendCompanyLeftSidebar
 
         $categoriesSidebar = $catalogCategoryProductRepository->getPublishedCategoriesFromCompanyForFrontendSidebar($company);
 
+//        dd(__METHOD__, $categoriesSidebar);
         $view->with('categoriesSidebar', $categoriesSidebar);
     }
 

@@ -21,7 +21,7 @@
                                             <div class="icons-holder">
                                                 <div class="icons-holder-inner">
                                                     <div class="styled-icons icon-sm icon-dark icon-circled icon-theme-colored">
-                                                        <a href="{{ route('frontend.company.catalog.category.parent', $category->get('id')) }}" data-lightbox-gallery="gallery" title="{{ $category->get('category_name') }}"><i class="fa fa-picture-o"></i></a>
+                                                        <a href="{{ route('frontend.company.catalog.category.parent', $category->get('slug')) }}" data-lightbox-gallery="gallery" title="{{ $category->get('category_name') }}"><i class="fa fa-picture-o"></i></a>
                                                     </div>
                                                 </div>
                                             </div>

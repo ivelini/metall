@@ -13,9 +13,9 @@
                 <div class="col-md-9 blog-pull-right">
                     <div class="blog-posts single-post">
                         <article class="post clearfix mb-0">
-                            <div class="entry-title pt-10 pl-15">
-                                <h4>{{ $content->get('h1') }}</h4>
-                            </div>
+{{--                            <div class="entry-title pt-10 pl-15">--}}
+{{--                                <h4>{{ $content->get('h1') }}</h4>--}}
+{{--                            </div>--}}
                                 <div class="row">
                                     <div class="col-md-6">
                                         <img src="{{ $content->get('img') }}" alt="">
@@ -82,6 +82,11 @@
                             @if(!empty($content->get('content')))
                                 <div class="entry-content mt-10">
                                    {!! $content->get('content') !!}
+                                </div>
+                            @endif
+                            @if(!empty($content->get('synonymizer_content')))
+                                <div class="entry-content mt-10">
+                                    {!! $content->get('synonymizer_content') !!}
                                 </div>
                             @endif
                         </article>

@@ -4,7 +4,7 @@
         <div class="section-content">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="title text-white">{{ $headerPage->get('h1') }}</h2>
+                    <h1 class="title text-white">{{ $headerPage->get('h1') }}</h1>
 {{--                    {{ Breadcrumbs::render('breadcrumbsFrontendCompany', $breadcrumbs) }}--}}
                 </div>
             </div>

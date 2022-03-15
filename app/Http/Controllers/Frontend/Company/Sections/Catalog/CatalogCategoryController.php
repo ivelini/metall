@@ -34,30 +34,34 @@ class CatalogCategoryController extends Controller
         return $frontendCompanyViewHelper->getView();
     }
 
-    public function showParent(FrontendCompanyViewHelper $frontendCompanyViewHelper, $id)
+    public function showParent(FrontendCompanyViewHelper $frontendCompanyViewHelper, $parentCategorySlug)
     {
-        $childrenCat = $this->catalogCategoryProductRepository->getChildrenCategoryFromParentIdForCompanyFrontend($id);
-        $parentCategory = $this->catalogCategoryProductRepository->getModelForId($id);
+        $parentId = $this->catalogCategoryProductRepository->getIdCategoryFromSlug($parentCategorySlug);
+        $childrenCat = $this->catalogCategoryProductRepository->getChildrenCategoryFromParentIdForCompanyFrontend($parentId);
+        $parentCategory = $this->catalogCategoryProductRepository->getModelForId($parentId);
         $content = $parentCategory->content;
 
         $frontendCompanyViewHelper->addModel($parentCategory);
         $frontendCompanyViewHelper->addValue('childrenCat', $childrenCat);
+        $frontendCompanyViewHelper->addValue('parentCategorySlug', $parentCategorySlug);
         $frontendCompanyViewHelper->addValue('content', $content);
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.parent');
 
         return $frontendCompanyViewHelper->getView();
     }
 
-    public function show(FrontendCompanyViewHelper $frontendCompanyViewHelper, $parentId, $id)
+    public function show(FrontendCompanyViewHelper $frontendCompanyViewHelper, $parentCategorySlug, $categorySlug)
     {
-        $porducts = $this->catalogCategoryProductRepository->getProductsFromFilterCategoryId($id);
-        $content = $this->catalogCategoryProductRepository->getCategoryContentForForntendCompany($id);
-        $category = $this->catalogCategoryProductRepository->getCategory($id);
+//        $parentId = $this->catalogCategoryProductRepository->getIdCategoryFromSlug($parentCategorySlug);
+        $categoryId = $this->catalogCategoryProductRepository->getIdCategoryFromSlug($categorySlug);
+        $porducts = $this->catalogCategoryProductRepository->getProductsFromFilterCategoryId($categoryId);
+        $content = $this->catalogCategoryProductRepository->getCategoryContentForForntendCompany($categoryId);
+        $category = $this->catalogCategoryProductRepository->getCategory($categoryId);
         $category->img = $this->catalogCategoryProductRepository->getImgPathFromCategoryId($category->parent_id, 'medium', true);
 
         $frontendCompanyViewHelper->addModel($category);
 
-        $frontendCompanyViewHelper->addValue('is_filterForGostOnly', $this->catalogCategoryProductRepository->is_filterForGostOnly($id));
+        $frontendCompanyViewHelper->addValue('is_filterForGostOnly', $this->catalogCategoryProductRepository->is_filterForGostOnly($categoryId));
         $frontendCompanyViewHelper->addValue('is_endLevel', false);
         $frontendCompanyViewHelper->addValue('content', $content);
         $frontendCompanyViewHelper->addValue('products', $porducts);
@@ -72,16 +76,7 @@ class CatalogCategoryController extends Controller
     public function categoryFilter(FrontendCompanyViewHelper $frontendCompanyViewHelper, $categoryName, $standard, $du)
     {
         $porducts = $this->catalogCategoryProductRepository->getProductsFromCategoryStandardDu($categoryName, $standard, $du);
-        $content = collect();
-
         $filterCategory = $this->catalogCategoryProductRepository->getCategoryForCategoryName($categoryName);
-        $filterCategory->title = $porducts->first()->get('name') . ' ' . $porducts->first()->get('gost');
-        $filterCategory->title = $filterCategory->category_name . ''
-            .mb_substr($filterCategory->title, mb_strpos($filterCategory->title, ' '));
-        $filterCategory->h1 = $filterCategory->title;
-
-        $content->put('h1', $filterCategory->h1);
-
         $infoFilteredProduct = $this->catalogCategoryProductRepository->getInfoFromFilteredProducts($porducts);
 
         $infoForCategoryFromStandardName = $this->catalogCategoryProductRepository
@@ -92,7 +87,19 @@ class CatalogCategoryController extends Controller
                 ->getInfoForCategoryId($filterCategory->id);
         }
 
+        $synonymized = $this->catalogCategoryProductRepository
+            ->getSynonymizerContentFromCategoryId($infoForCategoryFromStandardName->get('id'), $infoFilteredProduct);
+
+        $filterCategory->h1 = $porducts->first()->get('name') . ' ' . $porducts->first()->get('gost');
+        $filterCategory->h1 = $filterCategory->category_name . ''
+            .mb_substr($filterCategory->h1, mb_strpos($filterCategory->h1, ' '));
+        $filterCategory->title = $synonymized->get('synonymizer_title');
+        $filterCategory->description = $synonymized->get('synonymizer_description');
+
+        $content = collect();
+        $content->put('h1', $filterCategory->h1);
         $content->put('img', $infoForCategoryFromStandardName->get('img'));
+        $content->put('synonymizer_content', $synonymized->get('synonymizer_content'));
 
         $frontendCompanyViewHelper->addModel($filterCategory);
         $frontendCompanyViewHelper->addValue('is_filterForGostOnly', false);
