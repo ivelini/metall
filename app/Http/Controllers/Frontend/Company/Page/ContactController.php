@@ -4,24 +4,22 @@ namespace App\Http\Controllers\Frontend\Company\Page;
 
 use App\Helpers\FrontendCompanyViewHelper;
 use App\Http\Controllers\Controller;
+use App\Repositories\Content\ContentSheetPageInformationRepository;
 use App\Repositories\Settings\SettingsCompanyInformationRepository;
+use App\Repositories\Singletone\Frontend\Company\CompanyInformationSingleton;
 
 class ContactController extends Controller
 {
     public function index(FrontendCompanyViewHelper $frontendCompanyViewHelper)
     {
-        $settingsCompanyInformationRepository = new SettingsCompanyInformationRepository();
+        $company = CompanyInformationSingleton::getCompanyFromDomain();
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
 
-        $page = $settingsCompanyInformationRepository->startConditions();
-        $page->title = 'Контактная информация';
-        $page->description = 'Контактная информация';
-        $page->h1 = 'Контактная информация компании ЮУАЗ "СТАН-2000"';
-//        dd(__METHOD__);
-
+        $page = $contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_contacts', $company->id);
         $frontendCompanyViewHelper->addModel($page);
+        $frontendCompanyViewHelper->addValue('content', $page->content);
         $frontendCompanyViewHelper->setViewPath('sections.page.contacts');
 
         return $frontendCompanyViewHelper->getView();
-
     }
 }

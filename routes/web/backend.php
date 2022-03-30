@@ -26,6 +26,7 @@ use App\Http\Controllers\AdminPanel\Content\ContentSheetMainCatalogController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetPageInformationController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetMainDividerController;
 use App\Http\Controllers\AdminPanel\Content\ContentSheetMainServicesController;
+use App\Http\Controllers\AdminPanel\Content\ContentSheetContactController;
 
 
 Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
@@ -106,6 +107,8 @@ Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware
 
             Route::resource('standard', ContentSheetStandartController::class)->names('content.sheet.standard');
             Route::resource('shipment', ContentSheetShipmentController::class)->names('content.sheet.shipment');
+
+            Route::get('contact', [ContentSheetContactController::class, 'edit'])->name('content.sheet.contact.edit');
         });
     });
 

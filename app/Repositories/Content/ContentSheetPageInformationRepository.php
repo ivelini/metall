@@ -80,6 +80,10 @@ class ContentSheetPageInformationRepository extends CoreRepository
             case 'page_main':
                 $routePage = 'main.edit';
                 break;
+
+            case 'page_contacts':
+                $routePage = 'contact.edit';
+                break;
         }
 
         $routePage = 'content.sheet.' . $routePage;

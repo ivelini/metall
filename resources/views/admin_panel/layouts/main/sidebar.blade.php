@@ -82,6 +82,7 @@
                         <li class="nav-item"><a href="{{ route('content.sheet.standard.index') }}" class="nav-link"><i class="icon-file-pdf"></i> Стандарты</a></li>
                         <li class="nav-item"><a href="{{ route('content.sheet.worker.index') }}" class="nav-link"><i class="icon-users4"></i> Персонал</a></li>
                         <li class="nav-item"><a href="{{ route('content.sheet.timeline.page.index') }}" class="nav-link"><i class="icon-stairs"></i> Timeline</a></li>
+                        <li class="nav-item"><a href="{{ route('content.sheet.contact.edit') }}" class="nav-link"><i class="icon-address-book"></i> Контакты</a></li>
                     </ul>
                 </li>
                 <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs mt-1">Настройки</div> <i class="icon-menu" title="Main"></i></li>
@@ -91,13 +92,6 @@
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         <li class="nav-item"><a href="{{ route('settings.companyInformation.generalEdit') }}" class="nav-link"><i class="icon-sphere"></i> Общие</a></li>
                         <li class="nav-item"><a href="{{ route('settings.menu.edit') }}" class="nav-link"><i class="icon-menu2"></i> Меню</a></li>
-                        <li class="nav-item nav-item-submenu">
-                            <a href="#" class="nav-link"><i class="icon-insert-template"></i> <span>Шаблон</span></a>
-
-                            <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                                <li class="nav-item"><a href="{{ route('content.records.record.create') }}" class="nav-link"><i class="icon-circle-small"></i> Выбор шаблона</a></li>
-                            </ul>
-                        </li>
                     </ul>
                 </li>
 
