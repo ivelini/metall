@@ -73,14 +73,16 @@ class SliderRepository extends CoreRepository
             ])
             ->first();
 
-        foreach ($slider->slides as $slide) {
+        if (!empty($slider)) {
+            foreach ($slider->slides as $slide) {
 
-            $this->imageHelper->getImgPathFromModel($slide, 'small', true);
+                $this->imageHelper->getImgPathFromModel($slide, 'small', true);
 
-            $slide->img = !empty($slide->image->img_original) ? $slide->image->img_original : NULL;
+                $slide->img = !empty($slide->image->img_original) ? $slide->image->img_original : NULL;
+            }
+            $slider = $this->modelAttributeHelper->getAttributesFromCollectionModels($slider->slides,
+                ['h1', 'description', 'link_name', 'link_href', 'img']);
         }
-        $slider = $this->modelAttributeHelper->getAttributesFromCollectionModels($slider->slides,
-            ['h1', 'description', 'link_name', 'link_href', 'img']);
 
         return $slider;
     }

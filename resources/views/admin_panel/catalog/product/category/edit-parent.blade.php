@@ -48,13 +48,13 @@
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">Название категории (на странице)</label>
                         <div class="col-lg-10">
-                            <input name="h1" type="text" class="form-control" value="{{ old('h1', $category->h1) }}">
+                            <input name="h1" type="text" class="form-control" value="{{ old('h1', $category->h1) }}" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">title</label>
                         <div class="col-lg-10">
-                            <input name="title" type="text" class="form-control" value="{{ old('title', $category->title) }}">
+                            <input name="title" type="text" class="form-control" value="{{ old('title', $category->title) }}" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -66,7 +66,7 @@
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">slug</label>
                         <div class="col-lg-10">
-                            <input name="slug" type="text" class="form-control" value="{{ old('slug', $category->slug) }}">
+                            <input name="slug" type="text" class="form-control" value="{{ old('slug', $category->slug) }}" required>
                         </div>
                     </div>
                     <div class="form-group row">

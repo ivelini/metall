@@ -41,7 +41,9 @@
             <div class="card card-body border-top-primary">
                 <div class="text-right">
                     <a href="{{ route('content.sheet.worker.category.index') }}" class="btn btn-primary"><i class="icon-collaboration mr-2"></i> Управление подразделениями</a>
-                    <a href="{{ route('content.sheet.worker.create') }}" class="btn btn-light ml-1"><i class="icon-user-plus mr-2"></i> Добавить сотрудника</a>
+                    @if($categories->count() > 0)
+                        <a href="{{ route('content.sheet.worker.create') }}" class="btn btn-light ml-1"><i class="icon-user-plus mr-2"></i> Добавить сотрудника</a>
+                    @endif
                 </div>
             </div>
         </div>

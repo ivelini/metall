@@ -24,7 +24,7 @@ class CatalogCategoryController extends Controller
         $company = CompanyInformationSingleton::getCompanyFromDomain();
         $categories = $this->catalogCategoryProductRepository->getPublishedParentCategoriesFromCompanyForFrontend($company);
         $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
-        $content = $contentSheetPageInformationRepository->getContentFromSheetPageForFontend('page_catalog', $company->id);
+        $content = $contentSheetPageInformationRepository->getContentFromSheetPageForFrontend('page_catalog', $company->id);
 
         $frontendCompanyViewHelper->addModel($contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_catalog', $company->id));
         $frontendCompanyViewHelper->addValue('categories', $categories);
@@ -36,15 +36,22 @@ class CatalogCategoryController extends Controller
 
     public function showParent(FrontendCompanyViewHelper $frontendCompanyViewHelper, $parentCategorySlug)
     {
+        $company = CompanyInformationSingleton::getCompanyFromDomain();
         $parentId = $this->catalogCategoryProductRepository->getIdCategoryFromSlug($parentCategorySlug);
         $childrenCat = $this->catalogCategoryProductRepository->getChildrenCategoryFromParentIdForCompanyFrontend($parentId);
         $parentCategory = $this->catalogCategoryProductRepository->getModelForId($parentId);
         $content = $parentCategory->content;
 
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $headerPage = collect();
+        $headerPage->put('h1', $parentCategory->h1);
+        $headerPage->put('img', $contentSheetPageInformationRepository->getImageFromSheetPageForFrontend('page_catalog', $company->id));
+
         $frontendCompanyViewHelper->addModel($parentCategory);
         $frontendCompanyViewHelper->addValue('childrenCat', $childrenCat);
         $frontendCompanyViewHelper->addValue('parentCategorySlug', $parentCategorySlug);
         $frontendCompanyViewHelper->addValue('content', $content);
+        $frontendCompanyViewHelper->addValue('headerPage', $headerPage);
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.parent');
 
         return $frontendCompanyViewHelper->getView();
@@ -52,12 +59,16 @@ class CatalogCategoryController extends Controller
 
     public function show(FrontendCompanyViewHelper $frontendCompanyViewHelper, $parentCategorySlug, $categorySlug)
     {
-//        $parentId = $this->catalogCategoryProductRepository->getIdCategoryFromSlug($parentCategorySlug);
+        $company = CompanyInformationSingleton::getCompanyFromDomain();
         $categoryId = $this->catalogCategoryProductRepository->getIdCategoryFromSlug($categorySlug);
         $porducts = $this->catalogCategoryProductRepository->getProductsFromFilterCategoryId($categoryId);
         $content = $this->catalogCategoryProductRepository->getCategoryContentForForntendCompany($categoryId);
         $category = $this->catalogCategoryProductRepository->getCategory($categoryId);
-        $category->img = $this->catalogCategoryProductRepository->getImgPathFromCategoryId($category->parent_id, 'medium', true);
+        $content->put('img', $this->catalogCategoryProductRepository->getImgPathFromCategoryId($category->id, 'medium', true));
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $headerPage = collect();
+        $headerPage->put('h1', $category->h1);
+        $headerPage->put('img', $contentSheetPageInformationRepository->getImageFromSheetPageForFrontend('page_catalog', $company->id));
 
         $frontendCompanyViewHelper->addModel($category);
 
@@ -65,6 +76,7 @@ class CatalogCategoryController extends Controller
         $frontendCompanyViewHelper->addValue('is_endLevel', false);
         $frontendCompanyViewHelper->addValue('content', $content);
         $frontendCompanyViewHelper->addValue('products', $porducts);
+        $frontendCompanyViewHelper->addValue('headerPage', $headerPage);
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.show');
 
         return $frontendCompanyViewHelper->getView();
@@ -75,6 +87,7 @@ class CatalogCategoryController extends Controller
      */
     public function categoryFilter(FrontendCompanyViewHelper $frontendCompanyViewHelper, $categoryName, $standard, $du)
     {
+        $company = CompanyInformationSingleton::getCompanyFromDomain();
         $porducts = $this->catalogCategoryProductRepository->getProductsFromCategoryStandardDu($categoryName, $standard, $du);
         $filterCategory = $this->catalogCategoryProductRepository->getCategoryForCategoryName($categoryName);
         $infoFilteredProduct = $this->catalogCategoryProductRepository->getInfoFromFilteredProducts($porducts);
@@ -101,12 +114,18 @@ class CatalogCategoryController extends Controller
         $content->put('img', $infoForCategoryFromStandardName->get('img'));
         $content->put('synonymizer_content', $synonymized->get('synonymizer_content'));
 
+        $contentSheetPageInformationRepository = new ContentSheetPageInformationRepository();
+        $headerPage = collect();
+        $headerPage->put('h1', $filterCategory->h1);
+        $headerPage->put('img', $contentSheetPageInformationRepository->getImageFromSheetPageForFrontend('page_catalog', $company->id));
+
         $frontendCompanyViewHelper->addModel($filterCategory);
         $frontendCompanyViewHelper->addValue('is_filterForGostOnly', false);
         $frontendCompanyViewHelper->addValue('is_endLevel', true);
         $frontendCompanyViewHelper->addValue('products', $porducts);
         $frontendCompanyViewHelper->addValue('infoFilteredProduct', $infoFilteredProduct);
         $frontendCompanyViewHelper->addValue('content', $content);
+        $frontendCompanyViewHelper->addValue('headerPage', $headerPage);
 
         $frontendCompanyViewHelper->setViewPath('sections.catalog.category.show');
 

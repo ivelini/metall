@@ -67,25 +67,25 @@
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">Название категории (на странице)</label>
                         <div class="col-lg-10">
-                            <input name="h1" type="text" class="form-control" value="{{ old('h1') }}">
+                            <input name="h1" type="text" class="form-control" value="{{ old('h1') }}" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">title</label>
                         <div class="col-lg-10">
-                            <input name="title" type="text" class="form-control" value="{{ old('title') }}">
+                            <input name="title" type="text" class="form-control" value="{{ old('title') }}" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">description</label>
                         <div class="col-lg-10">
-                            <input name="description" type="text" class="form-control" value="{{ old('description') }}">
+                            <input name="description" type="text" class="form-control" value="{{ old('description') }}" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-lg-2">slug</label>
                         <div class="col-lg-10">
-                            <input name="slug" type="text" class="form-control" value="{{ old('slug') }}">
+                            <input name="slug" type="text" class="form-control" value="{{ old('slug') }}" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -107,25 +107,6 @@
                                         <input name="img" type="file" class="form-control-plaintext" style="width: 65px">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-lg-10">
-                            <div class="form-group">
-                                <label>Описание для вывода в фильтре</label>
-                                <p class="mb-3">
-                                <div>['Отводы']   =   ['du*', 'h*', 'steel*', 'standard*', 'ugol_giba', 'ed_izm', 'price']</div>
-                                <div>['Переходы'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'model','steel*', 'standard*', 'ed_izm', 'price']</div>
-                                <div>['Тройники'] =   ['du1*', 'h1*', 'du2*', 'h2*', 'steel*', 'standard*', 'ed_izm', 'price']</div>
-                                <div>['Фланцы']   =   ['du', 'davlenie*', 'steel*', 'standard*', 'price']</div>
-                                <div>['Днища']    =   ['du*', 'h*', 'steel*', 'standard*', 'price']</div>
-                                </p>
-                                <textarea name="synonymizer_content"
-                                          rows="5"
-                                          cols="3"
-                                          class="form-control"
-                                          id="summernote2">{{ old('synonymizer_content') }}</textarea>
                             </div>
                         </div>
                     </div>

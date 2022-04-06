@@ -14,7 +14,6 @@ class UpdateCatalogProductCategoryTable extends Migration
     public function up()
     {
         Schema::table('catalog_product_category', function (Blueprint $table) {
-            $table->string('description')->nullable();
             $table->string('synonymizer_title')->nullable();
             $table->string('synonymizer_description')->nullable();
             $table->text('synonymizer_content')->nullable();

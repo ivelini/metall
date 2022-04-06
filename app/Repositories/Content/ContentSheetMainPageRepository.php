@@ -42,16 +42,23 @@ class ContentSheetMainPageRepository extends CoreRepository
             ->worker_category_id;
 
         $workersCategory = $company->contentSheetWorkerCategory->where('id', $workerCategoryId)->first();
-        $workers = $workersCategory->workers()->with('image:id,content_sheet_worker_id,path')->get();
 
-        foreach ($workers as $worker) {
-            $worker->category = $workersCategory->h1;
-            $this->imageHelper->getImgPathFromModel($worker);
-            $worker->img = (!empty($worker->image->img) ? $worker->image->img : NULL);
+        if (!empty($workersCategory)) {
+            $workers = $workersCategory->workers()->with('image:id,content_sheet_worker_id,path')->get();
+
+            foreach ($workers as $worker) {
+                $worker->category = $workersCategory->h1;
+                $this->imageHelper->getImgPathFromModel($worker);
+                $worker->img = (!empty($worker->image->img) ? $worker->image->img : NULL);
+            }
+
+            $workers = $this->modelAttributeHelper->getAttributesFromCollectionModels($workers,
+                ['id', 'position', 'name', 'phone', 'email', 'category', 'img']);
+        }
+        else {
+            $workers = null;
         }
 
-        $workers = $this->modelAttributeHelper->getAttributesFromCollectionModels($workers,
-            ['id', 'position', 'name', 'phone', 'email', 'category', 'img']);
 
         return $workers;
     }

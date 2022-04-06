@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             MarkiStaliSeeder::class,
             StandardProductsSeeder::class,
             ContentRecordCategorySeeder::class,
-            ThemeSeeder::class
+            ThemeSeeder::class,
+            ContentSheetMainPageSeeder::class
         ]);
     }
 }

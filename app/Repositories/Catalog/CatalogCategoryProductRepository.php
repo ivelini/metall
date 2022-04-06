@@ -99,14 +99,6 @@ class CatalogCategoryProductRepository extends CoreRepository
             ->with('image')
             ->first();
 
-        $this->imageHelper->getImgPathFromModel($category);
-        $category->img = !empty($category->image->img) ? $category->image->img : NULL;
-
-//        if(!empty($category->image->path)) {
-//            $category->img = '/storage' . mb_substr($category->image->path, 0, mb_strripos($category->image->path, '.'))
-//                . '_medium.jpg';
-//        }
-
         return $category;
     }
 
@@ -265,9 +257,17 @@ class CatalogCategoryProductRepository extends CoreRepository
     public function getImgPathFromCategoryId($id, $format = 'medium', $originalPath = false)
     {
         $category = $this->getCategory($id);
-        $this->imageHelper->getImgPathFromModel($category, $format, $originalPath);
-        $imgPath =  !empty($category->image->img_original) ? $category->image->img_original :
-            !empty($category->image->img) ? $category->image->img: NULL;
+        $category = $this->imageHelper->getImgPathFromModel($category, $format, $originalPath);
+
+        if (!empty($category->image->img_original)) {
+            $imgPath = $category->image->img_original;
+        }
+        elseif (!empty($category->image->img)) {
+            $imgPath = $category->image->img;
+        }
+        else {
+            $imgPath = NULL;
+        }
 
         return $imgPath;
     }
@@ -324,8 +324,14 @@ class CatalogCategoryProductRepository extends CoreRepository
             ->first();
 
         if (!empty($category)) {
-            $this->imageHelper->getImgPathFromModel($category, 'medium');
-            $category->img = !empty($category->image->img) ? $category->image->img : NULL;
+            $this->imageHelper->getImgPathFromModel($category, 'medium', true);
+
+            if (!empty($category->image->img_original)) {
+                $category->img = $category->image->img_original;
+            }
+            else {
+                $category->img = !empty($category->image->img) ? $category->image->img : NULL;
+            }
 
             $collectInfoFromCategory = $this->modelAttributeHelper->getAttributesFromModel($category, ['id', 'title', 'img']);
         }

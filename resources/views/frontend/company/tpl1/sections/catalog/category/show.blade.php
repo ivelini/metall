@@ -13,15 +13,14 @@
                 <div class="col-md-9 blog-pull-right">
                     <div class="blog-posts single-post">
                         <article class="post clearfix mb-0">
-{{--                            <div class="entry-title pt-10 pl-15">--}}
-{{--                                <h4>{{ $content->get('h1') }}</h4>--}}
-{{--                            </div>--}}
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12" style="text-align: center; padding-bottom: 20px;">
                                         <img src="{{ $content->get('img') }}" alt="">
                                     </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-icon theme-colored square">
+                                </div>
+                            <div class="row" style="padding-bottom: 20px;">
+                                    <div class="col-md-12">
+                                        <ul class="list-icon theme-colored square" style="padding-bottom: 20px">
                                             @if (!empty($infoFilteredProduct))
                                                 @foreach($infoFilteredProduct as $key=>$value)
                                                     <li>
@@ -65,7 +64,7 @@
                                         </ul>
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12" style="text-align: center">
-                                                <a href="#" class="btn btn-border btn-theme-colored btn-xl">Зделать заказ</a>
+                                                <a href="#" class="btn btn-border btn-theme-colored btn-xl" style="width: 100%">Зделать заказ</a>
                                             </div>
                                         </div>
                                     </div>

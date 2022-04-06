@@ -101,7 +101,7 @@ class ContentSheetPageInformationRepository extends CoreRepository
         return $page;
     }
 
-    public function getContentFromSheetPageForFontend($sheetName, $companyId)
+    public function getContentFromSheetPageForFrontend($sheetName, $companyId)
     {
         $page = $this->getModelFromSheetPageForFontend($sheetName, $companyId);
 
@@ -111,6 +111,19 @@ class ContentSheetPageInformationRepository extends CoreRepository
         }
 
         return $content;
+    }
+
+    public function getImageFromSheetPageForFrontend($sheetName, $companyId)
+    {
+        $page = $this->getModelFromSheetPageForFontend($sheetName, $companyId);
+
+        $img = null;
+        if(!empty($page)) {
+            $this->imageHelper->getImgPathFromModel($page, 'small', true);
+            $img = (!empty($page->image->img_original) ? $page->image->img_original : NULL);
+        }
+
+        return $img;
     }
 
 }

@@ -27,8 +27,12 @@ class HeaderWidget extends AbstractWidget
 //        dd(__METHOD__, $headerValues);
 
         $menu = Menus::find(1);
-        $header_menu = $menu->items->toArray();
-
+        if (!empty($menu)) {
+            $header_menu = $menu->items->toArray();
+        }
+        else {
+            $header_menu = null;
+        }
 
         return view('frontend.company.' . $tpl->get('tplName') . '.layout.header.' .
             $tpl->get('tplHeaderName'), compact('headerValues', 'header_menu'));
