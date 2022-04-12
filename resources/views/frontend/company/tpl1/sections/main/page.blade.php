@@ -19,11 +19,11 @@
     @if($shipments->count() > 0)
         @include('frontend.company.tpl1.sections.main.include.shipments')
     @endif
-    @if(!empty($dividers->get(1)))
-        @include('frontend.company.tpl1.sections.main.include.divider1')
-    @endif
     @if(!empty($workers) && $workers->count() > 0)
         @include('frontend.company.tpl1.sections.main.include.managers')
+    @endif
+    @if(!empty($dividers->get(1)))
+        @include('frontend.company.tpl1.sections.main.include.divider1')
     @endif
     @include('frontend.company.tpl1.sections.main.include.email')
 @endsection

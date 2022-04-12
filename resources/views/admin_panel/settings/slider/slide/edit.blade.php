@@ -27,7 +27,6 @@
     <form action="{{ route('settings.slider.slide.update', [$page->id, $slide->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
-        <input name="order" value="{{ $slide->order }}" hidden>
         <div class="row">
             <div class="col-lg-9">
                 <div class="card">

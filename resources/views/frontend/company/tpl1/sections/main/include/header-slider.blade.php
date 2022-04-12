@@ -1,7 +1,7 @@
 <section id="home" class="divider">
     <div class="fullwidth-carousel" data-nav="true">
         @foreach($slider as $slide)
-            <div class="carousel-item" style="background-image: url('{{ $slide->get('img') }}'); background-size: cover !important;">
+            <div class="carousel-item bg-img-cover" data-bg-img="{{ $slide->get('img') }}">
                 <div class="display-table">
                     <div class="display-table-cell">
                         <div class="container pt-200 pb-200">

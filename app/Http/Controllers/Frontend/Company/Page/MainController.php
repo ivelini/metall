@@ -37,9 +37,7 @@ class MainController extends Controller
         $dividers = $contentSheetMainDividerRepository->getDividersFromCompany($company);
         $services = $contentSheetMainServicesRepository->getServicesFromCompany($company);
 
-        $page = $contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_main', $company->id);
-
-        $frontendCompanyViewHelper->addModel($page);
+        $frontendCompanyViewHelper->addModel($contentSheetPageInformationRepository->getModelFromSheetPageForFontend('page_main', $company->id));
         $frontendCompanyViewHelper->addValue('slider', $slider);
         $frontendCompanyViewHelper->addValue('catalog', $catalog);
         $frontendCompanyViewHelper->addValue('certificates', $certificates);
@@ -47,7 +45,6 @@ class MainController extends Controller
         $frontendCompanyViewHelper->addValue('workers', $workers);
         $frontendCompanyViewHelper->addValue('dividers', $dividers);
         $frontendCompanyViewHelper->addValue('services', $services);
-//        $frontendCompanyViewHelper->addValue('content', $page->content);
 
         $frontendCompanyViewHelper->setViewPath('sections.main.page');
 

@@ -131,8 +131,6 @@ Route::group(['domain' => env('APP_URL'), 'prefix' => 'admin-panel', 'middleware
             ->name('settings.companyInformation.update');
 
         Route::resource('slider', SliderController::class)->names('settings.slider');
-        Route::match(['put', 'patch'], 'slider/{slider}', [SliderController::class, 'orderRenew'])
-            ->name('settings.slider.orderrenew');
         Route::resource('slider/{slider}/slide', SliderImageController::class)->names('settings.slider.slide');
     });
 });

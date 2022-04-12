@@ -18,7 +18,7 @@
             <div class="card-group-control card-group-control-right">
                 <div class="card">
                         <div class="card-body">
-                            <form action=" {{ route('content.sheet.main.divider.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action=" {{ route('content.sheet.main.services.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('POST')
 
