@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <form action="{{ route('content.sheet.timeline.page.orderrenew', $page->id) }}" method="POST">
+    <form action="{{ route('settings.slider.orderrenew', $page->id) }}" method="POST">
         @csrf
         @method('PATCH')
         <div class="timeline timeline-left">
@@ -71,7 +71,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="content_sheet_timeline_line_id[]" value="{{ $slide->id }}">
+                                    <input type="hidden" name="slider_id[]" value="{{ $slide->id }}">
                                 </li>
                             @endforeach
                         </ul>
@@ -85,7 +85,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Сохранить порядок линий</button>
+                    <button type="submit" class="btn btn-primary">Сохранить порядок cлайдов</button>
                 </div>
             </div>
         </div>

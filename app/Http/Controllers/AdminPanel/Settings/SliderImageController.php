@@ -62,6 +62,7 @@ class SliderImageController extends Controller
     public function update(Request $request, $sliderId, $id)
     {
         $object = $this->sliderImageReposytory->getObject($id);
+        $request->merge(['slider_id' => $sliderId]);
         $this->createAndUpdateContentTableService->update($object, $request);
 
         return redirect()

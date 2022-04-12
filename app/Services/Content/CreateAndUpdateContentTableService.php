@@ -207,7 +207,6 @@ class CreateAndUpdateContentTableService
         $this->fillProperty($model, $request);
 
         $data = $this->dataProcessing($request->input(), true);
-
         $model->update($data);
 
         $this->saveOrUpdateMedia($model, $request);

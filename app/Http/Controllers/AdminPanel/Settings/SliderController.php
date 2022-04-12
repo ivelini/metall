@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Settings\SliderRepository;
 use App\Services\Content\CreateAndUpdateContentTableService;
 use Illuminate\Http\Request;
+use App\Repositories\Settings\SliderImageRepository;
 
 class SliderController extends Controller
 {
@@ -72,5 +73,24 @@ class SliderController extends Controller
         return redirect()
             ->route('settings.slider.index')
             ->with(['success' => 'Слайдер удален']);
+    }
+
+    public function orderRenew(Request $request, $pageId)
+    {
+
+        $sliderImageRepository = new SliderImageRepository();
+        $orderId = $request->input('slider_id');
+
+        $sliderModel = $sliderImageRepository->startConditions();
+
+        if(!empty($orderId)) {
+            foreach ($orderId as $key => $value) {
+                $sliderModel->where('id', $value)->update(['order' => $key + 1]);
+            }
+        }
+
+        return redirect()
+            ->back()
+            ->with(['success' => 'Порядок слайдов обновлен']);
     }
 }

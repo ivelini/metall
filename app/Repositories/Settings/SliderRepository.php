@@ -51,7 +51,10 @@ class SliderRepository extends CoreRepository
         $page = $this->startConditions()
             ->select('id', 'h1', 'description', 'is_published')
             ->where('id', $id)
-            ->with(['slides', 'slides.image:id,path,slider_image_id'])
+            ->with('slides', function ($query) {
+                $query->with('image:id,path,slider_image_id')
+                    ->orderBy('order', 'ASC');
+            })
             ->first();
 
         foreach ($page->slides as $slide) {
@@ -67,10 +70,10 @@ class SliderRepository extends CoreRepository
         $slider = $this->startConditions()
             ->where('company_id', $companyId)
             ->where('is_published', 1)
-            ->with([
-                'slides',
-                'slides.image:id,path,slider_image_id'
-            ])
+            ->with('slides', function ($query) {
+                $query->with('image:id,path,slider_image_id')
+                    ->orderBy('order', 'ASC');
+            })
             ->first();
 
         if (!empty($slider)) {
